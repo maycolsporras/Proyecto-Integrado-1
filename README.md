@@ -55,6 +55,7 @@ docs: actualizar requerimientos funcionales
 
 ## Tipos de Commit
 
+- new → Creación inicial de archivos, módulos o estructuras.
 - feat → Nueva funcionalidad
 - fix → Corrección de errores
 - docs → Cambios en documentación
