@@ -44,12 +44,12 @@ Se utilizará la siguiente estrategia basada en Git Flow simplificado:
 
 Los mensajes de commit siguen la convención:
 
-tipo: descripción breve en infinitivo
+tipo: descripción breve en gerundio.
 
 Ejemplo:
-feat: agregar listado de eventos
-fix: corregir validación de formulario
-docs: actualizar requerimientos funcionales
+feat: agregando listado de eventos
+fix: corregiendo validación de formulario
+docs: actualizando requerimientos funcionales
 
 ---
 
