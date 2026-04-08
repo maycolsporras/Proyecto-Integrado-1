@@ -1,3 +1,76 @@
-:root{
-    --colorPrincipal: #007bff;
+:root {
+    --nav-color: #3E578E;
+    --dropdown-text-color: #1E2E50;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+
+p {
+    margin: 0;
+}
+
+/* Estilos para el logo */
+
+.logoSicid img {
+    height: 80px;
+    width: auto;
+}
+
+.logoSicid p {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Estilos para la barra de navegación */
+.navbar {
+    background-color: var(--nav-color);
+    padding: 0;
+}
+
+.navbar-nav {
+    height: 100%;
+    margin: 0;
+}
+
+.nav-item {
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+        background-color: var(--dropdown-text-color);
+    }
+}
+
+.nav-link {
+    color: white;
+    padding: 1.5rem 1.5rem;
+    display: block;
+    width: 100%;
+    
+    &:hover {
+        color: white;
+    }
+}
+
+/* Estilos para los elementos del dropdown */
+.dropdown-item {
+    color: var(--dropdown-text-color);
+    border-left: 5px solid transparent;
+
+    &:hover {
+        color: var(--dropdown-text-color);
+        border-left: 5px solid var(--dropdown-text-color);
+        font-weight: bold;
+    }
+}
+
+.dropdown-menu {
+    width: 100%;
+    background-color: white;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
