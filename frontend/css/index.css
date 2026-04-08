@@ -1,6 +1,9 @@
 :root {
     --nav-color: #3E578E;
     --dropdown-text-color: #1E2E50;
+    --color-blanco: #FFFFFF;
+    --color-gris-claro: #c4c4c4;
+    --color-gris-oscuro: #333333;
 }
 
 body {
@@ -19,26 +22,26 @@ p {
 
 .logoSicid p {
     font-size: 0.9rem;
-    color: #555;
+    color: var(--color-gris-oscuro);
 }
 
 /* Estilos para la barra de navegación */
 .btnIniciarSesion {
-    color: #333333;
+    color: var(--color-gris-oscuro);
     padding: 0.5rem 1.5rem;
-    border: 1px solid #c4c4c4;
+    border: 1px solid var(--color-gris-claro);
 
     &:hover {
         background-color: var(--dropdown-text-color);
-        color: white;
+        color: var(--color-blanco);
     }
 }
 
 .btnHeader{
-    border: 1px solid #c4c4c4;
+    border: 1px solid var(--color-gris-claro);
     &:hover {
         background-color: var(--dropdown-text-color);
-        color: white;
+        color: var(--color-blanco);
     }
 }
 
@@ -73,7 +76,7 @@ p {
     text-decoration: none;
     
     &:hover {
-        color: white;
+        color: var(--color-blanco);
     }
 }
 
@@ -93,14 +96,14 @@ p {
 
     &:hover {
         color: var(--dropdown-text-color);
-        background-color: #f8f9fa;
+        background-color: var(--color-blanco);
         border-left: 5px solid var(--dropdown-text-color);
         font-weight: bold;
     }
 }
 
 .dropdown-menu {
-    background-color: white;
+    background-color: var(--color-blanco);
     border: none;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
