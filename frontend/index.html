@@ -15,17 +15,17 @@
 <body>
     <header class="headerLandingPage py-3">
         <div class="container-fluid">
-            <div class="row align-items-center mx-5">
+            <div class="row align-items-center mx-lg-5">
                 <!-- Logo -->
-                <div class="logoSicid col-6 d-flex align-items-center gap-3">
+                <div class="logoSicid col-12 col-md-2 col-lg-6 d-flex align-items-center gap-3">
                     <img src="./assets/img/logosicid.webp" alt="Logo de Sicid">
-                    <p><strong>Sistema Costarricense de<br>Información sobre Discapacidad</strong></p>
+                    <p class="d-block d-md-none d-lg-block"><strong>Sistema Costarricense de<br>Información sobre Discapacidad</strong></p>
                 </div>
 
-                <div class="col-6">
-                    <div class="row d-flex align-items-center justify-content-end">
+                <div class="col-12 col-md-10 col-lg-6">
+                    <div class="row d-flex flex-column flex-md-row align-items-center justify-content-end ms-md-1 ms-lg-0 me-1 me-md-0 gap-2 gap-md-0">
                         <!-- Selección de idioma -->
-                        <div class="col-3 d-flex gap-2 align-items-center">
+                        <div class="col-12 col-md-3 d-flex gap-2 align-items-center">
                             <label for="idioma">Idioma:</label>
                             <select class="form-select form-select-lg w-auto" id="idioma">
                                 <option class="selected" value="es">ES</option>
@@ -33,7 +33,7 @@
                             </select>
                         </div>
                         <!-- Botones de tamaño de fuente -->
-                        <div class="col-4 d-flex align-items-center gap-2">
+                        <div class="col-12 col-md-4 d-flex align-items-center gap-2">
                             <button class="btn btnHeader">
                                 <i class="fa-solid fa-minus p-2"></i>
                             </button>
@@ -45,13 +45,13 @@
                             </button>
                         </div>
                         <!-- Botón de contraste-->
-                        <div class="col-1 ">
+                        <div class="col-12 col-md-1 ">
                             <button class="btn btnHeader">
                                 <i class="fa-solid fa-circle-half-stroke p-2"></i>
                             </button>
                         </div>
                         <!-- Botón de inicio de sesión -->
-                        <div class="col-4 d-flex justify-content-end">
+                        <div class="col-12 col-md-4 d-flex justify-content-start justify-content-md-end">
                             <button class="btn btnIniciarSesion btn-lg">Iniciar sesión</button>
                         </div>
                     </div>
@@ -60,46 +60,51 @@
         </div>
     </header>
 
-    <nav class="navbar">
-        <div class="container-fluid">
-                <ul class="navbar-nav d-flex flex-row justify-content-around align-items-center w-100">
-                    <li class="nav-item">
-                        <a class="nav-link text-white"  href="#">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">SICID</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">Certificaciones</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">Formación</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white text-wrap-nav" href="#">Productos y Servicios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">Estadísticas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">PONADIS</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">Comisiones</a>
-                    </li>
-                    <li class="nav-item dropdown position-relative">
-                        <a class="nav-link dropdown-toggle text-white text-wrap-nav" href="#" role="button" data-bs-toggle="dropdown">
-                            Noticias y Eventos
-                        </a>
-                        <ul class="dropdown-menu position-absolute p-0 m-0">
-                            <li><a class="dropdown-item position-relative py-2" href="#"><strong>Noticias</strong></a></li>
-                            <li><hr class="dropdown-divider p-0 m-0"></li>
-                            <li><a class="dropdown-item position-relative py-2" href="#"><strong>Eventos</strong></a></li>
-                        </ul>
-                    </li>
-                </ul>
+<nav class="navbar navbar-expand-lg"> <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navSicid" aria-controls="navSicid" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="menuIcon fa-solid fa-bars"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navSicid">
+            <ul class="navbar-nav d-flex justify-content-around align-items-center w-100">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">SICID</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">Certificaciones</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">Formación</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white text-wrap-nav" href="#">Productos y Servicios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">Estadísticas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">PONADIS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">Comisiones</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white text-wrap-nav" href="#" role="button" data-bs-toggle="dropdown">
+                        Noticias y Eventos
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item py-2" href="#"><strong>Noticias</strong></a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item py-2" href="#"><strong>Eventos</strong></a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <main>
 
