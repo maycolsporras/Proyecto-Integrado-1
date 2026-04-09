@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <header class="headerLandingPage py-3">
+    <header class="headerLandingPage py-3" aria-label="Encabezado principal">
         <div class="container-fluid">
             <div class="row align-items-center mx-lg-5">
                 <!-- Logo -->
@@ -29,32 +29,35 @@
                         <!-- Selección de idioma -->
                         <div class="col-12 col-md-3 d-flex gap-2 align-items-center">
                             <label for="idioma">Idioma:</label>
-                            <select class="form-select form-select-lg w-auto" id="idioma">
+                            <select class="form-select form-select-lg w-auto" id="idioma"
+                                aria-label="Seleccionar idioma">
                                 <option class="selected" value="es">ES</option>
                                 <option value="en">EN</option>
                             </select>
                         </div>
                         <!-- Botones de tamaño de fuente -->
-                        <div class="col-12 col-md-4 d-flex align-items-center gap-2">
-                            <button class="btn btnHeader">
-                                <i class="fa-solid fa-minus p-2"></i>
+                        <div class="col-12 col-md-4 d-flex align-items-center gap-2" role="group"
+                            aria-label="Controles de tamaño de fuente">
+                            <button class="btn btnHeader" aria-label="Reducir tamaño de fuente">
+                                <i class="fa-solid fa-minus p-2" aria-hidden="true"></i>
                             </button>
-                            <button class="btn btnHeader">
-                                <i class="fa-solid fa-a p-2"></i>
+                            <button class="btn btnHeader" aria-label="Tamaño de fuente normal">
+                                <i class="fa-solid fa-a p-2" aria-hidden="true"></i>
                             </button>
-                            <button class="btn btnHeader">
-                                <i class="fa-solid fa-plus p-2"></i>
+                            <button class="btn btnHeader" aria-label="Aumentar tamaño de fuente">
+                                <i class="fa-solid fa-plus p-2" aria-hidden="true"></i>
                             </button>
                         </div>
                         <!-- Botón de contraste-->
                         <div class="col-12 col-md-1 ">
-                            <button class="btn btnHeader">
-                                <i class="fa-solid fa-circle-half-stroke p-2"></i>
+                            <button class="btn btnHeader" aria-label="Modo de alto contraste">
+                                <i class="fa-solid fa-circle-half-stroke p-2" aria-hidden="true"></i>
                             </button>
                         </div>
                         <!-- Botón de inicio de sesión -->
                         <div class="col-12 col-md-4 d-flex justify-content-start justify-content-md-end">
-                            <button class="btn btnIniciarSesion btn-lg">Iniciar sesión</button>
+                            <button class="btn btnIniciarSesion btn-lg"
+                                aria-label="Iniciar sesión en el sistema">Iniciar sesión</button>
                         </div>
                     </div>
                 </div>
@@ -62,12 +65,12 @@
         </div>
     </header>
 
-    <nav class="navBarTop navbar navbar-expand-lg">
+    <nav class="navBarTop navbar navbar-expand-lg" aria-label="Navegación principal">
         <div class="container-fluid mx-lg-5">
             <button class="navBarTogglerTop navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navSicid" aria-controls="navSicid" aria-expanded="false"
                 aria-label="Toggle navigation">
-                <i class="menuIcon fa-solid fa-bars"></i>
+                <i class="menuIcon fa-solid fa-bars" aria-hidden="true"></i>
             </button>
 
             <div class="collapse navbar-collapse" id="navSicid">
@@ -99,7 +102,7 @@
                     </li>
                     <li class="navItemTop nav-item dropdown">
                         <a class="navLinkTop nav-link dropdown-toggle text-white text-wrap-nav text-decoration-none"
-                            href="#" role="button" data-bs-toggle="dropdown">
+                            href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Noticias y Eventos
                         </a>
                         <ul class="dropdownMenuTop dropdown-menu">
@@ -144,19 +147,19 @@
                 <li class="nav-item">
                     <a class="nav-link text-white fw-light py-0" href="#">Marco Legal</a>
                 </li>
-                <li class="text-white d-none d-md-block">|</li>
+                <li class="text-white d-none d-md-block" aria-hidden="true">|</li>
                 <li class="nav-item">
                     <a class="nav-link text-white fw-light py-0" href="#">Términos de accesibilidad</a>
                 </li>
-                <li class="text-white d-none d-md-block">|</li>
+                <li class="text-white d-none d-md-block" aria-hidden="true">|</li>
                 <li class="nav-item">
                     <a class="nav-link text-white fw-light py-0" href="#">Créditos</a>
                 </li>
-                <li class="text-white d-none d-md-block">|</li>
+                <li class="text-white d-none d-md-block" aria-hidden="true">|</li>
                 <li class="nav-item">
                     <a class="nav-link text-white fw-light py-0" href="#">Directorio de ONGs</a>
                 </li>
-                <li class="text-white d-none d-md-block">|</li>
+                <li class="text-white d-none d-md-block" aria-hidden="true">|</li>
                 <li class="nav-item">
                     <a class="nav-link text-white fw-light py-0" href="#">Contacto</a>
                 </li>
