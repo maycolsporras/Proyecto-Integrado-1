@@ -19,11 +19,13 @@
                 <!-- Logo -->
                 <div class="logoSicid col-12 col-md-2 col-lg-6 d-flex align-items-center gap-3">
                     <img src="./assets/img/logosicid.webp" alt="Logo de Sicid">
-                    <p class="d-block d-md-none d-lg-block"><strong>Sistema Costarricense de<br>Información sobre Discapacidad</strong></p>
+                    <p class="d-block d-md-none d-lg-block"><strong>Sistema Costarricense de<br>Información sobre
+                            Discapacidad</strong></p>
                 </div>
 
                 <div class="col-12 col-md-10 col-lg-6">
-                    <div class="row d-flex flex-column flex-md-row align-items-center justify-content-end ms-md-1 ms-lg-0 me-1 me-md-0 gap-2 gap-md-0">
+                    <div
+                        class="row d-flex flex-column flex-md-row align-items-center justify-content-end ms-md-1 ms-lg-0 me-1 me-md-0 gap-2 gap-md-0">
                         <!-- Selección de idioma -->
                         <div class="col-12 col-md-3 d-flex gap-2 align-items-center">
                             <label for="idioma">Idioma:</label>
@@ -61,7 +63,7 @@
     </header>
 
     <nav class="navBarTop navbar navbar-expand-lg">
-        <div class="container-fluid">
+        <div class="container-fluid mx-lg-5">
             <button class="navBarTogglerTop navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navSicid" aria-controls="navSicid" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -71,32 +73,33 @@
             <div class="collapse navbar-collapse" id="navSicid">
                 <ul class="navBarNavTop navbar-nav d-flex justify-content-around align-items-center w-100">
                     <li class="navItemTop nav-item">
-                        <a class="navLinkTop nav-link text-white" href="#">Inicio</a>
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="#">Inicio</a>
                     </li>
                     <li class="navItemTop nav-item">
-                        <a class="navLinkTop nav-link text-white" href="#">SICID</a>
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="#">SICID</a>
                     </li>
                     <li class="navItemTop nav-item">
-                        <a class="navLinkTop nav-link text-white" href="#">Certificaciones</a>
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="#">Certificaciones</a>
                     </li>
                     <li class="navItemTop nav-item">
-                        <a class="navLinkTop nav-link text-white" href="#">Formación</a>
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="#">Formación</a>
                     </li>
                     <li class="navItemTop nav-item">
-                        <a class="navLinkTop nav-link text-white text-wrap-nav" href="#">Productos y Servicios</a>
+                        <a class="navLinkTop nav-link text-white text-wrap-nav text-decoration-none" href="#">Productos
+                            y Servicios</a>
                     </li>
                     <li class="navItemTop nav-item">
-                        <a class="navLinkTop nav-link text-white" href="#">Estadísticas</a>
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="#">Estadísticas</a>
                     </li>
                     <li class="navItemTop nav-item">
-                        <a class="navLinkTop nav-link text-white" href="#">PONADIS</a>
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="#">PONADIS</a>
                     </li>
                     <li class="navItemTop nav-item">
-                        <a class="navLinkTop nav-link text-white" href="#">Comisiones</a>
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="#">Comisiones</a>
                     </li>
                     <li class="navItemTop nav-item dropdown">
-                        <a class="navLinkTop nav-link dropdown-toggle text-white text-wrap-nav" href="#" role="button"
-                            data-bs-toggle="dropdown">
+                        <a class="navLinkTop nav-link dropdown-toggle text-white text-wrap-nav text-decoration-none"
+                            href="#" role="button" data-bs-toggle="dropdown">
                             Noticias y Eventos
                         </a>
                         <ul class="dropdownMenuTop dropdown-menu">
@@ -114,9 +117,51 @@
     </nav>
 
     <main>
+        <div class="container-fluid">
+        </div>
     </main>
 
     <footer>
+        <!--logos de las instituciones -->
+        <div class="container-fluid bg-light py-3 border-top">
+            <div class="row justify-content-center">
+                <div class="col-12 d-flex flex-wrap align-items-center justify-content-center gap-3 gap-md-5">
+                    <img src="./assets/img/logo-mideplan.webp" class="img-fluid imgFooterStandard mx-3" alt="Mideplan">
+                    <img src="./assets/img/logo-inec.webp" class="img-fluid imgFooterStandard mx-3" alt="INEC">
+
+                    <img src="./assets/img/logo-conapdis.webp" class="img-fluid imgFooterMain mx-3" alt="Conapdis">
+
+                    <img src="./assets/img/logo-imas.webp" class="img-fluid imgFooterStandard mx-3" alt="IMAS">
+                    <img src="./assets/img/logo-ministerio.webp" class="img-fluid imgFooterStandard mx-3"
+                        alt="Ministerio RREE">
+                </div>
+            </div>
+        </div>
+
+        <!-- Enlaces de pie de página -->
+        <div class="container-fluid py-3 bg-dark">
+            <ul class="nav d-flex flex-column flex-md-row justify-content-center align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-light py-0" href="#">Marco Legal</a>
+                </li>
+                <li class="text-white d-none d-md-block">|</li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-light py-0" href="#">Términos de accesibilidad</a>
+                </li>
+                <li class="text-white d-none d-md-block">|</li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-light py-0" href="#">Créditos</a>
+                </li>
+                <li class="text-white d-none d-md-block">|</li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-light py-0" href="#">Directorio de ONGs</a>
+                </li>
+                <li class="text-white d-none d-md-block">|</li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-light py-0" href="#">Contacto</a>
+                </li>
+            </ul>
+        </div>
     </footer>
 
 
