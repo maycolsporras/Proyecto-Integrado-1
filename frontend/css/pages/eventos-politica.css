@@ -6,3 +6,54 @@
     border-radius: 5px;  
     margin: 0 10px;
 }
+
+.barraBusquedaEventos{
+    background-color: var(--color-azul-claro);
+    margin: 0 auto;
+    border-radius: 10px;
+    width: fit-content;
+    max-width: 100%;
+    padding: .5rem .75rem 1rem;
+}
+
+.txtFormBsuqueda{
+    color: var(--dropdown-text-color);
+}
+
+.filtrosFecha {
+    width: fit-content;
+}
+
+.campoFecha .form-select {
+    width: 78px;
+    color: var(--dropdown-text-color);
+    border-color: var(--dropdown-text-color);
+    --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23164a98' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    background-image: var(--bs-form-select-bg-img) !important;
+}
+
+.lupaBusqueda {
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+    border: none;
+    z-index: 10000;
+
+}.barraBusqueda {
+    margin-left: -5px !important;
+    width: 100%;
+    color: var(--dropdown-text-color);
+    border-color: var(--dropdown-text-color);
+    caret-color: var(--dropdown-text-color);
+    z-index: 0;
+}
+
+.barraBusqueda::placeholder {
+    color: var(--dropdown-text-color);
+    opacity: 1;
+}
+
+.barraBusqueda:focus,
+.campoFecha .form-select:focus {
+    border-color: var(--dropdown-text-color);
+    box-shadow: none;
+}
