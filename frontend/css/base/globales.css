@@ -1,0 +1,17 @@
+:root {
+    --nav-color: #3E578E;
+    --dropdown-text-color: #1E2E50;
+    --color-blanco: #FFFFFF;
+    --color-gris-claro: #c4c4c4;
+    --color-gris-oscuro: #333333;
+    --color-azul-claro: #EFF4F7;
+}
+
+body {
+    font-family: Helvetica, sans-serif;
+    height: 100vh;
+}
+
+p {
+    margin: 0;
+}

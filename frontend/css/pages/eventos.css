@@ -1,0 +1,53 @@
+.eventosHeader{
+    background-color: var(--color-azul-claro);
+}
+
+.txtEventosHeader{
+    font-size: 40px;
+    color: var(--nav-color);
+}
+
+.breadcrumb-item.active{
+    color: var(--nav-color);
+    font-weight: bold !important;
+}
+
+.breadcrumb-item a{
+    color:var(--color-gris-oscuro);
+}
+
+.cardEventos{
+    max-width: 500px;
+    &:hover{
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.txtTituloCardEventos{
+    font-size: 30px;
+    font-weight: bold;
+    color: var(--nav-color);
+}
+
+.cardEventos img{
+    height: 200px;
+    object-fit: cover;
+    margin-top: 1rem;
+    border-radius: 5px;
+}
+
+.cardEventosBtn{
+    width: 100%;
+    background-color: var(--nav-color);
+    margin-top: 20px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+
+
+    &:hover {
+        background-color: var(--dropdown-text-color);
+        color: var(--color-blanco);
+    }
+}
