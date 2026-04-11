@@ -34,9 +34,9 @@ Se utilizará la siguiente estrategia basada en Git Flow simplificado:
 
 - main → Rama de producción.
 - develop → Rama de integración.
-- feature/nombre-feature → Nuevas funcionalidades.
-- fix/nombre-fix → Corrección de errores.
-- docs/nombre-doc → Cambios en documentación.
+- feature-nombre-feature → Nuevas funcionalidades.
+- fix-nombre-fix → Corrección de errores.
+- docs-nombre-doc → Cambios en documentación.
 
 ---
 
@@ -47,22 +47,22 @@ Los mensajes de commit siguen la convención:
 tipo: descripción breve en gerundio.
 
 Ejemplo:
-feat: agregando listado de eventos
-fix: corregiendo validación de formulario
-docs: actualizando requerimientos funcionales
+[feat]: agregando listado de eventos
+[fix]: corregiendo validación de formulario
+[docs]: actualizando requerimientos funcionales
 
 ---
 
 ## Tipos de Commit
 
-- new → Creación inicial de archivos, módulos o estructuras.
-- feat → Nueva funcionalidad
-- fix → Corrección de errores
-- docs → Cambios en documentación
-- style → Cambios de formato (sin alterar lógica)
-- refactor → Mejora interna del código
-- test → Pruebas
-- chore → Tareas de mantenimiento
+- [new] → Creación inicial de archivos, módulos o estructuras.
+- [feat] → Nueva funcionalidad
+- [fix] → Corrección de errores
+- [docs] → Cambios en documentación
+- [style] → Cambios de formato (sin alterar lógica)
+- [refactor] → Mejora interna del código
+- [test] → Pruebas
+- [chore] → Tareas de mantenimiento
 
 ---
 
