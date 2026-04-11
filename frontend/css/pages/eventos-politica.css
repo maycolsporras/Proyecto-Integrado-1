@@ -2,7 +2,7 @@
     display: inline-block;
     width: 4px;            
     height: 40px;        
-    background-color: #3b517d;
+    background-color: var(--nav-color);
     border-radius: 5px;  
     margin: 0 10px;
 }
