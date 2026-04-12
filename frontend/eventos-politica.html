@@ -142,70 +142,73 @@
                 </div>
             </div>
 
-            <form>
+            <form role="search" aria-label="Filtros de búsqueda de eventos">
                 <div class="row mt-4 pb-4 barraBusquedaEventos g-3 g-lg-4 align-items-stretch align-items-lg-center justify-content-center justify-content-lg-start">
                     <div class="col-12 col-lg-auto mt-3">
-                        <label class="form-label fw-bold txtFormBsuqueda">Ingrese el nombre del evento que
+                        <label class="form-label fw-bold txtFormBsuqueda" for="buscar-evento">Ingrese el nombre del evento que
                             desea buscar</label>
                         <div class="input-group mt-3">
                             <span class="input-group-text lupaBusqueda rounded-end"><i
                                     class="fa-solid fa-magnifying-glass"></i></span>
-                            <input type="text" class="form-control barraBusqueda" placeholder="Buscar">
+                            <input id="buscar-evento" name="buscar-evento" type="text" class="form-control barraBusqueda" placeholder="Buscar" aria-describedby="buscar-evento-ayuda">
                         </div>
+                        <small id="buscar-evento-ayuda" class="visually-hidden">Escriba el nombre del evento para filtrar los resultados.</small>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-auto mt-3 filtroDesde">
+                        <fieldset class="border-0 p-0 m-0" aria-label="Desde">
+                            <div id="desde-visible-label" class="form-label fw-bold txtFormBsuqueda mb-2">Desde</div>
+                            <div class="row g-2 filtrosFecha flex-nowrap flex-sm-wrap">
+                                <div class="col-4 col-sm-auto d-flex flex-column campoFecha">
+                                    <label class="form-label mb-0 txtFormBsuqueda small" for="desde-anio">Año</label>
+                                    <select id="desde-anio" name="desde-anio" class="form-select form-select-sm">
+                                        <option selected></option>
+                                    </select>
+                                </div>
+
+                                <div class="col-4 col-sm-auto d-flex flex-column campoFecha">
+                                    <label class="form-label mb-0 txtFormBsuqueda small" for="desde-mes">Mes</label>
+                                    <select id="desde-mes" name="desde-mes" class="form-select form-select-sm">
+                                        <option selected></option>
+                                    </select>
+                                </div>
+
+                                <div class="col-4 col-sm-auto d-flex flex-column campoFecha">
+                                    <label class="form-label mb-0 txtFormBsuqueda small" for="desde-dia">Día</label>
+                                    <select id="desde-dia" name="desde-dia" class="form-select form-select-sm">
+                                        <option selected></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
                     </div>
 
                     <div class="col-12 col-md-6 col-lg-auto mt-3">
-                        <label class="form-label fw-bold txtFormBsuqueda">Desde</label>
-                        <div class="row g-2 filtrosFecha flex-nowrap flex-sm-wrap">
-                            <div class="col-4 col-sm-auto d-flex flex-column campoFecha">
-                                <label class="form-label mb-0 txtFormBsuqueda small">Año</label>
-                                <select class="form-select form-select-sm">
-                                    <option selected></option>
-                                </select>
+                        <fieldset class="border-0 p-0 m-0" aria-label="Hasta">
+                            <div id="hasta-visible-label" class="form-label fw-bold txtFormBsuqueda mb-2">Hasta</div>
+                            <div class="row g-2 filtrosFecha flex-nowrap flex-sm-wrap">
+                                <div class="col-4 col-sm-auto d-flex flex-column campoFecha">
+                                    <label class="form-label mb-0 txtFormBsuqueda small" for="hasta-anio">Año</label>
+                                    <select id="hasta-anio" name="hasta-anio" class="form-select form-select-sm">
+                                        <option selected></option>
+                                    </select>
+                                </div>
+
+                                <div class="col-4 col-sm-auto d-flex flex-column campoFecha">
+                                    <label class="form-label mb-0 txtFormBsuqueda small" for="hasta-mes">Mes</label>
+                                    <select id="hasta-mes" name="hasta-mes" class="form-select form-select-sm">
+                                        <option selected></option>
+                                    </select>
+                                </div>
+
+                                <div class="col-4 col-sm-auto d-flex flex-column campoFecha">
+                                    <label class="form-label mb-0 txtFormBsuqueda small" for="hasta-dia">Día</label>
+                                    <select id="hasta-dia" name="hasta-dia" class="form-select form-select-sm">
+                                        <option selected></option>
+                                    </select>
+                                </div>
                             </div>
-
-                            <div class="col-4 col-sm-auto d-flex flex-column campoFecha">
-                                <label class="form-label mb-0 txtFormBsuqueda small">Mes</label>
-                                <select class="form-select form-select-sm">
-                                    <option selected></option>
-                                </select>
-                            </div>
-
-                            <div class="col-4 col-sm-auto d-flex flex-column campoFecha">
-                                <label class="form-label mb-0 txtFormBsuqueda small">Día</label>
-                                <select class="form-select form-select-sm">
-                                    <option selected></option>
-                                </select>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-6 col-lg-auto mt-3">
-                        <label class="form-label fw-bold txtFormBsuqueda">Hasta</label>
-                        <div class="row g-2 filtrosFecha flex-nowrap flex-sm-wrap">
-                            <div class="col-4 col-sm-auto d-flex flex-column campoFecha">
-                                <label class="form-label mb-0 txtFormBsuqueda small">Año</label>
-                                <select class="form-select form-select-sm">
-                                    <option selected></option>
-                                </select>
-                            </div>
-
-                            <div class="col-4 col-sm-auto d-flex flex-column campoFecha">
-                                <label class="form-label mb-0 txtFormBsuqueda small">Mes</label>
-                                <select class="form-select form-select-sm">
-                                    <option selected></option>
-                                </select>
-                            </div>
-
-                            <div class="col-4 col-sm-auto d-flex flex-column campoFecha">
-                                <label class="form-label mb-0 txtFormBsuqueda small">Día</label>
-                                <select class="form-select form-select-sm">
-                                    <option selected></option>
-                                </select>
-                            </div>
-
-                        </div>
+                        </fieldset>
                     </div>
 
             </form>
