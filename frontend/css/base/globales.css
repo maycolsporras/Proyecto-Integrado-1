@@ -7,10 +7,16 @@
     --color-azul-claro: #EFF4F7;
 }
 
+html{
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
 body {
     font-family: Helvetica, sans-serif;
     height: 100vh;
 }
+
 
 p {
     margin: 0;
