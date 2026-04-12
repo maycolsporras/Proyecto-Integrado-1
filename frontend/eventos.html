@@ -151,28 +151,34 @@
                 </div>
             </div>
         </div>
-        <section class="mt-5 sectionInscripcionEventos py-5">
+        <section class="mt-5 sectionInscripcionEventos py-5" aria-labelledby="titulo-inscripcion-eventos"
+            aria-describedby="descripcion-inscripcion-eventos">
             <div class="container-fluid bloqueInscripcionEventos py-5">
                 <div class="row d-flex flex-column justify-content-center align-items-center text-center gap-5">
                     <div class="col-12 ">
-                        <p class="tituloInscripcionEventos">Inscripción a Eventos PONADIS</p>
+                        <p id="titulo-inscripcion-eventos" class="tituloInscripcionEventos">Inscripción a Eventos PONADIS</p>
                     </div>
                     <div class="col-12 ">
-                        <p class="textoInscripcionEventos">Con el fin de manterse actualizado en los últimos eventos del Sistema Costarricense de
-                            Información Sobre Discapacidad </br>- SICID - puede inscribirse a la notificacion por correo
-                            electrónico sobre los eventos más recientes de la Política Nacional de </br>Discapacidad -
+                        <p id="descripcion-inscripcion-eventos" class="textoInscripcionEventos">Con el fin de manterse actualizado en los últimos eventos del Sistema Costarricense de
+                            Información Sobre Discapacidad <br>- SICID - puede inscribirse a la notificacion por correo
+                            electrónico sobre los eventos más recientes de la Política Nacional de <br>Discapacidad -
                             PONADIS -</p>
                     </div>
-                    <div class="col-6 gap-3 d-flex justify-content-center">
-                        <button class="btn text-decoration-none btnBloqueInscripcion" href="#">
-                            <i class="fa-solid fa-hands"></i>
+                    <div class="col-6 gap-3 d-flex justify-content-center"
+                        aria-label="Herramientas de accesibilidad de la sección de inscripción">
+                        <button type="button" class="btn text-decoration-none btnBloqueInscripcion" href="#"
+                            aria-label="Solicitar apoyo en lengua de señas">
+                            <i class="fa-solid fa-hands" aria-hidden="true"></i>
                         </button>
-                        <button class="btn text-decoration-none btnBloqueInscripcion" href="#">
-                            <i class="fa-solid fa-volume-high"></i>
+                        <button type="button" class="btn text-decoration-none btnBloqueInscripcion" href="#"
+                            aria-label="Escuchar el contenido de la sección">
+                            <i class="fa-solid fa-volume-high" aria-hidden="true"></i>
                         </button>
                     </div>
                     <div class="col-12">
-                        <button class="btn text-decoration-none btnInscribirme">Inscribirme</button>
+                        <button type="button" class="btn text-decoration-none btnInscribirme"
+                            aria-label="Inscribirme a notificaciones de eventos PONADIS"
+                            aria-describedby="descripcion-inscripcion-eventos">Inscribirme</button>
                     </div>
                 </div>
             </div>

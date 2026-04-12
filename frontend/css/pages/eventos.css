@@ -4,11 +4,11 @@
 
 .txtEventosHeader {
     font-size: 40px;
-    color: var(--nav-color);
+    color: var(--dropdown-text-color);
 }
 
 .breadcrumb-item.active {
-    color: var(--nav-color);
+    color: var(--dropdown-text-color);
     font-weight: bold !important;
 }
 
@@ -27,7 +27,7 @@
 .txtTituloCardEventos {
     font-size: 30px;
     font-weight: bold;
-    color: var(--nav-color);
+    color: var(--dropdown-text-color);
 }
 
 .cardEventos img {
@@ -39,7 +39,7 @@
 
 .cardEventosBtn {
     width: 100%;
-    background-color: var(--nav-color);
+    background-color: var(--dropdown-text-color);
     margin-top: 20px;
     padding: 10px;
     border: none;
@@ -48,7 +48,7 @@
 
 
     &:hover {
-        background-color: var(--dropdown-text-color);
+        background-color: var(--nav-color);
         color: var(--color-blanco);
     }
 }
