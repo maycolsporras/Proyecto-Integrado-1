@@ -14,7 +14,10 @@ html{
 
 body {
     font-family: Helvetica, sans-serif;
-    height: 100vh;
+}
+
+body #mainContent {
+    min-height: auto;
 }
 
 
