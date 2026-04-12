@@ -1,22 +1,21 @@
 .lineaSeparadora {
     display: inline-block;
-    width: 4px;            
-    height: 40px;        
+    width: 4px;
+    height: 40px;
     background-color: var(--nav-color);
-    border-radius: 5px;  
+    border-radius: 5px;
     margin: 0 10px;
 }
 
-.barraBusquedaEventos{
+.barraBusquedaEventos {
     background-color: var(--color-azul-claro);
-    margin: 0 auto;
     border-radius: 10px;
     width: fit-content;
     max-width: 100%;
     padding: .5rem .75rem 1rem;
 }
 
-.txtFormBsuqueda{
+.txtFormBsuqueda {
     color: var(--dropdown-text-color);
 }
 
@@ -58,7 +57,9 @@
     border: none;
     z-index: 10000;
 
-}.barraBusqueda {
+}
+
+.barraBusqueda {
     margin-left: -5px !important;
     width: 100%;
     color: var(--dropdown-text-color);
@@ -76,4 +77,10 @@
 .campoFecha .form-select:focus {
     border-color: var(--dropdown-text-color);
     box-shadow: none;
+}
+
+@media (max-width: 991.98px) {
+    .barraBusquedaEventos {
+        margin-left: 2px !important;
+    }
 }
