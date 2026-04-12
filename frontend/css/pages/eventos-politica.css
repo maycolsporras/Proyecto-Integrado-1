@@ -55,13 +55,13 @@
     background-color: var(--dropdown-text-color);
     color: var(--color-blanco);
     border: none;
-    z-index: 10000;
+    z-index: 1000;
 
 }
 
 .barraBusqueda {
     margin-left: -5px !important;
-    width: 100%;
+    width: 500px !important;
     color: var(--dropdown-text-color);
     border-color: var(--dropdown-text-color);
     caret-color: var(--dropdown-text-color);
@@ -82,5 +82,20 @@
 @media (max-width: 991.98px) {
     .barraBusquedaEventos {
         margin-left: 2px !important;
+    }
+}
+
+@media (min-width: 991.98px) {
+    .filtroDesde{
+        margin-left: 100px !important;
+    }
+    .filtroHasta{
+        margin-left: 100px !important;
+    }
+}
+
+@media (min-width: 991.98px) {
+    .offsetDerechaEventos {
+        margin-left: 180px !important;
     }
 }
