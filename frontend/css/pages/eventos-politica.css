@@ -88,16 +88,21 @@
 
 @media (min-width: 991.98px) {
     .filtroDesde{
-        margin-left: 100px !important;
+        margin-left: 50px !important;
     }
     .filtroHasta{
-        margin-left: 100px !important;
+        margin-left: 50px !important;
     }
 }
 
 @media (min-width: 991.98px) {
     .offsetDerechaEventos {
-        margin-left: 190px !important;
+        margin-left: 50px !important;
     }
 }
 
+@media (min-width: 1920px) {
+    .offsetDerechaEventos {
+        margin-left: 190px !important;
+    }
+}
