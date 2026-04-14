@@ -116,10 +116,11 @@
             </div>
         </div>
     </div>
-    <!-- fin Modal de suscripción enviada -->
     <!-- fin Modal de suscripción a eventos -->
 
-    <!-- Modal consulta de evento -->  
+
+
+    <!-- Modal consulta de evento -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalConsultaEvento">
         Modal Consulta de evento
     </button>
@@ -136,26 +137,34 @@
 
                     <form class="modalConsultaEventoFormulario" action="#">
                         <div class="row mb-3 align-items-start">
-                            <label for="consultaEventoCorreo" class="col-12 col-md-3 col-form-label modalConsultaEventoEtiqueta">
+                            <label for="consultaEventoCorreo"
+                                class="col-12 col-md-3 col-form-label modalConsultaEventoEtiqueta">
                                 *Correo Electrónico
                             </label>
                             <div class="col-12 col-md-9">
-                                <input id="consultaEventoCorreo" type="email" class="form-control modalConsultaEventoInput" placeholder="introduzca el dato solicitado">
+                                <input id="consultaEventoCorreo" type="email"
+                                    class="form-control modalConsultaEventoInput"
+                                    placeholder="introduzca el dato solicitado">
                             </div>
                         </div>
 
                         <div class="row mb-4 align-items-start">
-                            <label for="consultaEventoTexto" class="col-12 col-md-3 col-form-label modalConsultaEventoEtiqueta">
+                            <label for="consultaEventoTexto"
+                                class="col-12 col-md-3 col-form-label modalConsultaEventoEtiqueta">
                                 *Consulta
                             </label>
                             <div class="col-12 col-md-9">
-                                <textarea id="consultaEventoTexto" class="form-control modalConsultaEventoInput modalConsultaEventoTextarea" placeholder="introduzca el dato solicitado"></textarea>
+                                <textarea id="consultaEventoTexto"
+                                    class="form-control modalConsultaEventoInput modalConsultaEventoTextarea"
+                                    placeholder="introduzca el dato solicitado"></textarea>
                             </div>
                         </div>
 
                         <div class="modalConsultaEventoAcciones d-grid gap-3 d-md-flex justify-content-center my-5">
-                            <button type="button" class="btn modalConsultaEventoBtnCancelar px-4" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn modalConsultaEventoBtnAceptar px-4" data-bs-toggle="modal" data-bs-target="#modalConsultaEnviada">Aceptar</button>
+                            <button type="button" class="btn modalConsultaEventoBtnCancelar px-4"
+                                data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn modalConsultaEventoBtnAceptar px-4" data-bs-toggle="modal"
+                                data-bs-target="#modalConsultaEnviada">Aceptar</button>
                         </div>
                     </form>
                 </div>
@@ -163,28 +172,50 @@
         </div>
     </div>
 
-    <!-- modal consulta enviada -->
-     
-    
     <!-- Modal consulta enviada -->
     <div class="modal fade" id="modalConsultaEnviada" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modalConsultaEnviadaAncho">
-            <div class="modal-content modalConsultaEnviadaContenido">
-                <div class="modal-body modalConsultaEnviadaBody">
-                    <div class="modalConsultaEnviadaIcono" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+            <div class="modal-content modalSuscripcionEnviadaContenido">
+                <div class="modal-body modalSuscripcionEnviadaBody">
+                    <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
                         <i class="fa-solid fa-check"></i>
                     </div>
-                    <p class="modalConsultaEnviadaTitulo">Consulta Enviada</p>
-                    <p class="modalConsultaEnviadaDescripcion">
-                        Se envió la consulta con éxito. Los encargados del evento se estarán comunicando con usted, por medio del correo electrónico para responder su consulta.
+                    <p class="modalSuscripcionEnviadaTitulo">Consulta Enviada</p>
+                    <p class="modalSuscripcionEnviadaDescripcion">
+                        Se envió la consulta con éxito. Los encargados del evento se estarán comunicando con usted, por
+                        medio del correo electrónico para responder su consulta.
                     </p>
-                    <button type="button" class="btn modalConsultaEnviadaBtnContinuar" data-bs-dismiss="modal">Continuar</button>
+                    <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                        data-bs-dismiss="modal">Continuar</button>
                 </div>
             </div>
         </div>
     </div>
-
     <!-- fin Modal consulta de evento -->
+
+
+    <!-- Modal de inscripción a evento -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalInscripcionEvento">
+        Modal Inscripción a evento
+    </button>
+
+    <div class="modal fade" id="modalInscripcionEvento" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+            <div class="modal-content modalSuscripcionEnviadaContenido">
+                <div class="modal-body modalSuscripcionEnviadaBody">
+                    <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <p class="modalSuscripcionEnviadaTitulo">Inscripción Enviada</p>
+                    <p class="modalSuscripcionEnviadaDescripcion">
+                        Se envió la inscripción con éxito. Los encargados del evento se estarán comunicando con usted, por medio del correo electrónico para notificar la aprobación de su inscripción.
+                    </p>
+                    <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar" data-bs-dismiss="modal">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin modal de inscripción a evento -->
 
 
 
