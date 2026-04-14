@@ -1,0 +1,4 @@
+.modalSuscripcionEventos {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+}

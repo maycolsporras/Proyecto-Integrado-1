@@ -1,5 +1,5 @@
 @import "./base/globales.css";
 @import "./pages/landing.css";
 @import "./pages/eventos.css";
-@import "./pages/eventos-politica.css"
-
+@import "./pages/eventos-politica.css";
+@import "./components/modales.css";
