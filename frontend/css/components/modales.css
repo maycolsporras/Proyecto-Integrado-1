@@ -53,6 +53,8 @@
     padding: 0.65rem 1rem;
 }
 
+
+
 /* Modal de suscripción enviada */
 
 .modalSuscripcionEnviadaAncho {
@@ -90,7 +92,7 @@
 }
 
 .modalSuscripcionEnviadaDescripcion {
-    color: #343434;
+    color: var(--color-negro);
     text-align: left;
     line-height: 1.55;
     margin: 0 auto 2rem;
@@ -113,9 +115,11 @@
 .modalSuscripcionEnviadaBtnContinuar:hover,
 .modalSuscripcionEnviadaBtnContinuar:focus,
 .modalSuscripcionEnviadaBtnContinuar:active {
-    background-color: #b8b8b8;
+    background-color: var(--color-gris-hover);
     color: var(--color-negro);
 }
+
+
 
 /* Modal de consulta de evento */
 
@@ -202,7 +206,7 @@
 .modalConsultaEventoBtnCancelar:hover,
 .modalConsultaEventoBtnCancelar:focus,
 .modalConsultaEventoBtnCancelar:active {
-    background-color: #b8b8b8;
+    background-color: var(--color-gris-hover);
     color: var(--color-negro);
 }
 
@@ -212,6 +216,8 @@
     background-color: var(--nav-color);
     color: var(--color-blanco);
 }
+
+
 
 /* Modal de consulta enviada */
 
@@ -250,7 +256,7 @@
 }
 
 .modalConsultaEnviadaDescripcion {
-    color: #343434;
+    color: var(--color-negro);
     text-align: left;
     line-height: 1.55;
     margin: 0 auto 2rem;
@@ -269,7 +275,68 @@
 .modalConsultaEnviadaBtnContinuar:hover,
 .modalConsultaEnviadaBtnContinuar:focus,
 .modalConsultaEnviadaBtnContinuar:active {
-    background-color: #b8b8b8;
+    background-color: var(--color-gris-hover);
     color: var(--color-negro);
 }
 
+
+
+/* Modal de evento incompleto */
+
+.modalEventoIncompletoAncho {
+    max-width: 620px;
+}
+
+.modalEventoIncompletoContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--color-rojo);
+}
+
+.modalEventoIncompletoBody {
+    padding: 1.3rem 2.9rem 2.3rem;
+    text-align: center;
+}
+
+.modalEventoIncompletoIcono {
+    width: 42px;
+    height: 42px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    background-color: var(--color-rojo);
+    color: var(--color-blanco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.modalEventoIncompletoTitulo {
+    color: var(--color-rojo);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.7rem;
+}
+
+.modalEventoIncompletoDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.55;
+    margin: 0 auto 2rem;
+}
+
+.modalEventoIncompletoBtnContinuar {
+    min-width: 140px;
+    padding: 0.5rem 1.3rem;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+    font-weight: 600;
+}
+
+.modalEventoIncompletoBtnContinuar:hover,
+.modalEventoIncompletoBtnContinuar:focus,
+.modalEventoIncompletoBtnContinuar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
