@@ -1,0 +1,945 @@
+/* Modal de suscripción a eventos */
+.modalSuscripcionEventosContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+}
+
+.modalSuscripcionEventosTitulo {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--dropdown-text-color);
+}
+
+.modalSuscripcionEventosAncho {
+    max-width: 720px;
+}
+
+.modalSuscripcionEventosDescripcion {
+    max-width: 90%;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+.modalSuscripcionEventosBtnInscribirme {
+    background-color: var(--dropdown-text-color);
+    border: none;
+    color: var(--color-blanco);
+    font-weight: 700;
+    min-width: 200px;
+    padding: 0.6rem 1.5rem;
+}
+
+.modalSuscripcionEventosBtnInscribirme:hover,
+.modalSuscripcionEventosBtnInscribirme:focus,
+.modalSuscripcionEventosBtnInscribirme:active {
+    background-color: var(--nav-color);
+    color: var(--color-blanco);
+}
+
+
+.modalSuscripcionEventosTextoNotificaciones {
+    font-weight: 700;
+    color: var(--dropdown-text-color);
+}
+
+.modalSuscripcionEventosEtiqueta {
+    text-align: left;
+    white-space: normal;
+    line-height: 1.25;
+}
+
+.modalSuscripcionEventosBody .form-control {
+    min-height: 46px;
+    padding: 0.65rem 1rem;
+}
+
+
+
+/* Modal de suscripción enviada */
+
+.modalSuscripcionEnviadaAncho {
+    max-width: 620px;
+}
+
+.modalSuscripcionEnviadaContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--color-verde);
+}
+
+.modalSuscripcionEnviadaBody {
+    padding: 1.3rem 2.9rem 2.3rem;
+    text-align: center;
+}
+
+.modalSuscripcionEnviadaIcono {
+    width: 42px;
+    height: 42px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.modalSuscripcionEnviadaTitulo {
+    color: var(--color-verde);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.7rem;
+}
+
+.modalSuscripcionEnviadaDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.55;
+    margin: 0 auto 2rem;
+}
+
+.modalSuscripcionEnviadaDescripcionNegrita {
+    font-weight: 700;
+}
+
+.modalSuscripcionEnviadaBtnContinuar {
+    min-width: 140px;
+    padding: 0.5rem 1.3rem;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+    font-weight: 600;
+}
+
+.modalSuscripcionEnviadaBtnContinuar:hover,
+.modalSuscripcionEnviadaBtnContinuar:focus,
+.modalSuscripcionEnviadaBtnContinuar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
+
+
+
+/* Modal de consulta de evento */
+
+.modalConsultaEventoAncho {
+    max-width: 720px;
+}
+
+.modalConsultaEventoContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+    background-color: var(--color-blanco);
+}
+
+.modalConsultaEventoBody {
+    padding: 2.2rem 3.2rem 2.5rem;
+}
+
+.modalConsultaEventoTitulo {
+    color: var(--dropdown-text-color);
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.3rem;
+}
+
+.modalConsultaEventoDescripcion {
+    color: var(--color-negro);
+    font-size: 1.05rem;
+    line-height: 1.5;
+    text-align: center;
+    margin: 0 auto 1.4rem;
+    max-width: 95%;
+}
+
+.modalConsultaEventoFormulario {
+    max-width: 100%;
+}
+
+.modalConsultaEventoEtiqueta {
+    color: var(--color-negro);
+    font-size: 1rem;
+    line-height: 1.15;
+    text-align: left;
+}
+
+.modalConsultaEventoInput {
+    min-height: 44px;
+    border-color: var(--color-gris-claro);
+    border-radius: 2px;
+    padding: 0.5rem 0.85rem;
+    font-size: 1rem;
+    color: var(--color-gris-oscuro);
+}
+
+.modalConsultaEventoTextarea {
+    min-height: 140px;
+    resize: none;
+}
+
+.modalConsultaEventoAcciones {
+    margin-top: 1rem;
+}
+
+.modalConsultaEventoBtnCancelar,
+.modalConsultaEventoBtnAceptar {
+    min-width: 140px;
+    padding: 0.55rem 1.3rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+}
+
+.modalConsultaEventoBtnCancelar {
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+}
+
+.modalConsultaEventoBtnAceptar {
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+}
+
+.modalConsultaEventoBtnCancelar:hover,
+.modalConsultaEventoBtnCancelar:focus,
+.modalConsultaEventoBtnCancelar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
+
+.modalConsultaEventoBtnAceptar:hover,
+.modalConsultaEventoBtnAceptar:focus,
+.modalConsultaEventoBtnAceptar:active {
+    background-color: var(--nav-color);
+    color: var(--color-blanco);
+}
+
+/* Modal rechazo lista administrador */
+
+.modalRechazoListaAdministradorConfirmacionAncho {
+    max-width: 620px;
+}
+
+.modalRechazoListaAdministradorConfirmacionContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+}
+
+.modalRechazoListaAdministradorConfirmacionBody {
+    padding: 1.9rem 2.4rem 2rem;
+    text-align: center;
+}
+
+.modalRechazoListaAdministradorConfirmacionTitulo {
+    color: var(--dropdown-text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.8rem;
+}
+
+.modalRechazoListaAdministradorConfirmacionDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.5;
+    margin: 0 auto 1.6rem;
+}
+
+.modalRechazoListaAdministradorConfirmacionAcciones {
+    margin-top: 1.2rem;
+}
+
+.modalRechazoListaAdministradorAncho {
+    max-width: 680px;
+}
+
+.modalRechazoListaAdministradorContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+}
+
+.modalRechazoListaAdministradorBody {
+    padding: 1.9rem 2.4rem 2rem;
+    text-align: center;
+}
+
+.modalRechazoListaAdministradorTitulo {
+    color: var(--dropdown-text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.8rem;
+}
+
+.modalRechazoListaAdministradorDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.5;
+    margin: 0 auto 1.6rem;
+}
+
+.modalRechazoListaAdministradorFormulario {
+    max-width: 100%;
+}
+
+.modalRechazoListaAdministradorTextarea {
+    min-height: 140px;
+    border-color: #a4a4a4;
+    color: var(--color-negro);
+    resize: none;
+}
+
+.modalRechazoListaAdministradorContador {
+    color: var(--dropdown-text-color);
+    font-size: 0.95rem;
+    text-align: right;
+    margin-top: 0.2rem;
+}
+
+.modalRechazoListaAdministradorAcciones {
+    margin-top: 1.2rem;
+}
+
+.modalRechazoListaAdministradorBtnCancelar,
+.modalRechazoListaAdministradorBtnPrincipal {
+    min-width: 140px;
+    padding: 0.55rem 1.3rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+}
+
+.modalRechazoListaAdministradorBtnCancelar {
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+}
+
+.modalRechazoListaAdministradorBtnPrincipal {
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+}
+
+.modalRechazoListaAdministradorBtnCancelar:hover,
+.modalRechazoListaAdministradorBtnCancelar:focus,
+.modalRechazoListaAdministradorBtnCancelar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
+
+.modalRechazoListaAdministradorBtnPrincipal:hover,
+.modalRechazoListaAdministradorBtnPrincipal:focus,
+.modalRechazoListaAdministradorBtnPrincipal:active {
+    background-color: var(--nav-color);
+    color: var(--color-blanco);
+}
+
+
+
+/* Modal de consulta enviada */
+
+.modalConsultaEnviadaAncho {
+    max-width: 620px;
+}
+
+.modalConsultaEnviadaContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--color-verde);
+}
+
+.modalConsultaEnviadaBody {
+    padding: 1.3rem 2.9rem 2.3rem;
+    text-align: center;
+}
+
+.modalConsultaEnviadaIcono {
+    width: 42px;
+    height: 42px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    background-color: var(--color-verde);
+    color: var(--color-blanco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.modalConsultaEnviadaTitulo {
+    color: var(--color-verde);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.7rem;
+}
+
+.modalConsultaEnviadaDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.55;
+    margin: 0 auto 2rem;
+}
+
+.modalConsultaEnviadaBtnContinuar {
+    min-width: 140px;
+    padding: 0.5rem 1.3rem;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+    font-weight: 600;
+}
+
+.modalConsultaEnviadaBtnContinuar:hover,
+.modalConsultaEnviadaBtnContinuar:focus,
+.modalConsultaEnviadaBtnContinuar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
+
+
+
+/* Modal de evento incompleto */
+
+.modalEventoIncompletoAncho {
+    max-width: 620px;
+}
+
+.modalEventoIncompletoContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--color-rojo);
+}
+
+.modalEventoIncompletoBody {
+    padding: 1.3rem 2.9rem 2.3rem;
+    text-align: center;
+}
+
+.modalEventoIncompletoIcono {
+    width: 42px;
+    height: 42px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    background-color: var(--color-rojo);
+    color: var(--color-blanco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.modalEventoIncompletoTitulo {
+    color: var(--color-rojo);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.7rem;
+}
+
+.modalEventoIncompletoDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.55;
+    margin: 0 auto 2rem;
+}
+
+.modalEventoIncompletoBtnContinuar {
+    min-width: 140px;
+    padding: 0.5rem 1.3rem;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+    font-weight: 600;
+}
+
+.modalEventoIncompletoBtnContinuar:hover,
+.modalEventoIncompletoBtnContinuar:focus,
+.modalEventoIncompletoBtnContinuar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
+
+
+
+
+/* Modal de eliminar evento */
+
+.modalEliminarEventoAncho {
+    max-width: 620px;
+}
+
+.modalEliminarEventoContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+}
+
+.modalEliminarEventoBody {
+    padding: 1.3rem 2.9rem 2.3rem;
+    text-align: center;
+}
+
+.modalEliminarEventoIcono {
+    width: 42px;
+    height: 42px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.modalEliminarEventoTitulo {
+    color: var(--dropdown-text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.7rem;
+}
+
+.modalEliminarEventoDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.55;
+    margin: 0 auto 2rem;
+}
+
+.modalEliminarEventoBtnCancelar,
+.modalEliminarEventoBtnEliminar {
+    min-width: 140px;
+    padding: 0.55rem 1.3rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+}
+
+.modalEliminarEventoBtnCancelar {
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+}
+
+.modalEliminarEventoBtnEliminar {
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+}
+
+.modalEliminarEventoBtnCancelar:hover,
+.modalEliminarEventoBtnCancelar:focus,
+.modalEliminarEventoBtnCancelar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
+
+.modalEliminarEventoBtnEliminar:hover,
+.modalEliminarEventoBtnEliminar:focus,
+.modalEliminarEventoBtnEliminar:active {
+    background-color: var(--nav-color);
+    color: var(--color-blanco);
+}
+
+
+
+
+
+/* Modal de evento en borrador */
+
+.modalEventoBorradorAncho {
+    max-width: 620px;
+}
+
+.modalEventoBorradorContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+}
+
+.modalEventoBorradorBody {
+    padding: 1.8rem 2.9rem 2.3rem;
+    text-align: center;
+}
+
+.modalEventoBorradorTitulo {
+    color: var(--dropdown-text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.9rem;
+}
+
+.modalEventoBorradorDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.55;
+    margin: 0 auto 1.5rem;
+}
+
+.modalEventoBorradorNegrita {
+    font-weight: 700;
+}
+
+.modalEventoBorradorNegritaAzul {
+    color: var(--dropdown-text-color);
+}
+
+.modalEventoBorradorAcciones {
+    margin-top: 1.2rem;
+}
+
+.modalEventoBorradorBtnEliminar,
+.modalEventoBorradorBtnContinuar {
+    min-width: 140px;
+    padding: 0.55rem 1.3rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+}
+
+.modalEventoBorradorBtnEliminar {
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+}
+
+.modalEventoBorradorBtnContinuar {
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+}
+
+.modalEventoBorradorBtnEliminar:hover,
+.modalEventoBorradorBtnEliminar:focus,
+.modalEventoBorradorBtnEliminar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
+
+.modalEventoBorradorBtnContinuar:hover,
+.modalEventoBorradorBtnContinuar:focus,
+.modalEventoBorradorBtnContinuar:active {
+    background-color: var(--nav-color);
+    color: var(--color-blanco);
+}
+
+
+
+
+/* Modal de rechazo lista de difusion */
+
+.modalRechazoListaDifusionAncho {
+    max-width: 680px;
+}
+
+.modalRechazoListaDifusionContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+}
+
+.modalRechazoListaDifusionBody {
+    padding: 1.7rem 2.2rem 2rem;
+    text-align: center;
+}
+
+.modalRechazoListaDifusionTitulo {
+    color: var(--dropdown-text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.6rem;
+}
+
+.modalRechazoListaDifusionDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.5;
+    margin: 0 auto 1rem;
+}
+
+.modalRechazoListaDifusionCajaMotivo {
+    border: 1px solid #a4a4a4;
+    border-radius: 2px;
+    color: #4b4b4b;
+    text-align: left;
+    padding: 1.2rem 1rem;
+    line-height: 1.25;
+    margin: 0 auto 1.4rem;
+}
+
+.modalRechazoListaDifusionAcciones {
+    margin-top: 1rem;
+}
+
+.modalRechazoListaDifusionBtnCancelar,
+.modalRechazoListaDifusionBtnAceptar {
+    min-width: 140px;
+    padding: 0.55rem 1.3rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+}
+
+.modalRechazoListaDifusionBtnCancelar {
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+}
+
+.modalRechazoListaDifusionBtnAceptar {
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+}
+
+.modalRechazoListaDifusionBtnCancelar:hover,
+.modalRechazoListaDifusionBtnCancelar:focus,
+.modalRechazoListaDifusionBtnCancelar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
+
+.modalRechazoListaDifusionBtnAceptar:hover,
+.modalRechazoListaDifusionBtnAceptar:focus,
+.modalRechazoListaDifusionBtnAceptar:active {
+    background-color: var(--nav-color);
+    color: var(--color-blanco);
+}
+
+/* Modal de rechazo de suscriptor */
+
+.modalRechazoSuscriptorAncho {
+    max-width: 680px;
+}
+
+.modalRechazoSuscriptorContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+}
+
+.modalRechazoSuscriptorBody {
+    padding: 1.7rem 2.2rem 2rem;
+    text-align: center;
+}
+
+.modalRechazoSuscriptorTitulo {
+    color: var(--dropdown-text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.6rem;
+}
+
+.modalRechazoSuscriptorDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.5;
+    margin: 0 auto 1rem;
+}
+
+.modalRechazoSuscriptorFormulario {
+    max-width: 100%;
+}
+
+.modalRechazoSuscriptorTextarea {
+    min-height: 140px;
+    border-color: #a4a4a4;
+    color: var(--color-negro);
+    resize: none;
+}
+
+.modalRechazoSuscriptorContador {
+    color: var(--dropdown-text-color);
+    font-size: 0.95rem;
+    text-align: right;
+    margin-top: 0.2rem;
+}
+
+.modalRechazoSuscriptorAcciones {
+    margin-top: 1rem;
+}
+
+.modalRechazoSuscriptorBtnCancelar,
+.modalRechazoSuscriptorBtnAceptar {
+    min-width: 140px;
+    padding: 0.55rem 1.3rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+}
+
+.modalRechazoSuscriptorBtnCancelar {
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+}
+
+.modalRechazoSuscriptorBtnAceptar {
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+}
+
+.modalRechazoSuscriptorBtnCancelar:hover,
+.modalRechazoSuscriptorBtnCancelar:focus,
+.modalRechazoSuscriptorBtnCancelar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
+
+.modalRechazoSuscriptorBtnAceptar:hover,
+.modalRechazoSuscriptorBtnAceptar:focus,
+.modalRechazoSuscriptorBtnAceptar:active {
+    background-color: var(--nav-color);
+    color: var(--color-blanco);
+}
+
+/* Modal respuesta de consulta */
+
+.modalRespuestaConsultaAncho {
+    max-width: 680px;
+}
+
+.modalRespuestaConsultaContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+}
+
+.modalRespuestaConsultaBody {
+    padding: 1.7rem 2.2rem 2rem;
+    text-align: center;
+}
+
+.modalRespuestaConsultaTitulo {
+    color: var(--dropdown-text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.6rem;
+}
+
+.modalRespuestaConsultaDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.5;
+    margin: 0 auto 1rem;
+}
+
+.modalRespuestaConsultaFormulario {
+    max-width: 100%;
+}
+
+.modalRespuestaConsultaTextarea {
+    min-height: 140px;
+    border-color: #a4a4a4;
+    color: var(--color-negro);
+    resize: none;
+}
+
+.modalRespuestaConsultaAcciones {
+    margin-top: 1rem;
+}
+
+.modalRespuestaConsultaBtnCancelar,
+.modalRespuestaConsultaBtnAceptar {
+    min-width: 140px;
+    padding: 0.55rem 1.3rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+}
+
+.modalRespuestaConsultaBtnCancelar {
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+}
+
+.modalRespuestaConsultaBtnAceptar {
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+}
+
+.modalRespuestaConsultaBtnCancelar:hover,
+.modalRespuestaConsultaBtnCancelar:focus,
+.modalRespuestaConsultaBtnCancelar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
+
+.modalRespuestaConsultaBtnAceptar:hover,
+.modalRespuestaConsultaBtnAceptar:focus,
+.modalRespuestaConsultaBtnAceptar:active {
+    background-color: var(--nav-color);
+    color: var(--color-blanco);
+}
+
+/* Modal asignar lista al suscriptor */
+
+.modalAsignarListaSuscriptorAncho {
+    max-width: 680px;
+}
+
+.modalAsignarListaSuscriptorContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+}
+
+.modalAsignarListaSuscriptorBody {
+    padding: 1.9rem 2.4rem 2rem;
+    text-align: center;
+}
+
+.modalAsignarListaSuscriptorTitulo {
+    color: var(--dropdown-text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.8rem;
+}
+
+.modalAsignarListaSuscriptorDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.5;
+    margin: 0 auto 2rem;
+}
+
+.modalAsignarListaSuscriptorFormulario {
+    max-width: 100%;
+}
+
+.modalAsignarListaSuscriptorSelect {
+    min-height: 44px;
+    border-color: #a4a4a4;
+    color: #555;
+}
+
+.modalAsignarListaSuscriptorAcciones {
+    margin-top: 1.2rem;
+}
+
+.modalAsignarListaSuscriptorBtnCancelar,
+.modalAsignarListaSuscriptorBtnAceptar {
+    min-width: 140px;
+    padding: 0.55rem 1.3rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+}
+
+.modalAsignarListaSuscriptorBtnCancelar {
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+}
+
+.modalAsignarListaSuscriptorBtnAceptar {
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+}
+
+.modalAsignarListaSuscriptorBtnCancelar:hover,
+.modalAsignarListaSuscriptorBtnCancelar:focus,
+.modalAsignarListaSuscriptorBtnCancelar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
+
+.modalAsignarListaSuscriptorBtnAceptar:hover,
+.modalAsignarListaSuscriptorBtnAceptar:focus,
+.modalAsignarListaSuscriptorBtnAceptar:active {
+    background-color: var(--nav-color);
+    color: var(--color-blanco);
+}
+

@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal - componente</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
+
+    <!-- Modal de suscripción a eventos -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalSuscripcionEventos">
+        Modal Form de suscripcion a eventos
+    </button>
+
+    <div class="modal fade" id="modalSuscripcionEventos" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalSuscripcionEventosAncho">
+            <div class="modal-content modalSuscripcionEventosContenido">
+                <div class="modal-body text-center modalSuscripcionEventosBody">
+                    <p class="py-4 mb-3 modalSuscripcionEventosTitulo">Inscripción a Eventos</p>
+                    <p class="modalSuscripcionEventosDescripcion text-start">
+                        Complete los datos solicitados para inscribirse a recibir notificaciones de los eventos más
+                        recientes del Sistema Costarricense de Información sobre Discapacidad -SICID-. Se le enviará un
+                        correo electrónico a su cuenta cuando existan nuevas noticias publicadas en el sitio.
+                    </p>
+                    <form class="p-3 mx-auto">
+                        <!-- Nombre -->
+                        <div class="row mb-3 align-items-center justify-content-center">
+                            <label class="col-12 col-md-4 col-form-label modalSuscripcionEventosEtiqueta">
+                                <span class="text-danger">*</span> Nombre Completo
+                            </label>
+                            <div class="col-12 col-md-8">
+                                <input type="text" class="form-control" placeholder="Introduzca el dato solicitado">
+                            </div>
+                        </div>
+                        <!-- Correo -->
+                        <div class="row mb-3 align-items-center justify-content-center">
+                            <label class="col-12 col-md-4 col-form-label modalSuscripcionEventosEtiqueta">
+                                <span class="text-danger">*</span> Correo Electrónico
+                            </label>
+                            <div class="col-12 col-md-8">
+                                <input type="email" class="form-control" placeholder="Introduzca el dato solicitado">
+                            </div>
+                        </div>
+                        <!-- Profesión -->
+                        <div class="row mb-3 align-items-center justify-content-center">
+                            <label class="col-12 col-md-4 col-form-label modalSuscripcionEventosEtiqueta">
+                                <span class="text-danger">*</span> Profesión u Oficio
+                            </label>
+                            <div class="col-12 col-md-8">
+                                <input type="text" class="form-control" placeholder="Introduzca el dato solicitado">
+                            </div>
+                        </div>
+                        <!-- Entidad -->
+                        <div class="row mb-3 align-items-center justify-content-center">
+                            <label class="col-12 col-md-4 col-form-label modalSuscripcionEventosEtiqueta">
+                                <span class="text-danger">*</span> Entidad para la que trabaja o está vinculado
+                            </label>
+                            <div class="col-12 col-md-8">
+                                <input type="text" class="form-control" placeholder="Introduzca el dato solicitado">
+                            </div>
+                        </div>
+                        <!-- Razón -->
+                        <div class="row mb-3 align-items-center justify-content-center">
+                            <label class="col-12 col-md-4 col-form-label modalSuscripcionEventosEtiqueta">
+                                <span class="text-danger">*</span> Razón por la que desea ser notificado
+                            </label>
+                            <div class="col-12 col-md-8">
+                                <input type="text" class="form-control" placeholder="Introduzca el dato solicitado">
+                            </div>
+                        </div>
+                        <!-- Checkbox -->
+                        <div class="row">
+                            <div class="col-md-8 mx-auto">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="notificaciones">
+                                    <label class="form-check-label" for="notificaciones">
+                                        <span class="modalSuscripcionEventosTextoNotificaciones">Acepto recibir
+                                            notificaciones</span> a mi correo electrónico de SICID
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="d-grid d-md-flex justify-content-center my-5">
+                        <button type="button" class="btn modalSuscripcionEventosBtnInscribirme" data-bs-toggle="modal"
+                            data-bs-target="#suscripcionEnviada">Inscribirme</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal de suscripción enviada -->
+    <div class="modal fade" id="suscripcionEnviada" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+            <div class="modal-content modalSuscripcionEnviadaContenido">
+                <div class="modal-body modalSuscripcionEnviadaBody">
+                    <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <p class="modalSuscripcionEnviadaTitulo">Inscripción Enviada</p>
+                    <p class="modalSuscripcionEnviadaDescripcion">
+                        <span class="modalSuscripcionEnviadaDescripcionNegrita">Se envió la solicitud de inscripción con
+                            éxito.</span> Los encargados de administrar EVENTOS se estarán comunicando con usted, por
+                        medio del correo electrónico para notificar la aprobación de su inscripción al módulo.
+                    </p>
+                    <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                        data-bs-dismiss="modal">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- fin Modal de suscripción a eventos -->
+
+
+
+
+
+    <!-- Modal consulta de evento -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalConsultaEvento">
+        Modal Consulta de evento
+    </button>
+
+    <div class="modal fade" id="modalConsultaEvento" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalConsultaEventoAncho">
+            <div class="modal-content modalConsultaEventoContenido">
+                <div class="modal-body modalConsultaEventoBody">
+                    <p class="modalConsultaEventoTitulo">Consulta de Evento</p>
+                    <p class="modalConsultaEventoDescripcion">
+                        Para solicitar más información o aclarar dudas acerca de este evento, escriba su consulta en el
+                        recuadro siguiente y un correo electrónico para contactarle.
+                    </p>
+
+                    <form class="modalConsultaEventoFormulario" action="#">
+                        <div class="row mb-3 align-items-start">
+                            <label for="consultaEventoCorreo"
+                                class="col-12 col-md-3 col-form-label modalConsultaEventoEtiqueta">
+                                *Correo Electrónico
+                            </label>
+                            <div class="col-12 col-md-9">
+                                <input id="consultaEventoCorreo" type="email"
+                                    class="form-control modalConsultaEventoInput"
+                                    placeholder="introduzca el dato solicitado">
+                            </div>
+                        </div>
+
+                        <div class="row mb-4 align-items-start">
+                            <label for="consultaEventoTexto"
+                                class="col-12 col-md-3 col-form-label modalConsultaEventoEtiqueta">
+                                *Consulta
+                            </label>
+                            <div class="col-12 col-md-9">
+                                <textarea id="consultaEventoTexto"
+                                    class="form-control modalConsultaEventoInput modalConsultaEventoTextarea"
+                                    placeholder="introduzca el dato solicitado"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="modalConsultaEventoAcciones d-grid gap-3 d-md-flex justify-content-center my-5">
+                            <button type="button" class="btn modalConsultaEventoBtnCancelar px-4"
+                                data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn modalConsultaEventoBtnAceptar px-4" data-bs-toggle="modal"
+                                data-bs-target="#modalConsultaEnviada">Aceptar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal consulta enviada -->
+    <div class="modal fade" id="modalConsultaEnviada" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+            <div class="modal-content modalSuscripcionEnviadaContenido">
+                <div class="modal-body modalSuscripcionEnviadaBody">
+                    <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <p class="modalSuscripcionEnviadaTitulo">Consulta Enviada</p>
+                    <p class="modalSuscripcionEnviadaDescripcion">
+                        Se envió la consulta con éxito. Los encargados del evento se estarán comunicando con usted, por
+                        medio del correo electrónico para responder su consulta.
+                    </p>
+                    <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                        data-bs-dismiss="modal">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- fin Modal consulta de evento -->
+
+
+
+
+
+    <!-- Modal de inscripción a evento enviada-->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalInscripcionEvento">
+        Modal Inscripción a evento
+    </button>
+
+    <div class="modal fade" id="modalInscripcionEvento" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+            <div class="modal-content modalSuscripcionEnviadaContenido">
+                <div class="modal-body modalSuscripcionEnviadaBody">
+                    <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <p class="modalSuscripcionEnviadaTitulo">Inscripción Enviada</p>
+                    <p class="modalSuscripcionEnviadaDescripcion">
+                        Se envió la inscripción con éxito. Los encargados del evento se estarán comunicando con usted,
+                        por medio del correo electrónico para notificar la aprobación de su inscripción.
+                    </p>
+                    <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                        data-bs-dismiss="modal">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin modal de inscripción a evento enviada -->
+
+
+
+
+
+
+    <!-- Modal evento enviado -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEventoEnviado">
+        Modal Evento Enviado
+    </button>
+
+
+    <div class="modal fade" id="modalEventoEnviado" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+            <div class="modal-content modalSuscripcionEnviadaContenido">
+                <div class="modal-body modalSuscripcionEnviadaBody">
+                    <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <p class="modalSuscripcionEnviadaTitulo">Evento Enviado</p>
+                    <p class="modalSuscripcionEnviadaDescripcion">
+                        Se envió el evento con éxito al administrador. Este debe ser revisado y aprobado por el
+                        administrador, para ser publicado en la sección de Eventos. Pronto recibirá una notificación
+                        para conocer si el evento fue aprobado o rechazado.
+                    </p>
+                    <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                        data-bs-dismiss="modal">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin modal evento enviado -->
+
+
+
+
+
+
+    <!-- Modal evento incompleto -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEventoIncompleto">
+        Modal Evento Incompleto
+    </button>
+
+    <div class="modal fade" id="modalEventoIncompleto" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalEventoIncompletoAncho">
+            <div class="modal-content modalEventoIncompletoContenido">
+                <div class="modal-body modalEventoIncompletoBody">
+                    <div class="modalEventoIncompletoIcono" aria-hidden="true">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <p class="modalEventoIncompletoTitulo">Evento Incompleto</p>
+                    <p class="modalEventoIncompletoDescripcion">
+                        Hay campos obligatorios que no han sido completados, por esta razón no se puede continuar con
+                        enviar el evento para revisión. Complete los campos y proceda a enviar el evento.
+                    </p>
+                    <button type="button" class="btn modalEventoIncompletoBtnContinuar"
+                        data-bs-dismiss="modal">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin modal evento incompleto -->
+
+
+
+
+
+    <!-- modal eliminar evento -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEliminarEvento">
+        Modal Eliminar Evento
+    </button>
+
+    <div class="modal fade" id="modalEliminarEvento" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalEliminarEventoAncho">
+            <div class="modal-content modalEliminarEventoContenido">
+                <div class="modal-body modalEliminarEventoBody">
+                    <div class="modalEliminarEventoIcono" aria-hidden="true">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <p class="modalEliminarEventoTitulo">¿Eliminar?</p>
+                    <p class="modalEliminarEventoDescripcion">
+                        Al eliminar un evento en desarrollo lo perderá para siempre, ¿está seguro que desea continuar
+                        con este proceso?
+                    </p>
+                    <div class="modalEliminarEventoAcciones d-grid gap-3 d-md-flex justify-content-center my-3">
+                        <button type="button" class="btn modalEliminarEventoBtnCancelar px-4"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn modalEliminarEventoBtnEliminar px-4">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- fin modal eliminar evento -->
+
+
+
+
+
+
+    <!-- modal evento borrador -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEventoBorrador">
+        Modal Evento en Borrador
+    </button>
+
+    <div class="modal fade" id="modalEventoBorrador" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalEventoBorradorAncho">
+            <div class="modal-content modalEventoBorradorContenido">
+                <div class="modal-body modalEventoBorradorBody">
+                    <p class="modalEventoBorradorTitulo">Evento en Borrador</p>
+                    <p class="modalEventoBorradorDescripcion">
+                        El evento no se ha completado, por lo tanto al salir de esta pantalla, podrá encontrar este
+                        evento en la sección <span class="modalEventoBorradorNegrita">“Eventos en Borrador”</span>. En
+                        esta sección puede volver a editarlo y completarlo o bien eliminarlo.
+                    </p>
+                    <p class="modalEventoBorradorDescripcion mb-0">
+                        Presione <span
+                            class="modalEventoBorradorNegrita modalEventoBorradorNegritaAzul">Continuar</span> para
+                        enviar el evento a “Eventos en Desarrollo” o <span class="modalEventoBorradorNegrita">Eliminar
+                            Evento</span> para descartarla.
+                    </p>
+                    <div class="modalEventoBorradorAcciones d-grid gap-3 d-md-flex justify-content-center mb-3 mt-5">
+                        <button type="button" class="btn modalEventoBorradorBtnEliminar px-4">Eliminar Evento</button>
+                        <button type="button" class="btn modalEventoBorradorBtnContinuar px-4"
+                            data-bs-dismiss="modal">Continuar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- fin modal evento borrador -->
+
+
+
+
+
+
+    <!-- modal rechazo lista difusion -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRechazoListaDifusion">
+        Modal Rechazo Lista Difusión
+    </button>
+
+    <div class="modal fade" id="modalRechazoListaDifusion" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalRechazoListaDifusionAncho">
+            <div class="modal-content modalRechazoListaDifusionContenido">
+                <div class="modal-body modalRechazoListaDifusionBody">
+                    <p class="modalRechazoListaDifusionTitulo">Rechazo de Lista de Difusión</p>
+                    <p class="modalRechazoListaDifusionDescripcion">
+                        La Lista de Difusión enviada ha sido rechazada, a continuación, presentamos el motivo en las
+                        anotaciones realizadas por el administrador responsable:
+                    </p>
+                    <div class="modalRechazoListaDifusionCajaMotivo">
+                        Buenos días, la lista de difusión enviada no puede ser aprobada ya que se requiere verificar el
+                        dato del párrafo tres de la descripción para una mejor comprensión. Gracias!
+                    </div>
+                    <div class="modalRechazoListaDifusionAcciones d-grid gap-3 d-md-flex justify-content-center my-4">
+                        <button type="button" class="btn modalRechazoListaDifusionBtnCancelar px-4"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn modalRechazoListaDifusionBtnAceptar px-4">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- fin modal rechazo lista difusion -->
+
+
+
+
+
+
+    <!-- modal eliminar lista difusion -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEliminarListaDifusion">
+        Modal Eliminar Lista Difusión
+    </button>
+
+    <div class="modal fade" id="modalEliminarListaDifusion" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalEliminarEventoAncho">
+            <div class="modal-content modalEliminarEventoContenido">
+                <div class="modal-body modalEliminarEventoBody">
+                    <p class="modalEliminarEventoTitulo">¿Eliminar?</p>
+                    <p class="modalEliminarEventoDescripcion">
+                        Al eliminar una lista de difusión la perderá para siempre, ¿está seguro que desea continuar con
+                        este proceso?
+                    </p>
+                    <div class="modalEliminarEventoAcciones d-grid gap-3 d-md-flex justify-content-center my-3">
+                        <button type="button" class="btn modalEliminarEventoBtnCancelar px-4"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn modalEliminarEventoBtnEliminar px-4">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- fin modal eliminar lista difusion -->
+
+
+
+
+
+
+
+
+    <!-- aisgnar lista a suscriptor -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAsignarListaSuscriptor">
+        Modal Asignar Lista al Suscriptor
+    </button>
+
+    <div class="modal fade" id="modalAsignarListaSuscriptor" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalAsignarListaSuscriptorAncho">
+            <div class="modal-content modalAsignarListaSuscriptorContenido">
+                <div class="modal-body modalAsignarListaSuscriptorBody">
+                    <p class="modalAsignarListaSuscriptorTitulo">Asignar lista al suscriptor</p>
+                    <p class="modalAsignarListaSuscriptorDescripcion">
+                        Usted desea agregar a este suscriptor a las listas de difusión de la sección de noticias, favor
+                        seleccione una o varias de las listas que considere sean de interés para este usuario.
+                    </p>
+
+                    <form class="modalAsignarListaSuscriptorFormulario" action="#">
+                        <select class="form-select modalAsignarListaSuscriptorSelect"
+                            aria-label="Seleccionar listas de difusión">
+                            <option selected>seleccione el/los datos necesarios</option>
+                            <option value="1">Lista 1</option>
+                            <option value="2">Lista 2</option>
+                            <option value="3">Lista 3</option>
+                        </select>
+
+                        <div
+                            class="modalAsignarListaSuscriptorAcciones d-grid gap-3 d-md-flex justify-content-center my-5">
+                            <button type="button" class="btn modalAsignarListaSuscriptorBtnCancelar px-4"
+                                data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn modalAsignarListaSuscriptorBtnAceptar px-4"
+                                data-bs-toggle="modal" data-bs-target="#modalListaDifusionAsignada">Aceptar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal lista difusion asignada -->
+    <div class="modal fade" id="modalListaDifusionAsignada" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+            <div class="modal-content modalSuscripcionEnviadaContenido">
+                <div class="modal-body modalSuscripcionEnviadaBody">
+                    <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <p class="modalSuscripcionEnviadaTitulo">Listas de Difusión Asignada</p>
+                    <p class="modalSuscripcionEnviadaDescripcion">
+                        Se asignaron con éxito las listas seleccionadas al usuario. Para modificar o eliminar este
+                        usuario puede revisarlo en la sección del menú principal en <span
+                            class="modalSuscripcionEnviadaDescripcionNegrita">Usuarios Suscritos.</span>
+                    </p>
+                    <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                        data-bs-dismiss="modal">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- fin asignar lista a suscriptor -->
+
+
+
+
+
+
+
+    <!-- modal rechazo de suscriptor -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRechazoSuscriptor">
+        Modal Rechazo de Suscriptor
+    </button>
+
+    <div class="modal fade" id="modalRechazoSuscriptor" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalRechazoSuscriptorAncho">
+            <div class="modal-content modalRechazoSuscriptorContenido">
+                <div class="modal-body modalRechazoSuscriptorBody">
+                    <p class="modalRechazoSuscriptorTitulo">Rechazo de Suscriptor</p>
+                    <p class="modalRechazoSuscriptorDescripcion">
+                        Para realizar el rechazo de un suscriptor, favor indicar el motivo por el cual fue rechazado en
+                        el recuadro siguiente. Este será mensaje será enviado al solicitante de la suscripción.
+                    </p>
+
+                    <form class="modalRechazoSuscriptorFormulario" action="#">
+                        <textarea class="form-control modalRechazoSuscriptorTextarea" maxlength="300"
+                            placeholder="introduzca el motivo del rechazo"></textarea>
+                        <p class="modalRechazoSuscriptorContador">0 / 300 caracteres</p>
+
+                        <div class="modalRechazoSuscriptorAcciones d-grid gap-3 d-md-flex justify-content-center my-4">
+                            <button type="button" class="btn modalRechazoSuscriptorBtnCancelar px-4"
+                                data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn modalRechazoSuscriptorBtnAceptar px-4"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalConfirmacionRechazoSuscriptor">Aceptar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal confirmacion rechazo -->
+    <div class="modal fade" id="modalConfirmacionRechazoSuscriptor" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalEliminarEventoAncho">
+            <div class="modal-content modalEliminarEventoContenido">
+                <div class="modal-body modalEliminarEventoBody">
+                    <p class="modalEliminarEventoTitulo">¿Rechazar?</p>
+                    <p class="modalEliminarEventoDescripcion">
+                        Al rechazar un usuario este no puede ser agregado a una lista de difusión, ¿está seguro que
+                        desea continuar con este proceso?
+                    </p>
+                    <div class="modalEliminarEventoAcciones d-grid gap-3 d-md-flex justify-content-center my-3">
+                        <button type="button" class="btn modalEliminarEventoBtnCancelar px-4"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn modalEliminarEventoBtnEliminar px-4">Rechazar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- fin modal rechazo de suscriptor -->
+
+
+
+
+
+
+
+
+    <!-- modal respuesta consulta -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRespuestaConsulta">
+        Modal Respuesta de Consulta
+    </button>
+
+    <div class="modal fade" id="modalRespuestaConsulta" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalRespuestaConsultaAncho">
+            <div class="modal-content modalRespuestaConsultaContenido">
+                <div class="modal-body modalRespuestaConsultaBody">
+                    <p class="modalRespuestaConsultaTitulo">Respuesta de Consulta</p>
+                    <p class="modalRespuestaConsultaDescripcion">
+                        Para resolver la consulta del usuario, favor escriba en el siguiente recuadro. Este será mensaje
+                        será enviado autor de la consulta.
+                    </p>
+
+                    <form class="modalRespuestaConsultaFormulario" action="#">
+                        <textarea class="form-control modalRespuestaConsultaTextarea"
+                            placeholder="introduzca el dato solicitado"></textarea>
+
+                        <div class="modalRespuestaConsultaAcciones d-grid gap-3 d-md-flex justify-content-center my-4">
+                            <button type="button" class="btn modalRespuestaConsultaBtnCancelar px-4"
+                                data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn modalRespuestaConsultaBtnAceptar px-4"
+                                data-bs-toggle="modal" data-bs-target="#modalRespuestaEnviada">Aceptar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal respuesta enviada -->
+    <div class="modal fade" id="modalRespuestaEnviada" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+            <div class="modal-content modalSuscripcionEnviadaContenido">
+                <div class="modal-body modalSuscripcionEnviadaBody">
+                    <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <p class="modalSuscripcionEnviadaTitulo">Respuesta Enviada</p>
+                    <p class="modalSuscripcionEnviadaDescripcion">
+                        Se envió con éxito la respuesta a la consulta. Para ver la consulta y la respuesta enviada,
+                        puede revisarlo en la sección de <span
+                            class="modalSuscripcionEnviadaDescripcionNegrita">Consultas/ Consultas Resueltas.</span>
+                    </p>
+                    <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                        data-bs-dismiss="modal">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- fin modal respuesta consulta -->
+
+
+
+
+
+
+
+    <!-- Modal rechazar evento -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRechazarEvento">
+        Modal Rechazar Evento
+    </button>
+
+    <div class="modal fade" id="modalRechazarEvento" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalEliminarEventoAncho">
+            <div class="modal-content modalEliminarEventoContenido">
+                <div class="modal-body modalEliminarEventoBody">
+                    <p class="modalEliminarEventoTitulo">¿Rechazar?</p>
+                    <p class="modalEliminarEventoDescripcion">
+                        Al rechazar un evento, este no podrá ser publicado, ¿está seguro que desea continuar con este
+                        proceso?
+                    </p>
+                    <div class="modalEliminarEventoAcciones d-grid gap-3 d-md-flex justify-content-center my-3">
+                        <button type="button" class="btn modalEliminarEventoBtnCancelar px-4"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn modalEliminarEventoBtnEliminar px-4" data-bs-toggle="modal"
+                            data-bs-target="#modalRechazoEvento">Rechazar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal motivo rechazo evento -->
+
+    <div class="modal fade" id="modalRechazoEvento" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalRechazoSuscriptorAncho">
+            <div class="modal-content modalRechazoSuscriptorContenido">
+                <div class="modal-body modalRechazoSuscriptorBody">
+                    <p class="modalRechazoSuscriptorTitulo">Rechazo de Evento</p>
+                    <p class="modalRechazoSuscriptorDescripcion">
+                        Para realizar el rechazo de un evento, favor indicar el motivo por el cual fue rechazado en el
+                        recuadro siguiente. Este será mensaje será enviado al Editor que lo creó.
+                    </p>
+
+                    <form class="modalRechazoSuscriptorFormulario" action="#">
+                        <textarea class="form-control modalRechazoSuscriptorTextarea" maxlength="300"
+                            placeholder="introduzca el motivo del rechazo"></textarea>
+                        <p class="modalRechazoSuscriptorContador">0 / 300 caracteres</p>
+
+                        <div class="modalRechazoSuscriptorAcciones d-grid gap-3 d-md-flex justify-content-center my-4">
+                            <button type="button" class="btn modalRechazoSuscriptorBtnCancelar px-4"
+                                data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn modalRechazoSuscriptorBtnAceptar px-4">Aceptar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- fin modal rechazar evento -->
+
+
+
+
+
+
+
+    <!-- modal aprobado y publicar -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAprobarPublicarEvento">
+        Modal Aprobar y Publicar
+    </button>
+
+    <div class="modal fade" id="modalAprobarPublicarEvento" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalEliminarEventoAncho">
+            <div class="modal-content modalEliminarEventoContenido">
+                <div class="modal-body modalEliminarEventoBody">
+                    <p class="modalEliminarEventoTitulo">¿Aprobar y publicar?</p>
+                    <p class="modalEliminarEventoDescripcion">
+                        Al aprobar un evento este se mostrará como público, ¿está seguro que desea continuar con este
+                        proceso?
+                    </p>
+                    <div class="modalEliminarEventoAcciones d-grid gap-3 d-md-flex justify-content-center my-3">
+                        <button type="button" class="btn modalEliminarEventoBtnCancelar px-4"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn modalEliminarEventoBtnEliminar px-4" data-bs-toggle="modal"
+                            data-bs-target="#modalEventoPublicado">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal evento aprobado -->
+    <div class="modal fade" id="modalEventoPublicado" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+            <div class="modal-content modalSuscripcionEnviadaContenido">
+                <div class="modal-body modalSuscripcionEnviadaBody">
+                    <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <p class="modalSuscripcionEnviadaTitulo">Evento Publicado</p>
+                    <p class="modalSuscripcionEnviadaDescripcion">
+                        Se publicó con éxito el evento seleccionado. Para modificar o eliminar este evento puede
+                        realizarlo en la sección del menú principal en <span
+                            class="modalSuscripcionEnviadaDescripcionNegrita">Eventos Publicados.</span>
+                    </p>
+                    <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                        data-bs-dismiss="modal">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- fin modal aprobado y publicar -->
+
+
+
+
+
+
+    <!-- modal rechazo lista administrador -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+        data-bs-target="#modalConfirmacionRechazoListaAdministrador">
+        Modal Rechazo Lista Administrador
+    </button>
+
+    <div class="modal fade" id="modalConfirmacionRechazoListaAdministrador" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalRechazoListaAdministradorConfirmacionAncho">
+            <div class="modal-content modalRechazoListaAdministradorConfirmacionContenido">
+                <div class="modal-body modalRechazoListaAdministradorConfirmacionBody">
+                    <p class="modalRechazoListaAdministradorConfirmacionTitulo">¿Rechazar?</p>
+                    <p class="modalRechazoListaAdministradorConfirmacionDescripcion">
+                        Al rechazar una lista de difusión, esta no podrá ser utilizada, ¿está seguro que desea continuar
+                        con este proceso?
+                    </p>
+                    <div
+                        class="modalRechazoListaAdministradorConfirmacionAcciones d-grid gap-3 d-md-flex justify-content-center my-3">
+                        <button type="button" class="btn modalRechazoListaAdministradorBtnCancelar px-4"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn modalRechazoListaAdministradorBtnPrincipal px-4"
+                            data-bs-toggle="modal" data-bs-target="#modalRechazoListaAdministrador">Rechazar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal motivo rechazo admin -->
+
+    <div class="modal fade" id="modalRechazoListaAdministrador" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalRechazoListaAdministradorAncho">
+            <div class="modal-content modalRechazoListaAdministradorContenido">
+                <div class="modal-body modalRechazoListaAdministradorBody">
+                    <p class="modalRechazoListaAdministradorTitulo">Rechazo de Lista de Difusión</p>
+                    <p class="modalRechazoListaAdministradorDescripcion">
+                        Para realizar el rechazo de una lista de difusión, favor indicar el motivo por el cual fue
+                        rechazada en el siguiente recuadro. Este será mensaje será enviado al Editor que la creó.
+                    </p>
+
+                    <form class="modalRechazoListaAdministradorFormulario" action="#">
+                        <textarea class="form-control modalRechazoListaAdministradorTextarea" maxlength="300"
+                            placeholder="introduzca el motivo del rechazo"></textarea>
+                        <p class="modalRechazoListaAdministradorContador">0 / 300 caracteres</p>
+
+                        <div
+                            class="modalRechazoListaAdministradorAcciones d-grid gap-3 d-md-flex justify-content-center my-4">
+                            <button type="button" class="btn modalRechazoListaAdministradorBtnCancelar px-4"
+                                data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button"
+                                class="btn modalRechazoListaAdministradorBtnPrincipal px-4">Aceptar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- fin modal rechazo lista administrador -->
+
+
+
+
+
+
+
+
+    <!-- modal informe generado -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalInformeGenerado">
+        Modal Informe Generado
+    </button>
+
+    <div class="modal fade" id="modalInformeGenerado" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+            <div class="modal-content modalSuscripcionEnviadaContenido">
+                <div class="modal-body modalSuscripcionEnviadaBody">
+                    <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <p class="modalSuscripcionEnviadaTitulo">Informe Generado</p>
+                    <p class="modalSuscripcionEnviadaDescripcion">
+                        Se descargó el informe solicitado en su dispositivo. Puede revisar los informes generados
+                        anteriormente en la sección de <span
+                            class="modalSuscripcionEnviadaDescripcionNegrita">Informes.</span>
+                    </p>
+                    <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                        data-bs-dismiss="modal">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- fin modal informe generado -->
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/index.js"></script>
+</body>
+
+</html>

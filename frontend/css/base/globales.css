@@ -5,6 +5,10 @@
     --color-gris-claro: #d2d2d2;
     --color-gris-oscuro: #7c7b75;
     --color-azul-claro: #EFF4F7;
+    --color-verde: #4aa147;
+    --color-negro: #000000;
+    --color-rojo: #d2232a;
+    --color-gris-hover: #b8b8b8;
 }
 
 html{
