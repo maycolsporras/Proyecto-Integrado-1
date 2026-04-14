@@ -217,6 +217,124 @@
     color: var(--color-blanco);
 }
 
+/* Modal rechazo lista administrador */
+
+.modalRechazoListaAdministradorConfirmacionAncho {
+    max-width: 620px;
+}
+
+.modalRechazoListaAdministradorConfirmacionContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+}
+
+.modalRechazoListaAdministradorConfirmacionBody {
+    padding: 1.9rem 2.4rem 2rem;
+    text-align: center;
+}
+
+.modalRechazoListaAdministradorConfirmacionTitulo {
+    color: var(--dropdown-text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.8rem;
+}
+
+.modalRechazoListaAdministradorConfirmacionDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.5;
+    margin: 0 auto 1.6rem;
+}
+
+.modalRechazoListaAdministradorConfirmacionAcciones {
+    margin-top: 1.2rem;
+}
+
+.modalRechazoListaAdministradorAncho {
+    max-width: 680px;
+}
+
+.modalRechazoListaAdministradorContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+}
+
+.modalRechazoListaAdministradorBody {
+    padding: 1.9rem 2.4rem 2rem;
+    text-align: center;
+}
+
+.modalRechazoListaAdministradorTitulo {
+    color: var(--dropdown-text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.8rem;
+}
+
+.modalRechazoListaAdministradorDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.5;
+    margin: 0 auto 1.6rem;
+}
+
+.modalRechazoListaAdministradorFormulario {
+    max-width: 100%;
+}
+
+.modalRechazoListaAdministradorTextarea {
+    min-height: 140px;
+    border-color: #a4a4a4;
+    color: var(--color-negro);
+    resize: none;
+}
+
+.modalRechazoListaAdministradorContador {
+    color: var(--dropdown-text-color);
+    font-size: 0.95rem;
+    text-align: right;
+    margin-top: 0.2rem;
+}
+
+.modalRechazoListaAdministradorAcciones {
+    margin-top: 1.2rem;
+}
+
+.modalRechazoListaAdministradorBtnCancelar,
+.modalRechazoListaAdministradorBtnPrincipal {
+    min-width: 140px;
+    padding: 0.55rem 1.3rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+}
+
+.modalRechazoListaAdministradorBtnCancelar {
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+}
+
+.modalRechazoListaAdministradorBtnPrincipal {
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+}
+
+.modalRechazoListaAdministradorBtnCancelar:hover,
+.modalRechazoListaAdministradorBtnCancelar:focus,
+.modalRechazoListaAdministradorBtnCancelar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
+
+.modalRechazoListaAdministradorBtnPrincipal:hover,
+.modalRechazoListaAdministradorBtnPrincipal:focus,
+.modalRechazoListaAdministradorBtnPrincipal:active {
+    background-color: var(--nav-color);
+    color: var(--color-blanco);
+}
+
 
 
 /* Modal de consulta enviada */
@@ -340,3 +458,323 @@
     background-color: var(--color-gris-hover);
     color: var(--color-negro);
 }
+
+
+
+
+/* Modal de eliminar evento */
+
+.modalEliminarEventoAncho {
+    max-width: 620px;
+}
+
+.modalEliminarEventoContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+}
+
+.modalEliminarEventoBody {
+    padding: 1.3rem 2.9rem 2.3rem;
+    text-align: center;
+}
+
+.modalEliminarEventoIcono {
+    width: 42px;
+    height: 42px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.modalEliminarEventoTitulo {
+    color: var(--dropdown-text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.7rem;
+}
+
+.modalEliminarEventoDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.55;
+    margin: 0 auto 2rem;
+}
+
+.modalEliminarEventoBtnCancelar,
+.modalEliminarEventoBtnEliminar {
+    min-width: 140px;
+    padding: 0.55rem 1.3rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+}
+
+.modalEliminarEventoBtnCancelar {
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+}
+
+.modalEliminarEventoBtnEliminar {
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+}
+
+.modalEliminarEventoBtnCancelar:hover,
+.modalEliminarEventoBtnCancelar:focus,
+.modalEliminarEventoBtnCancelar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
+
+.modalEliminarEventoBtnEliminar:hover,
+.modalEliminarEventoBtnEliminar:focus,
+.modalEliminarEventoBtnEliminar:active {
+    background-color: var(--nav-color);
+    color: var(--color-blanco);
+}
+
+
+
+
+
+/* Modal de evento en borrador */
+
+.modalEventoBorradorAncho {
+    max-width: 620px;
+}
+
+.modalEventoBorradorContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+}
+
+.modalEventoBorradorBody {
+    padding: 1.8rem 2.9rem 2.3rem;
+    text-align: center;
+}
+
+.modalEventoBorradorTitulo {
+    color: var(--dropdown-text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.9rem;
+}
+
+.modalEventoBorradorDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.55;
+    margin: 0 auto 1.5rem;
+}
+
+.modalEventoBorradorNegrita {
+    font-weight: 700;
+}
+
+.modalEventoBorradorNegritaAzul {
+    color: var(--dropdown-text-color);
+}
+
+.modalEventoBorradorAcciones {
+    margin-top: 1.2rem;
+}
+
+.modalEventoBorradorBtnEliminar,
+.modalEventoBorradorBtnContinuar {
+    min-width: 140px;
+    padding: 0.55rem 1.3rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+}
+
+.modalEventoBorradorBtnEliminar {
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+}
+
+.modalEventoBorradorBtnContinuar {
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+}
+
+.modalEventoBorradorBtnEliminar:hover,
+.modalEventoBorradorBtnEliminar:focus,
+.modalEventoBorradorBtnEliminar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
+
+.modalEventoBorradorBtnContinuar:hover,
+.modalEventoBorradorBtnContinuar:focus,
+.modalEventoBorradorBtnContinuar:active {
+    background-color: var(--nav-color);
+    color: var(--color-blanco);
+}
+
+
+
+
+/* Modal de rechazo lista de difusion */
+
+.modalRechazoListaDifusionAncho {
+    max-width: 680px;
+}
+
+.modalRechazoListaDifusionContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+}
+
+.modalRechazoListaDifusionBody {
+    padding: 1.7rem 2.2rem 2rem;
+    text-align: center;
+}
+
+.modalRechazoListaDifusionTitulo {
+    color: var(--dropdown-text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.6rem;
+}
+
+.modalRechazoListaDifusionDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.5;
+    margin: 0 auto 1rem;
+}
+
+.modalRechazoListaDifusionCajaMotivo {
+    border: 1px solid #a4a4a4;
+    border-radius: 2px;
+    color: #4b4b4b;
+    text-align: left;
+    padding: 1.2rem 1rem;
+    line-height: 1.25;
+    margin: 0 auto 1.4rem;
+}
+
+.modalRechazoListaDifusionAcciones {
+    margin-top: 1rem;
+}
+
+.modalRechazoListaDifusionBtnCancelar,
+.modalRechazoListaDifusionBtnAceptar {
+    min-width: 140px;
+    padding: 0.55rem 1.3rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+}
+
+.modalRechazoListaDifusionBtnCancelar {
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+}
+
+.modalRechazoListaDifusionBtnAceptar {
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+}
+
+.modalRechazoListaDifusionBtnCancelar:hover,
+.modalRechazoListaDifusionBtnCancelar:focus,
+.modalRechazoListaDifusionBtnCancelar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
+
+.modalRechazoListaDifusionBtnAceptar:hover,
+.modalRechazoListaDifusionBtnAceptar:focus,
+.modalRechazoListaDifusionBtnAceptar:active {
+    background-color: var(--nav-color);
+    color: var(--color-blanco);
+}
+
+/* Modal asignar lista al suscriptor */
+
+.modalAsignarListaSuscriptorAncho {
+    max-width: 680px;
+}
+
+.modalAsignarListaSuscriptorContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+}
+
+.modalAsignarListaSuscriptorBody {
+    padding: 1.9rem 2.4rem 2rem;
+    text-align: center;
+}
+
+.modalAsignarListaSuscriptorTitulo {
+    color: var(--dropdown-text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.8rem;
+}
+
+.modalAsignarListaSuscriptorDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.5;
+    margin: 0 auto 2rem;
+}
+
+.modalAsignarListaSuscriptorFormulario {
+    max-width: 100%;
+}
+
+.modalAsignarListaSuscriptorSelect {
+    min-height: 44px;
+    border-color: #a4a4a4;
+    color: #555;
+}
+
+.modalAsignarListaSuscriptorAcciones {
+    margin-top: 1.2rem;
+}
+
+.modalAsignarListaSuscriptorBtnCancelar,
+.modalAsignarListaSuscriptorBtnAceptar {
+    min-width: 140px;
+    padding: 0.55rem 1.3rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+}
+
+.modalAsignarListaSuscriptorBtnCancelar {
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+}
+
+.modalAsignarListaSuscriptorBtnAceptar {
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+}
+
+.modalAsignarListaSuscriptorBtnCancelar:hover,
+.modalAsignarListaSuscriptorBtnCancelar:focus,
+.modalAsignarListaSuscriptorBtnCancelar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
+
+.modalAsignarListaSuscriptorBtnAceptar:hover,
+.modalAsignarListaSuscriptorBtnAceptar:focus,
+.modalAsignarListaSuscriptorBtnAceptar:active {
+    background-color: var(--nav-color);
+    color: var(--color-blanco);
+}
+
