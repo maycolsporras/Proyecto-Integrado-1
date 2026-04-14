@@ -1,4 +1,124 @@
-.modalSuscripcionEventos {
+.modalSuscripcionEventosContenido {
     border-radius: 0;
     border-top: 5px solid var(--dropdown-text-color);
+}
+
+.modalSuscripcionEventosTitulo {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--dropdown-text-color);
+}
+
+.modalSuscripcionEventosAncho {
+    max-width: 720px;
+}
+
+.modalSuscripcionEventosDescripcion {
+    max-width: 90%;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+.modalSuscripcionEventosBtnInscribirme {
+    background-color: var(--dropdown-text-color);
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    min-width: 200px;
+    padding: 0.6rem 1.5rem;
+}
+
+.modalSuscripcionEventosBtnInscribirme:hover,
+.modalSuscripcionEventosBtnInscribirme:focus,
+.modalSuscripcionEventosBtnInscribirme:active {
+    background-color: var(--nav-color);
+    color: #fff;
+}
+
+
+.modalSuscripcionEventosTextoNotificaciones {
+    font-weight: 700;
+    color: var(--dropdown-text-color);
+}
+
+.modalSuscripcionEventosEtiqueta {
+    text-align: left;
+    white-space: normal;
+    line-height: 1.25;
+}
+
+.modalSuscripcionEventosBody .form-control {
+    min-height: 46px;
+    padding: 0.65rem 1rem;
+}
+
+.modalSuscripcionEventosBody .row.align-items-center .col-md-4 {
+    width: 30%;
+}
+
+.modalSuscripcionEventosBody .row.align-items-center .col-md-8 {
+    width: 70%;
+}
+
+.modalSuscripcionEnviadaAncho {
+    max-width: 620px;
+}
+
+.modalSuscripcionEnviadaContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--color-verde);
+    background-color: #efefef;
+}
+
+.modalSuscripcionEnviadaBody {
+    padding: 1.3rem 2.9rem 2.3rem;
+    text-align: center;
+}
+
+.modalSuscripcionEnviadaIcono {
+    width: 42px;
+    height: 42px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    background-color: var(--color-verde);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.modalSuscripcionEnviadaTitulo {
+    color: var(--color-verde);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.7rem;
+}
+
+.modalSuscripcionEnviadaDescripcion {
+    color: #343434;
+    text-align: left;
+    line-height: 1.55;
+    margin: 0 auto 2rem;
+}
+
+.modalSuscripcionEnviadaDescripcionNegrita {
+    font-weight: 700;
+}
+
+.modalSuscripcionEnviadaBtnContinuar {
+    min-width: 140px;
+    padding: 0.5rem 1.3rem;
+    border: none;
+    border-radius: 6px;
+    background-color: #d1d1d1;
+    color: #2e2e2e;
+    font-weight: 600;
+}
+
+.modalSuscripcionEnviadaBtnContinuar:hover,
+.modalSuscripcionEnviadaBtnContinuar:focus,
+.modalSuscripcionEnviadaBtnContinuar:active {
+    background-color: #bdbdbd;
+    color: #222;
 }
