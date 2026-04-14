@@ -700,6 +700,171 @@
     color: var(--color-blanco);
 }
 
+/* Modal de rechazo de suscriptor */
+
+.modalRechazoSuscriptorAncho {
+    max-width: 680px;
+}
+
+.modalRechazoSuscriptorContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+}
+
+.modalRechazoSuscriptorBody {
+    padding: 1.7rem 2.2rem 2rem;
+    text-align: center;
+}
+
+.modalRechazoSuscriptorTitulo {
+    color: var(--dropdown-text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.6rem;
+}
+
+.modalRechazoSuscriptorDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.5;
+    margin: 0 auto 1rem;
+}
+
+.modalRechazoSuscriptorFormulario {
+    max-width: 100%;
+}
+
+.modalRechazoSuscriptorTextarea {
+    min-height: 140px;
+    border-color: #a4a4a4;
+    color: var(--color-negro);
+    resize: none;
+}
+
+.modalRechazoSuscriptorContador {
+    color: var(--dropdown-text-color);
+    font-size: 0.95rem;
+    text-align: right;
+    margin-top: 0.2rem;
+}
+
+.modalRechazoSuscriptorAcciones {
+    margin-top: 1rem;
+}
+
+.modalRechazoSuscriptorBtnCancelar,
+.modalRechazoSuscriptorBtnAceptar {
+    min-width: 140px;
+    padding: 0.55rem 1.3rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+}
+
+.modalRechazoSuscriptorBtnCancelar {
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+}
+
+.modalRechazoSuscriptorBtnAceptar {
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+}
+
+.modalRechazoSuscriptorBtnCancelar:hover,
+.modalRechazoSuscriptorBtnCancelar:focus,
+.modalRechazoSuscriptorBtnCancelar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
+
+.modalRechazoSuscriptorBtnAceptar:hover,
+.modalRechazoSuscriptorBtnAceptar:focus,
+.modalRechazoSuscriptorBtnAceptar:active {
+    background-color: var(--nav-color);
+    color: var(--color-blanco);
+}
+
+/* Modal respuesta de consulta */
+
+.modalRespuestaConsultaAncho {
+    max-width: 680px;
+}
+
+.modalRespuestaConsultaContenido {
+    border-radius: 0;
+    border-top: 5px solid var(--dropdown-text-color);
+}
+
+.modalRespuestaConsultaBody {
+    padding: 1.7rem 2.2rem 2rem;
+    text-align: center;
+}
+
+.modalRespuestaConsultaTitulo {
+    color: var(--dropdown-text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.6rem;
+}
+
+.modalRespuestaConsultaDescripcion {
+    color: var(--color-negro);
+    text-align: left;
+    line-height: 1.5;
+    margin: 0 auto 1rem;
+}
+
+.modalRespuestaConsultaFormulario {
+    max-width: 100%;
+}
+
+.modalRespuestaConsultaTextarea {
+    min-height: 140px;
+    border-color: #a4a4a4;
+    color: var(--color-negro);
+    resize: none;
+}
+
+.modalRespuestaConsultaAcciones {
+    margin-top: 1rem;
+}
+
+.modalRespuestaConsultaBtnCancelar,
+.modalRespuestaConsultaBtnAceptar {
+    min-width: 140px;
+    padding: 0.55rem 1.3rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+}
+
+.modalRespuestaConsultaBtnCancelar {
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+}
+
+.modalRespuestaConsultaBtnAceptar {
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+}
+
+.modalRespuestaConsultaBtnCancelar:hover,
+.modalRespuestaConsultaBtnCancelar:focus,
+.modalRespuestaConsultaBtnCancelar:active {
+    background-color: var(--color-gris-hover);
+    color: var(--color-negro);
+}
+
+.modalRespuestaConsultaBtnAceptar:hover,
+.modalRespuestaConsultaBtnAceptar:focus,
+.modalRespuestaConsultaBtnAceptar:active {
+    background-color: var(--nav-color);
+    color: var(--color-blanco);
+}
+
 /* Modal asignar lista al suscriptor */
 
 .modalAsignarListaSuscriptorAncho {
