@@ -125,7 +125,7 @@ body {
 
 .gestionAdminBottomLine {
     height: 7px;
-    background-color: var(--color-fucsia);
+    background-color: var(--color-amarillo);
 }
 
 .gestionAdminHeader .dropdownProfileMenu {
@@ -173,16 +173,16 @@ body {
 .gestionAdminMenuLink:hover,
 .gestionAdminMenuLink:focus-visible {
     color: var(--color-negro);
-    background-color: var(--color-fucsia-claro);
+    background-color: var(--color-amarillo-claro);
     border-radius: 0;
     box-shadow: none;
 }
 
 .gestionAdminMenuLink.active {
     color: var(--color-negro);
-    background-color: var(--color-fucsia-claro);
+    background-color: var(--color-amarillo-claro);
     border-radius: 0;
-    border-right: 4px solid var(--color-fucsia);
+    border-right: 4px solid var(--color-amarillo);
     box-shadow: none;
 }
 
@@ -190,7 +190,7 @@ body {
 .gestionAdminMain .dropdown-menu .gestionAdminMenuOption:focus-visible,
 .gestionAdminMain .dropdown-menu .gestionAdminMenuOption.active {
     color: var(--color-negro);
-    background-color: var(--color-fucsia-claro);
+    background-color: var(--color-amarillo-claro);
 }
 
 /*  Header Responsive */
