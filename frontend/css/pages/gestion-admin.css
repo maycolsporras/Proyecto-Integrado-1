@@ -172,7 +172,7 @@ body {
     box-sizing: border-box;
 }
 
-.gestionAdminMenuTitle + .gestionAdminMenuLink {
+.gestionAdminMenuTitle+.gestionAdminMenuLink {
     margin-top: 0.1rem;
 }
 
@@ -213,10 +213,178 @@ body {
 }
 
 .gestionAdminContentInner {
-    width: min(100%, 860px);
+    width: min(100%, 1280px);
     padding: 0;
     min-height: 220px;
 }
+
+
+/* Aprobacion eventos */
+.buscadorEventosTitle {
+    font-weight: bold;
+    color: var(--dropdown-text-color);
+}
+
+.buscadorEventosSubtitle {
+    color: var(--dropdown-text-color);
+}
+
+.gestionEventosInput {
+    border: 1px solid var(--dropdown-text-color);
+}
+
+.gestionEventosInput::placeholder {
+    color: var(--dropdown-text-color);
+    opacity: 1;
+}
+
+.gestionEventosSelect {
+    width: 100%;
+    color: var(--color-blanco);
+    background-color: var(--dropdown-text-color);
+    --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%23ffffff' d='M4.646 6.146a.5.5 0 0 1 .708 0L8 8.793l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+.gestionEventosSelect:hover {
+    background-color: var(--nav-color) !important;
+    color: var(--color-blanco);
+}
+
+.gestionEventosSearchBtn {
+    color: var(--color-blanco);
+    background-color: var(--dropdown-text-color);
+}
+
+.gestionEventosSearchBtn:hover {
+    background-color: var(--nav-color) !important;
+    color: var(--color-blanco);
+}
+
+.iconoAprobacionEventos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border: 2px solid var(--color-gris-oscuro);
+    border-radius: 50%;
+    color: var(--color-gris-oscuro);
+    font-size: 30px;
+}
+
+.txtAprobacionEventos {
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--color-gris-oscuro);
+}
+
+.aprobacionEventosTitle {
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--color-gris-oscuro);
+}
+
+/* Cards de Eventos */
+
+.eventosPendientesAprobacion{
+    border: 1px solid var(--color-negro);
+    padding: 0;
+}
+
+.eventoCardAprobacionHeader {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--color-negro);
+}
+
+.eventoCardTitulo {
+    margin: 0;
+    font-size: 2rem;
+    line-height: 1.2;
+    font-weight: 700;
+
+}
+
+.eventoCardMeta {
+    margin: 4px 0 0;
+    font-size: 1.5rem;
+
+}
+
+.eventoCardMeta span {
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+
+.eventoCardAprobacionBody {
+    padding: 10px 12px;
+}
+
+.eventoCardInfo {
+    display: grid;
+    gap: 0.35rem;
+}
+
+.eventoCardInfo .eventoCardMeta {
+    margin: 0;
+}
+
+.eventoCardAcciones {
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.eventoCardBtnIcon {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid var(--dropdown-text-color);
+    border-radius: 5px;
+    color: var(--dropdown-text-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.eventoCardBtnIcon:hover,
+.eventoCardBtnIcon:focus-visible {
+    color: var(--color-blanco);
+    background-color: var(--dropdown-text-color);
+    border-color: var(--dropdown-text-color);
+}
+
+.eventoCardDecision {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.65rem;
+    margin-top: 8px;
+}
+
+.eventoCardDecisionBtn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 2px solid var(--color-gris-oscuro);
+    border-radius: 50%;
+    color: var(--color-gris-oscuro);
+    background-color: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.eventoCardDecisionBtnReject:hover,
+.eventoCardDecisionBtnReject:focus-visible {
+    color: var(--color-rojo);
+    border-color: var(--color-rojo);
+}
+
+.eventoCardDecisionBtnApprove:hover,
+.eventoCardDecisionBtnApprove:focus-visible {
+    color: var(--color-verde);
+    border-color: var(--color-verde);
+}
+
 
 
 /*  Header Responsive */
@@ -330,5 +498,46 @@ body {
         padding-top: 1.1rem;
         padding-left: 0.75rem;
         padding-right: 0.75rem;
+    }
+
+    .gestionEventosSearchBtn {
+        width: 100%;
+    }
+
+
+
+@media (min-width: 576px) {
+    .gestionEventosSelect {
+        min-width: 200px;
+    }
+}
+    .eventoCardAprobacionHeader {
+        padding: 12px;
+    }
+
+    .eventoCardTitulo {
+        font-size: 1.25rem;
+    }
+
+    .eventoCardMeta {
+        font-size: 1rem;
+    }
+
+    .eventoCardMeta span {
+        font-size: 1rem;
+    }
+
+    .eventoCardAprobacionBody {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
+    }
+
+    .eventoCardAcciones {
+        align-self: flex-end;
+    }
+
+    .eventoCardDecision {
+        margin-top: 10px;
     }
 }
