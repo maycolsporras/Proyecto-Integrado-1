@@ -192,6 +192,15 @@ body {
 
 /*  Sidebar Base */
 
+.sideBarTitles {
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+}
+
+.dropdown-header.sideBarTitles {
+    font-weight: 700 !important;
+}
+
 .gestionAdminMenuTitle {
     margin: 0;
     font-size: 1.1rem;
@@ -425,8 +434,6 @@ body {
     border-color: var(--color-verde);
 }
 
-
-/*  Card eventos publicados */
 
 
 
