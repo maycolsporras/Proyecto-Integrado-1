@@ -192,12 +192,8 @@ body {
 
 /*  Sidebar Base */
 
-.sideBarTitles {
+.sideBarTitles{
     font-size: 1.1rem !important;
-    font-weight: 700 !important;
-}
-
-.dropdown-header.sideBarTitles {
     font-weight: 700 !important;
 }
 
