@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sicid - Administrador</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+
+<body>
+    <header class="headerLandingPage py-3" aria-label="Encabezado principal">
+        <div class="container-fluid">
+            <div class="row align-items-center px-lg-5">
+                <div class="logoSicid col-12 col-md-2 col-lg-6 d-flex align-items-center gap-3">
+                    <a href="./index.html">
+                        <img src="./assets/img/logosicid.webp" alt="Logo de Sicid">
+                    </a>
+                    <p class="d-block d-md-none d-lg-block"><strong>Sistema Costarricense de<br>Información sobre
+                            Discapacidad</strong></p>
+                </div>
+
+                <div class="col-12 col-md-10 col-lg-6">
+                    <div
+                        class="row d-flex flex-column flex-md-row align-items-center justify-content-end ms-md-1 ms-lg-0 me-1 me-md-0 gap-2 gap-md-0">
+                        <div class="col-12 col-md-3 d-flex gap-2 align-items-center">
+                            <label for="idioma">Idioma:</label>
+                            <select class="form-select form-select-lg w-auto" id="idioma"
+                                aria-label="Seleccionar idioma">
+                                <option class="selected" value="es">ES</option>
+                                <option value="en">EN</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-4 d-flex align-items-center gap-2" role="group"
+                            aria-label="Controles de tamaño de fuente">
+                            <button class="btn btnHeader" aria-label="Reducir tamaño de fuente">
+                                <i class="fa-solid fa-minus p-2" aria-hidden="true"></i>
+                            </button>
+                            <button class="btn btnHeader" aria-label="Tamaño de fuente normal">
+                                <i class="fa-solid fa-a p-2" aria-hidden="true"></i>
+                            </button>
+                            <button class="btn btnHeader" aria-label="Aumentar tamaño de fuente">
+                                <i class="fa-solid fa-plus p-2" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="col-12 col-md-1 ">
+                            <button class="btn btnHeader" aria-label="Modo de alto contraste">
+                                <i class="fa-solid fa-circle-half-stroke p-2" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="col-12 col-md-4 d-flex justify-content-start justify-content-md-end">
+                            <div class="headerUserActions" role="group" aria-label="Acciones de usuario">
+                                <button class="btn btnHeader btnHeaderIcon" type="button"
+                                    aria-label="Ver notificaciones">
+                                    <i class="fa-regular fa-bell" aria-hidden="true"></i>
+                                </button>
+                                <div class="dropdown headerProfileMenu">
+                                    <button class="btn btnHeader btnHeaderProfile dropdown-toggle" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false"
+                                        aria-label="Abrir menú de perfil">
+                                        <i class="fa-regular fa-user" aria-hidden="true"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end dropdownProfileMenu">
+                                        <li><a class="dropdown-item" href="./index.html">Cerrar sesión</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="navBarTop navbar navbar-expand-lg" aria-label="Navegación principal">
+        <div class="container-fluid px-lg-5">
+            <button class="navBarTogglerTop navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navSicid" aria-controls="navSicid" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <i class="menuIcon fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navSicid">
+                <ul class="navBarNavTop navbar-nav d-flex justify-content-around align-items-center w-100">
+                    <li class="navItemTop nav-item">
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="./index.html">Inicio</a>
+                    </li>
+                    <li class="navItemTop nav-item">
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="#">SICID</a>
+                    </li>
+                    <li class="navItemTop nav-item dropdown">
+                        <a class="navLinkTop nav-link dropdown-toggle text-white text-wrap-nav text-decoration-none"
+                            href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Gestión
+                        </a>
+                        <ul class="dropdownMenuTop dropdown-menu p-0" aria-label="Submenú de gestión">
+                            <li><a class="dropdownItemTop dropdown-item" href="#" aria-label="Noticias"><strong>Noticias</strong></a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider my-0">
+                            </li>
+                            <li><a class="dropdownItemTop dropdown-item" href="./pages/gestion-admin.html" aria-label="Eventos"><strong>Eventos</strong></a></li>
+                        </ul>
+                    </li>
+                    <li class="navItemTop nav-item">
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="#">Formación</a>
+                    </li>
+                    <li class="navItemTop nav-item">
+                        <a class="navLinkTop nav-link text-white text-wrap-nav text-decoration-none" href="#">Productos
+                            y Servicios</a>
+                    </li>
+                    <li class="navItemTop nav-item">
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="#">Estadísticas</a>
+                    </li>
+                    <li class="navItemTop nav-item">
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="#">PONADIS</a>
+                    </li>
+                    <li class="navItemTop nav-item">
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="#">Comisiones</a>
+                    </li>
+                    <li class="navItemTop nav-item dropdown">
+                        <a class="navLinkTop nav-link dropdown-toggle text-white text-wrap-nav text-decoration-none"
+                            href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Noticias y Eventos
+                        </a>
+                        <ul class="dropdownMenuTop dropdown-menu p-0" aria-label="Submenú de Noticias y Eventos">
+                            <li><a class="dropdownItemTop dropdown-item" href="#" aria-label="Noticias"><strong>Noticias</strong></a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider my-0">
+                            </li>
+                            <li><a class="dropdownItemTop dropdown-item" href="./eventos.html" aria-label="Eventos"><strong>Eventos</strong></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main id="mainContentLanding">
+    </main>
+
+    <footer>
+        <div class="container-fluid bg-light py-3 border-top">
+            <div class="row justify-content-center">
+                <div class="col-12 d-flex flex-wrap align-items-center justify-content-center gap-3 gap-md-5">
+                    <img src="./assets/img/logo-mideplan.webp" class="img-fluid imgFooterStandard mx-3" alt="Mideplan">
+                    <img src="./assets/img/logo-inec.webp" class="img-fluid imgFooterStandard mx-3" alt="INEC">
+                    <img src="./assets/img/logo-conapdis.webp" class="img-fluid imgFooterMain mx-3" alt="Conapdis">
+                    <img src="./assets/img/logo-imas.webp" class="img-fluid imgFooterStandard mx-3" alt="IMAS">
+                    <img src="./assets/img/logo-ministerio.webp" class="img-fluid imgFooterStandard mx-3"
+                        alt="Ministerio RREE">
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid py-3 bg-dark">
+            <ul class="nav d-flex flex-column flex-md-row justify-content-center align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-light py-0" href="#">Marco Legal</a>
+                </li>
+                <li class="text-white d-none d-md-block" aria-hidden="true">|</li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-light py-0" href="#">Términos de accesibilidad</a>
+                </li>
+                <li class="text-white d-none d-md-block" aria-hidden="true">|</li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-light py-0" href="#">Créditos</a>
+                </li>
+                <li class="text-white d-none d-md-block" aria-hidden="true">|</li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-light py-0" href="#">Directorio de ONGs</a>
+                </li>
+                <li class="text-white d-none d-md-block" aria-hidden="true">|</li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-light py-0" href="#">Contacto</a>
+                </li>
+            </ul>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/index.js"></script>
+</body>
+
+</html>

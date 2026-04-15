@@ -1,5 +1,6 @@
 @import "./base/globales.css";
 @import "./pages/landing.css";
+@import "./pages/modulo-admin.css";
 @import "./pages/inicio-sesion.css";
 @import "./pages/eventos.css";
 @import "./pages/eventos-politica.css";
