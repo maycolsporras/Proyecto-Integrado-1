@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sicid - Gestión de eventos administrador </title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../../css/index.css">
+    <link rel="stylesheet" href="../../css/pages/gestion-admin.css">
+</head>
+
+<body>
+
+<!-- Card de lista de difusión -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <article class="listaDifusionCard border border-1 border-dark bg-white">
+                                    <div class="listaDifusionHeader px-3 py-2">
+                                        <h3 class="h5 fw-bold mb-0">Nombre de la lista de difusión</h3>
+                                    </div>
+
+                                    <div class="table-responsive">
+                                        <table class="table listaDifusionTabla mb-0 align-middle">
+                                            <tbody>
+                                                <tr>
+                                                    <th class="w-25 text-start">Autor:</th>
+                                                    <td>usuario@gmail.com</td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="text-start">Fecha de creación:</th>
+                                                    <td>22/02/2020</td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="text-start">Descripción de la lista de difusión:</th>
+                                                    <td>
+                                                        <div>Eventos relacionados con nuevos proyectos de ley relacionados a el CONAPDIS.</div>
+                                                        <div class="d-flex justify-content-end gap-2 mt-2">
+                                                            <button class="btn btn-outline-primary btn-sm" type="button" aria-label="Editar lista de difusión">
+                                                                <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
+                                                            </button>
+                                                            <button class="btn btn-outline-primary btn-sm" type="button" aria-label="Eliminar lista de difusión">
+                                                                <i class="fa-regular fa-trash-can" aria-hidden="true"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </article>
+                                <div class="d-flex justify-content-end gap-2 mt-2">
+                                    <button class="btn btn-outline-secondary rounded-circle" type="button" aria-label="Rechazar lista de difusión" style="width: 36px; height: 36px; padding: 0;">
+                                        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary rounded-circle" type="button" aria-label="Aprobar lista de difusión" style="width: 36px; height: 36px; padding: 0;">
+                                        <i class="fa-solid fa-check" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- fin de cards de listas de difusión -->
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
