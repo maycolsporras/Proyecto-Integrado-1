@@ -635,7 +635,151 @@ document.addEventListener('DOMContentLoaded', () => {
         },
     };
 
+    let activeSidebarKey = null;
+    let hasDraftChanges = false;
+    let pendingNavigationLink = null;
+    let leaveDraftModalInstance = null;
+    let deleteEventModalInstance = null;
+    let openingDeleteConfirmation = false;
+    let deleteConfirmed = false;
+
     const getSidebarKey = (link) => link.dataset.sidebarKey || link.textContent.trim();
+    const getDraftManager = () => globalThis.crearEventoDraftManager;
+
+    const updateDraftState = () => {
+        if (activeSidebarKey !== 'crear-evento') {
+            hasDraftChanges = false;
+            return;
+        }
+
+        const draftManager = getDraftManager();
+        hasDraftChanges = Boolean(draftManager?.hasTypedData?.());
+    };
+
+    const clearCrearEventoDraft = () => {
+        const draftManager = getDraftManager();
+        draftManager?.clearDraft?.();
+    };
+
+    const restoreCrearEventoDraft = () => {
+        const draftManager = getDraftManager();
+        draftManager?.restoreDraft?.();
+    };
+
+    const navigateAfterDraftDecision = () => {
+        // Al continuar o eliminar, el flujo deja el formulario local en limpio.
+        clearCrearEventoDraft();
+
+        hasDraftChanges = false;
+
+        const linkToNavigate = pendingNavigationLink;
+        pendingNavigationLink = null;
+
+        if (linkToNavigate) {
+            setActiveLink(linkToNavigate);
+        }
+    };
+
+    const ensureDeleteConfirmModal = () => {
+        const modalElement = document.getElementById('modalEliminarEvento');
+        if (!modalElement || !globalThis.bootstrap?.Modal) {
+            return false;
+        }
+
+        const deleteButton = modalElement.querySelector('.modalEliminarEventoBtnEliminar');
+
+        if (modalElement.dataset.draftDeleteBound !== 'true') {
+            deleteButton?.addEventListener('click', () => {
+                deleteConfirmed = true;
+                deleteEventModalInstance?.hide();
+            });
+
+            modalElement.addEventListener('hidden.bs.modal', () => {
+                if (deleteConfirmed) {
+                    deleteConfirmed = false;
+                    navigateAfterDraftDecision();
+                    return;
+                }
+
+                if (pendingNavigationLink && leaveDraftModalInstance) {
+                    leaveDraftModalInstance.show();
+                }
+            });
+
+            modalElement.dataset.draftDeleteBound = 'true';
+        }
+
+        deleteEventModalInstance = globalThis.bootstrap.Modal.getOrCreateInstance(modalElement);
+        return Boolean(deleteEventModalInstance);
+    };
+
+    const openDeleteConfirmationModal = () => {
+        const hasDeleteModal = ensureDeleteConfirmModal();
+        if (!hasDeleteModal) {
+            navigateAfterDraftDecision();
+            return;
+        }
+
+        const draftModalElement = document.getElementById('modalEventoBorrador');
+        if (!draftModalElement || !leaveDraftModalInstance) {
+            deleteEventModalInstance?.show();
+            return;
+        }
+
+        openingDeleteConfirmation = true;
+
+        const onDraftModalHidden = () => {
+            draftModalElement.removeEventListener('hidden.bs.modal', onDraftModalHidden);
+            openingDeleteConfirmation = false;
+            deleteEventModalInstance?.show();
+        };
+
+        draftModalElement.addEventListener('hidden.bs.modal', onDraftModalHidden);
+        leaveDraftModalInstance.hide();
+    };
+
+    const ensureLeaveDraftModal = () => {
+        const modalElement = document.getElementById('modalEventoBorrador');
+        if (!modalElement || !globalThis.bootstrap?.Modal) {
+            return false;
+        }
+
+        const keepDraftButton = modalElement.querySelector('.modalEventoBorradorBtnContinuar');
+        const deleteEventButton = modalElement.querySelector('.modalEventoBorradorBtnEliminar');
+
+        if (modalElement.dataset.draftGuardBound !== 'true') {
+            keepDraftButton?.addEventListener('click', () => {
+                navigateAfterDraftDecision();
+            });
+
+            deleteEventButton?.addEventListener('click', () => {
+                openDeleteConfirmationModal();
+            });
+
+            modalElement.addEventListener('hidden.bs.modal', () => {
+                if (!openingDeleteConfirmation) {
+                    pendingNavigationLink = null;
+                }
+            });
+
+            modalElement.dataset.draftGuardBound = 'true';
+        }
+
+        leaveDraftModalInstance = globalThis.bootstrap.Modal.getOrCreateInstance(modalElement);
+        return Boolean(leaveDraftModalInstance);
+    };
+
+    const promptDraftDecision = (targetLink) => {
+        pendingNavigationLink = targetLink;
+        const hasModal = ensureLeaveDraftModal();
+
+        if (hasModal && leaveDraftModalInstance) {
+            leaveDraftModalInstance.show();
+            return;
+        }
+
+        navigateAfterDraftDecision();
+    };
 
     const defaultPanelHtml = `
         <p class="gestionEditorPanelText">Selecciona una opcion del menu para ver el contenido.</p>
@@ -657,6 +801,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (sidebarKey === 'crear-evento' && typeof globalThis.initCrearEvento === 'function') {
             globalThis.initCrearEvento();
+            restoreCrearEventoDraft();
+            updateDraftState();
         }
     };
 
@@ -681,6 +827,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 mobileMenuLabel.textContent = activeLabel;
             }
 
+            activeSidebarKey = activeKeyValue;
             renderSection(activeKeyValue);
             return;
         }
@@ -689,17 +836,61 @@ document.addEventListener('DOMContentLoaded', () => {
             mobileMenuLabel.textContent = 'Opciones de gestión';
         }
 
+        activeSidebarKey = null;
         renderSection(null);
     };
 
     setActiveLink(null);
 
+    contentPanel?.addEventListener('input', (event) => {
+        if (activeSidebarKey !== 'crear-evento') {
+            return;
+        }
+
+        if (event.target.closest('.ceCard')) {
+            updateDraftState();
+        }
+    });
+
+    contentPanel?.addEventListener('change', (event) => {
+        if (activeSidebarKey !== 'crear-evento') {
+            return;
+        }
+
+        if (event.target.closest('.ceCard')) {
+            updateDraftState();
+        }
+    });
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden' && activeSidebarKey === 'crear-evento') {
+            const draftManager = getDraftManager();
+            draftManager?.discardForm?.();
+            hasDraftChanges = false;
+        }
+    });
+
+    globalThis.addEventListener('beforeunload', () => {
+        if (activeSidebarKey !== 'crear-evento') {
+            return;
+        }
+
+        const draftManager = getDraftManager();
+        draftManager?.clearDraft?.();
+    });
+
     sidebarLinks.forEach((link) => {
         link.addEventListener('click', (event) => {
             const href = link.getAttribute('href');
+            const targetSidebarKey = getSidebarKey(link);
 
             if (href === '#') {
                 event.preventDefault();
+            }
+
+            if (activeSidebarKey === 'crear-evento' && targetSidebarKey !== 'crear-evento' && hasDraftChanges) {
+                promptDraftDecision(link);
+                return;
             }
 
             setActiveLink(link);

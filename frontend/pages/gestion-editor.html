@@ -108,6 +108,54 @@
         </section>
     </main>
 
+    <div class="modal fade" id="modalEventoBorrador" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalEventoBorradorAncho">
+            <div class="modal-content modalEventoBorradorContenido">
+                <div class="modal-body modalEventoBorradorBody">
+                    <p class="modalEventoBorradorTitulo">Evento en Borrador</p>
+                    <p class="modalEventoBorradorDescripcion">
+                        El evento no se ha completado, por lo tanto al salir de esta pantalla, podrá encontrar este
+                        evento en la sección <span class="modalEventoBorradorNegrita">"Eventos en Borrador"</span>. En
+                        esta sección puede volver a editarlo y completarlo o bien eliminarlo.
+                    </p>
+                    <p class="modalEventoBorradorDescripcion mb-0">
+                        Presione <span
+                            class="modalEventoBorradorNegrita modalEventoBorradorNegritaAzul">Continuar</span> para
+                        enviar el evento a "Eventos en Desarrollo" o <span class="modalEventoBorradorNegrita">Eliminar
+                            Evento</span> para descartarla.
+                    </p>
+                    <div class="modalEventoBorradorAcciones d-grid gap-3 d-md-flex justify-content-center mb-3 mt-5">
+                        <button type="button" class="btn modalEventoBorradorBtnEliminar px-4">Eliminar Evento</button>
+                        <button type="button" class="btn modalEventoBorradorBtnContinuar px-4"
+                            data-bs-dismiss="modal">Continuar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEliminarEvento" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalEliminarEventoAncho">
+            <div class="modal-content modalEliminarEventoContenido">
+                <div class="modal-body modalEliminarEventoBody">
+                    <div class="modalEliminarEventoIcono" aria-hidden="true">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <p class="modalEliminarEventoTitulo">¿Eliminar?</p>
+                    <p class="modalEliminarEventoDescripcion">
+                        Al eliminar un evento en desarrollo lo perdera para siempre, ¿esta seguro que desea continuar
+                        con este proceso?
+                    </p>
+                    <div class="modalEliminarEventoAcciones d-grid gap-3 d-md-flex justify-content-center my-3">
+                        <button type="button" class="btn modalEliminarEventoBtnCancelar px-4"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn modalEliminarEventoBtnEliminar px-4">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/pages/crea-evento.js"></script>

@@ -418,6 +418,175 @@ function initCrearEvento() {
 
 }
 
+const crearEventoDraftStorageKey = 'gestionEditor.crearEventoDraft';
+
+function getCrearEventoRoot() {
+    return document.querySelector('.ceCard');
+}
+
+function serializeCrearEventoForm(formRoot) {
+    if (!formRoot) {
+        return [];
+    }
+
+    const fields = formRoot.querySelectorAll('input, textarea, select, [contenteditable="true"]');
+
+    return Array.from(fields).map((field) => {
+        if (field.getAttribute('contenteditable') === 'true') {
+            return {
+                kind: 'contenteditable',
+                html: field.innerHTML,
+            };
+        }
+
+        if (field.type === 'checkbox' || field.type === 'radio') {
+            return {
+                kind: 'checkable',
+                checked: field.checked,
+            };
+        }
+
+        if (field.type === 'file') {
+            return {
+                kind: 'file',
+                hasFiles: field.files?.length > 0,
+            };
+        }
+
+        return {
+            kind: 'value',
+            value: field.value,
+        };
+    });
+}
+
+function restoreCrearEventoForm(formRoot, snapshot) {
+    if (!formRoot || !Array.isArray(snapshot) || !snapshot.length) {
+        return;
+    }
+
+    const fields = Array.from(formRoot.querySelectorAll('input, textarea, select, [contenteditable="true"]'));
+    const restoreLength = Math.min(fields.length, snapshot.length);
+
+    for (let i = 0; i < restoreLength; i++) {
+        const field = fields[i];
+        const fieldSnapshot = snapshot[i];
+
+        if (fieldSnapshot.kind === 'contenteditable' && field.getAttribute('contenteditable') === 'true') {
+            field.innerHTML = fieldSnapshot.html || '';
+            continue;
+        }
+
+        if (fieldSnapshot.kind === 'checkable' && (field.type === 'checkbox' || field.type === 'radio')) {
+            field.checked = Boolean(fieldSnapshot.checked);
+            continue;
+        }
+
+        if (fieldSnapshot.kind === 'value' && 'value' in field) {
+            field.value = fieldSnapshot.value || '';
+        }
+    }
+}
+
+function hasAnyTypedData(formRoot) {
+    if (!formRoot) {
+        return false;
+    }
+
+    const textInputs = formRoot.querySelectorAll('input[type="text"], input[type="email"], input[type="url"], input[type="tel"], input[type="number"], input[type="search"], input[type="password"]');
+    const textareas = formRoot.querySelectorAll('textarea');
+    const contentEditors = formRoot.querySelectorAll('[contenteditable="true"]');
+    const fileInputs = formRoot.querySelectorAll('input[type="file"]');
+
+    const hasText = Array.from(textInputs).some((input) => input.value.trim() !== '');
+    const hasTextarea = Array.from(textareas).some((textarea) => textarea.value.trim() !== '');
+    const hasEditorText = Array.from(contentEditors).some((editor) => editor.textContent.trim() !== '');
+    const hasFiles = Array.from(fileInputs).some((input) => input.files?.length > 0);
+
+    return hasText || hasTextarea || hasEditorText || hasFiles;
+}
+
+function saveCrearEventoDraft() {
+    const formRoot = getCrearEventoRoot();
+    const draftSnapshot = serializeCrearEventoForm(formRoot);
+
+    if (!draftSnapshot.length) {
+        return;
+    }
+
+    sessionStorage.setItem(crearEventoDraftStorageKey, JSON.stringify(draftSnapshot));
+}
+
+function clearCrearEventoDraft() {
+    sessionStorage.removeItem(crearEventoDraftStorageKey);
+}
+
+function clearCrearEventoFormData() {
+    const formRoot = getCrearEventoRoot();
+    if (!formRoot) {
+        return;
+    }
+
+    const fields = formRoot.querySelectorAll('input, textarea, select, [contenteditable="true"]');
+    fields.forEach((field) => {
+        if (field.getAttribute('contenteditable') === 'true') {
+            field.innerHTML = '';
+            return;
+        }
+
+        if (field.type === 'checkbox' || field.type === 'radio') {
+            field.checked = Boolean(field.defaultChecked);
+            return;
+        }
+
+        if (field.type === 'file') {
+            field.value = '';
+            return;
+        }
+
+        if (field.tagName === 'SELECT') {
+            field.selectedIndex = field.options.length > 0 ? 0 : -1;
+            return;
+        }
+
+        if ('value' in field) {
+            field.value = '';
+        }
+    });
+
+    formRoot.querySelectorAll('.ceFileName').forEach((fileNameEl) => {
+        fileNameEl.textContent = 'Adjuntar Documento';
+    });
+}
+
+function restoreCrearEventoDraft() {
+    const formRoot = getCrearEventoRoot();
+    const rawSnapshot = sessionStorage.getItem(crearEventoDraftStorageKey);
+
+    if (!formRoot || !rawSnapshot) {
+        return;
+    }
+
+    try {
+        const snapshot = JSON.parse(rawSnapshot);
+        restoreCrearEventoForm(formRoot, snapshot);
+    } catch {
+        clearCrearEventoDraft();
+    }
+}
+
+globalThis.crearEventoDraftManager = {
+    hasTypedData: () => hasAnyTypedData(getCrearEventoRoot()),
+    saveDraft: saveCrearEventoDraft,
+    restoreDraft: restoreCrearEventoDraft,
+    clearDraft: clearCrearEventoDraft,
+    clearFormData: clearCrearEventoFormData,
+    discardForm: () => {
+        clearCrearEventoFormData();
+        clearCrearEventoDraft();
+    },
+};
+
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initCrearEvento);
 } else {
