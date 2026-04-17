@@ -21,15 +21,8 @@
     font-size: 0.98rem;
     line-height: 1.4;
     padding: 0.28rem 0.6rem 0.28rem 1.5rem;
-    box-sizing: border-box;
-}
-
-.gestionEditorMenuTitle+.gestionEditorMenuLink {
     margin-top: 0.1rem;
 }
-
-/*  Sidebar Estados con JS */
-
 .gestionEditorMenuLink:hover,
 .gestionEditorMenuLink:focus-visible {
     color: var(--color-negro);
@@ -62,6 +55,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
+    min-height: 100vh;
 }
 
 .gestionEditorContentInner {
@@ -69,6 +63,20 @@
     padding: 0;
     min-height: 220px;
 }
+
+/* Mantiene el sidebar estable cuando el panel derecho crece por contenido dinámico */
+.gestionEditorLayout {
+    align-items: flex-start;
+}
+
+.gestionEditorSidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    align-self: flex-start;
+}
+
 
 
 
@@ -190,14 +198,15 @@
     .gestionEventosSearchBtn {
         width: 100%;
     }
-
-
+}
 
 @media (min-width: 576px) {
     .gestionEventosSelect {
         min-width: 200px;
     }
 }
+
+@media (max-width: 576px) {
     .eventoCardAprobacionHeader {
         padding: 12px;
     }
