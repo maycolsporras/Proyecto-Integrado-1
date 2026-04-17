@@ -671,9 +671,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <p class="txtAprobacionEventos mb-0">Eventos Publicados</p>
                                 </div>
                                 <div class="col-12 d-flex flex-column flex-lg-row justify-content-center align-items-center gap-2 gap-sm-3 mt-4 aprobacionEventosSubtitle">
-                                    <button type="button" class="btn btnListasDifusionEdit btnEventosEnEdicion is-active" data-status="edicion">En edición</button>
-                                    <button type="button" class="btn btnListasDifusionEdit btnEventosEnPendiente" data-status="pendiente">Pendientes de Aprobación</button>
-                                    <button type="button" class="btn btnListasDifusionEdit btnEventosEnRechazado" data-status="rechazado">Rechazados</button>
+                                    <button type="button" class="btn btnEventosBorrador btnEventosEnEdicion is-active" data-status="edicion">En edición</button>
+                                    <button type="button" class="btn btnEventosBorrador btnEventosEnPendiente" data-status="pendiente">Pendientes de Aprobación</button>
+                                    <button type="button" class="btn btnEventosBorrador btnEventosEnRechazado" data-status="rechazado">Rechazados</button>
                                 </div>
                                 <div class="col-12 buscadorEventosTitle mt-4 mb-2">
                                     <p>Buscador de Eventos</p>
