@@ -583,28 +583,336 @@ document.addEventListener('DOMContentLoaded', () => {
         'eventos-publicados': {
             title: 'Eventos Publicados',
             html: `
-                
+                <nav class="breadcrumbEventos" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a class="text-decoration-none"
+                                href="../modulo-admin.html">Inicio</a>
+                            </li>
+                            <li class="breadcrumb-item"><a class="text-decoration-none" href="#">Eventos</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Eventos Publicados
+                            </li>
+                        </ol>
+                    </nav>
+                    <div class="container-fluid">
+                            <div class="row mt-5">
+                                <div
+                                    class="col-12 d-flex justify-content-start align-items-center gap-2 gap-sm-3 mt-4 aprobacionEventosTitle">
+                                    <div class="iconoAprobacionEventos">
+                                        <i class="fa-solid fa-file-circle-check"></i>
+                                    </div>
+                                    <p class="txtAprobacionEventos mb-0">Eventos Publicados</p>
+                                </div>
+                                <div class="col-12 buscadorEventosTitle mt-4 mb-2">
+                                    <p>Buscador de Eventos</p>
+                                </div>
+                                <div class="col-12 buscadorEventosSubtitle mb-2">
+                                    Filtrar por:
+                                </div>
+                                <div class="col-12 mb-4">
+                                    <div class="row g-2 align-items-center">
+                                        <div class="col-12 col-sm-4 col-md-auto">
+                                            <label class="visually-hidden" for="gestionEventosFiltro">Filtro de
+                                                eventos</label>
+                                            <select id="gestionEventosFiltro" class="form-select gestionEventosSelect"
+                                                aria-label="Tipo de filtro">
+                                                <option selected>Título del Evento</option>
+                                                <option>Fecha del Evento</option>
+                                                <option>Nombre del Editor</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-sm">
+                                            <label class="visually-hidden" for="gestionEventosBusqueda">Dato a
+                                                buscar</label>
+                                            <input id="gestionEventosBusqueda" class="form-control gestionEventosInput"
+                                                type="text" placeholder="Ingrese el dato indicado"
+                                                aria-label="Ingrese el dato indicado">
+                                        </div>
+
+                                        <div class="col-12 col-sm-auto d-grid d-sm-inline-flex">
+                                            <button class="btn gestionEventosSearchBtn" type="button" aria-label="Buscar">
+                                                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-4 fw-bold d-flex justify-content-end">
+                                    <p>1-20 de 57</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cardsEventosPublicados container-fluid mt-3">
+
+                        </div>  
                 
             `,
         },
         'eventos-borrador': {
             title: 'Eventos en Borrador',
             html: `
-                
+                <nav class="breadcrumbEventos" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a class="text-decoration-none"
+                                href="../modulo-admin.html">Inicio</a>
+                            </li>
+                            <li class="breadcrumb-item"><a class="text-decoration-none" href="#">Eventos</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Eventos en Borrador
+                            </li>
+                        </ol>
+                    </nav>
+                    <div class="container-fluid">
+                            <div class="row mt-5">
+                                <div
+                                    class="col-12 d-flex justify-content-start align-items-center gap-2 gap-sm-3 mt-4 aprobacionEventosTitle">
+                                    <div class="iconoAprobacionEventos">
+                                        <i class="fa-solid fa-file-circle-check"></i>
+                                    </div>
+                                    <p class="txtAprobacionEventos mb-0">Eventos Publicados</p>
+                                </div>
+                                <div class="col-12 d-flex flex-column flex-lg-row justify-content-center align-items-center gap-2 gap-sm-3 mt-4 aprobacionEventosSubtitle">
+                                    <button type="button" class="btn btnListasDifusionEdit btnEventosEnEdicion is-active" data-status="edicion">En edición</button>
+                                    <button type="button" class="btn btnListasDifusionEdit btnEventosEnPendiente" data-status="pendiente">Pendientes de Aprobación</button>
+                                    <button type="button" class="btn btnListasDifusionEdit btnEventosEnRechazado" data-status="rechazado">Rechazados</button>
+                                </div>
+                                <div class="col-12 buscadorEventosTitle mt-4 mb-2">
+                                    <p>Buscador de Eventos</p>
+                                </div>
+                                <div class="col-12 buscadorEventosSubtitle mb-2">
+                                    Filtrar por:
+                                </div>
+                                <div class="col-12 mb-4">
+                                    <div class="row g-2 align-items-center">
+                                        <div class="col-12 col-sm-4 col-md-auto">
+                                            <label class="visually-hidden" for="gestionEventosFiltro">Filtro de
+                                                eventos</label>
+                                            <select id="gestionEventosFiltro" class="form-select gestionEventosSelect"
+                                                aria-label="Tipo de filtro">
+                                                <option selected>Título del Evento</option>
+                                                <option>Fecha del Evento</option>
+                                                <option>Nombre del Editor</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-sm">
+                                            <label class="visually-hidden" for="gestionEventosBusqueda">Dato a
+                                                buscar</label>
+                                            <input id="gestionEventosBusqueda" class="form-control gestionEventosInput"
+                                                type="text" placeholder="Ingrese el dato indicado"
+                                                aria-label="Ingrese el dato indicado">
+                                        </div>
+
+                                        <div class="col-12 col-sm-auto d-grid d-sm-inline-flex">
+                                            <button class="btn gestionEventosSearchBtn" type="button" aria-label="Buscar">
+                                                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-4 fw-bold d-flex justify-content-end">
+                                    <p>1-20 de 57</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cardsEventosBorrador  container-fluid mt-3" id="cardsEventosBorrador">
+
+                        </div>  
+                    </div>
             
+            `,
+        },
+        'eventos-finalizados': {
+            title: 'Eventos Finalizados',
+            html: `
+                <nav class="breadcrumbEventos" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a class="text-decoration-none"
+                                href="../modulo-admin.html">Inicio</a>
+                            </li>
+                            <li class="breadcrumb-item"><a class="text-decoration-none" href="#">Eventos</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Eventos Finalizados
+                            </li>
+                        </ol>
+                    </nav>
+                    <div class="container-fluid">
+                            <div class="row mt-5">
+                                <div
+                                    class="col-12 d-flex justify-content-start align-items-center gap-2 gap-sm-3 mt-4 aprobacionEventosTitle">
+                                    <div class="iconoAprobacionEventos">
+                                        <i class="fa-solid fa-file-circle-check"></i>
+                                    </div>
+                                    <p class="txtAprobacionEventos mb-0">Eventos Finalizados</p>
+                                </div>
+                                <div class="col-12 buscadorEventosTitle mt-4 mb-2">
+                                    <p>Buscador de Eventos</p>
+                                </div>
+                                <div class="col-12 buscadorEventosSubtitle mb-2">
+                                    Filtrar por:
+                                </div>
+                                <div class="col-12 mb-4">
+                                    <div class="row g-2 align-items-center">
+                                        <div class="col-12 col-sm-4 col-md-auto">
+                                            <label class="visually-hidden" for="gestionEventosFiltro">Filtro de
+                                                eventos</label>
+                                            <select id="gestionEventosFiltro" class="form-select gestionEventosSelect"
+                                                aria-label="Tipo de filtro">
+                                                <option selected>Título del Evento</option>
+                                                <option>Fecha del Evento</option>
+                                                <option>Nombre del Editor</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-sm">
+                                            <label class="visually-hidden" for="gestionEventosBusqueda">Dato a
+                                                buscar</label>
+                                            <input id="gestionEventosBusqueda" class="form-control gestionEventosInput"
+                                                type="text" placeholder="Ingrese el dato indicado"
+                                                aria-label="Ingrese el dato indicado">
+                                        </div>
+
+                                        <div class="col-12 col-sm-auto d-grid d-sm-inline-flex">
+                                            <button class="btn gestionEventosSearchBtn" type="button" aria-label="Buscar">
+                                                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-4 fw-bold d-flex justify-content-end">
+                                    <p>1-20 de 57</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cardsEventosFinalizadosEditor container-fluid mt-3">
+
+                        </div>  
+                
             `,
         },
         'crear-lista-difusion': {
             title: 'Crear lista de difusión',
             html: `
-                
+                <nav class="breadcrumbEventos" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a class="text-decoration-none"
+                                href="../modulo-admin.html">Inicio</a>
+                            </li>
+                            <li class="breadcrumb-item"><a class="text-decoration-none" href="#">Eventos</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Crear lista de difusión
+                            </li>
+                        </ol>
+                    </nav>
+                    <div class="container-fluid">
+                            <div class="row d-flex flex-column gap-4 mt-5">
+                                <div class="col-12 d-flex justify-content-center align-items-center">
+                                    <h2 class="fw-bold">Lista de Difusión</h2>
+                                </div>
+                                <div class="col-12 d-flex justify-content-center align-items-center">
+                                    <p class="txtCrearLista">Información de la Lista</p>
+                                </div>
+                                <div class="col-12 d-flex justify-content-center align-items-center">
+                                    <form class="w-100" style="max-width: 800px;">
+                                        <div class="mb-4">
+                                            <div class="row align-items-center">
+                                                <label for="nombreLista" class="col-12 col-lg-3 form-label ">*Nombre de la lista</label>
+                                                <div class="col-12 col-lg-9">
+                                                    <input type="text" class="form-control" id="nombreLista" placeholder="Introduzca el dato solicitado">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <div class="row align-items-start">
+                                                <label for="descripcionLista" class="col-12 col-lg-3 form-label">*Descripción de la lista de difusión</label>
+                                                <div class="col-12 col-lg-9">
+                                                    <textarea class="form-control" id="descripcionLista" rows="5" placeholder="Introduzca el dato solicitado"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <button type="submit" class="btn btnCrearLista">
+                                                <i class="fa-solid fa-circle-check me-2" aria-hidden="true"></i>Crear
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
             
             `,
         },
         'listas-difusion': {
             title: 'Listas de Difusion',
             html: `
-                
+                <nav class="breadcrumbEventos" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a class="text-decoration-none"
+                                href="../modulo-admin.html">Inicio</a>
+                            </li>
+                            <li class="breadcrumb-item"><a class="text-decoration-none" href="#">Eventos</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Listas de difusión
+                            </li>
+                        </ol>
+                    </nav>
+                    <div class="container-fluid">
+                            <div class="row mt-5">
+                                <div
+                                    class="col-12 d-flex justify-content-start align-items-center gap-2 gap-sm-3 mt-4 aprobacionEventosTitle">
+                                    <div class="iconoAprobacionEventos">
+                                        <i class="fa-solid fa-file-circle-check"></i>
+                                    </div>
+                                    <p class="txtAprobacionEventos mb-0">Listas de Difusión</p>
+                                </div>
+                                <div class="col-12 d-flex flex-column flex-lg-row justify-content-center align-items-center gap-2 gap-sm-3 mt-4 aprobacionEventosSubtitle">
+                                    <button type="button" class="btn btnListasDifusionEdit btnlistasEnAprobado is-active" data-status="edicion">Aprobadas</button>
+                                    <button type="button" class="btn btnListasDifusionEdit btnlistasEnPendiente" data-status="pendiente">Pendientes de Aprobación</button>
+                                    <button type="button" class="btn btnListasDifusionEdit btnlistasEnRechazado" data-status="rechazado">Rechazadas</button>
+                                </div>
+                                <div class="col-12 buscadorEventosTitle mt-4 mb-2">
+                                    <p>Buscador de Listas de Difusión</p>
+                                </div>
+                                <div class="col-12 buscadorEventosSubtitle mb-2">
+                                    Filtrar por:
+                                </div>
+                                <div class="col-12 mb-4">
+                                    <div class="row g-2 align-items-center">
+                                        <div class="col-12 col-sm-4 col-md-auto">
+                                            <label class="visually-hidden" for="gestionEventosFiltro">Filtro de
+                                                eventos</label>
+                                            <select id="gestionEventosFiltro" class="form-select gestionEventosSelect"
+                                                aria-label="Tipo de filtro">
+                                                <option selected>Título de la lista</option>
+                                                <option>Fecha de la lista</option>
+                                                <option>Autor de la lista</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-sm">
+                                            <label class="visually-hidden" for="gestionEventosBusqueda">Dato a
+                                                buscar</label>
+                                            <input id="gestionEventosBusqueda" class="form-control gestionEventosInput"
+                                                type="text" placeholder="Ingrese el dato indicado"
+                                                aria-label="Ingrese el dato indicado">
+                                        </div>
+
+                                        <div class="col-12 col-sm-auto d-grid d-sm-inline-flex">
+                                            <button class="btn gestionEventosSearchBtn" type="button" aria-label="Buscar">
+                                                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-4 fw-bold d-flex justify-content-end">
+                                    <p>1-20 de 57</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cardsEventosBorrador  container-fluid mt-3" id="cardsEventosBorrador">
+
+                        </div>  
+                    </div>
             
             `,
         },
@@ -803,6 +1111,14 @@ document.addEventListener('DOMContentLoaded', () => {
             globalThis.initCrearEvento();
             restoreCrearEventoDraft();
             updateDraftState();
+        }
+
+        if (sidebarKey === 'eventos-borrador' && typeof globalThis.initEventoBorrador === 'function') {
+            globalThis.initEventoBorrador();
+        }
+
+        if (sidebarKey === 'listas-difusion' && typeof globalThis.initListaDifusionEdit === 'function') {
+            globalThis.initListaDifusionEdit();
         }
     };
 

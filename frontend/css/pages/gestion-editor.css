@@ -51,7 +51,7 @@
 .gestionEditorContent {
     padding: clamp(1rem, 2vw, 2rem);
     padding-top: clamp(2.6rem, 5vw, 4rem);
-    padding-left: clamp(3.6rem, 7vw, 6.5rem);
+    padding-left: clamp(1rem, 2.2vw, 1.8rem);
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
@@ -78,9 +78,55 @@
 }
 
 
+/* Botones de Eventos en borrador */
+
+.btnEventosBorrador{
+    width: 100%;
+    background-color: var(--color-gris-claro);
+    border: none;
+}
+
+.btnEventosBorrador:hover,
+.btnEventosBorrador:active,
+.btnEventosBorrador.is-active {
+    background-color: var(--color-amarillo-claro);
+    border: none;
+    font-weight: 600;
+}
+
+/* Crear Lista  */
+.txtCrearLista{
+    font-size: 1.5rem;
+}
+
+.btnCrearLista{
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
+    border: none;
+    padding: 0.5rem 3.25rem;
+    font-size: 1.1rem;
+    &:hover{
+        background-color: var(--nav-color);
+        color: var(--color-blanco);
+    }
+}
 
 
+/* Botons listas de difusion dinamicos */
 
+.btnListasDifusionEdit{
+    width: 100%;
+    background-color: var(--color-gris-claro);
+    border: none;
+}
+
+.btnListasDifusionEdit:hover,
+.btnListasDifusionEdit:active,
+.btnListasDifusionEdit.is-active {
+    background-color: var(--color-amarillo-claro);
+    border: none;
+    font-weight: 600;
+}
 
 /*  Header Responsive */
 

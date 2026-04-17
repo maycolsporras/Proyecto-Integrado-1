@@ -22,9 +22,11 @@
 
             <div class="gestionAdminControls" aria-label="Controles de accesibilidad y cuenta">
                 <div class="gestionAdminFontGroup" aria-label="Controles de tamaño de fuente">
-                    <button class="gestionAdminControlBtn" type="button" aria-label="Reducir tamaño de fuente">-</button>
+                    <button class="gestionAdminControlBtn" type="button"
+                        aria-label="Reducir tamaño de fuente">-</button>
                     <button class="gestionAdminControlBtn" type="button" aria-label="Tamaño de fuente normal">A</button>
-                    <button class="gestionAdminControlBtn" type="button" aria-label="Aumentar tamaño de fuente">+</button>
+                    <button class="gestionAdminControlBtn" type="button"
+                        aria-label="Aumentar tamaño de fuente">+</button>
                 </div>
 
                 <div class="gestionAdminContrastGroup" aria-label="Control de contraste">
@@ -59,43 +61,71 @@
         <section class="gestionEditorLayout row g-0 h-100">
             <section class="col-12 d-md-none px-3 pt-3 pb-2" aria-label="Menu de gestion en moviles">
                 <div class="dropdown">
-                    <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Abrir opciones de gestion">
+                    <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false" aria-label="Abrir opciones de gestion">
                         <span id="gestionEditorMobileMenuLabel">Opciones de gestión</span>
                     </button>
                     <ul class="dropdown-menu w-100">
-                        <li><p class="dropdown-header sideBarTitles">Eventos</p></li>
-                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="crear-evento">Crear Evento</a></li>
-                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="eventos-publicados">Eventos Publicados</a></li>
-                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="eventos-borrador">Eventos en Borrador</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><p class="dropdown-header sideBarTitles">Usuarios</p></li>
-                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="crear-lista-difusion">Crear lista de difusión</a></li>
-                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="listas-difusion">Listas de Difusión</a></li>
-                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="suscriptores">Suscriptores</a></li>
-                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="consultas">Consultas</a></li>
-                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="aprobacion-inscripciones">Aprobación de Inscripciones</a></li>
-                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="inscritos-eventos">Inscritos a eventos</a></li>
+                        <li>
+                            <p class="dropdown-header sideBarTitles">Eventos</p>
+                        </li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption"
+                                data-sidebar-key="crear-evento">Crear Evento</a></li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption"
+                                data-sidebar-key="eventos-publicados">Eventos Publicados</a></li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption"
+                                data-sidebar-key="eventos-borrador">Eventos en Borrador</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <p class="dropdown-header sideBarTitles">Usuarios</p>
+                        </li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption"
+                                data-sidebar-key="crear-lista-difusion">Crear lista de difusión</a></li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption"
+                                data-sidebar-key="listas-difusion">Listas de Difusión</a></li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption"
+                                data-sidebar-key="suscriptores">Suscriptores</a></li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption"
+                                data-sidebar-key="consultas">Consultas</a></li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption"
+                                data-sidebar-key="aprobacion-inscripciones">Aprobación de Inscripciones</a></li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption"
+                                data-sidebar-key="inscritos-eventos">Inscritos a eventos</a></li>
                     </ul>
                 </div>
             </section>
 
-            <aside class="gestionEditorSidebar d-none d-md-flex col-md-4 col-lg-3 col-xl-2 align-items-start border-end border-1 border-secondary-subtle ps-4 ps-md-5 pe-0 py-5" aria-label="Menu lateral de gestion">
-                <nav class="gestionEditorSidebarNav d-flex flex-column gap-5 w-100 mt-4 mt-md-5 ms-2 ms-md-3" aria-label="Opciones de administracion">
+            <aside
+                class="gestionEditorSidebar d-none d-md-flex col-md-4 col-lg-3 col-xl-2 align-items-start border-end border-1 border-secondary-subtle ps-4 ps-md-5 pe-0 py-5"
+                aria-label="Menu lateral de gestion">
+                <nav class="gestionEditorSidebarNav d-flex flex-column gap-5 w-100 mt-4 mt-md-5 ms-2 ms-md-3"
+                    aria-label="Opciones de administracion">
                     <section class="gestionEditorMenuGroup d-flex flex-column gap-2" aria-label="Menu de eventos">
                         <p class="gestionEditorMenuTitle">Eventos</p>
-                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="crear-evento">Crear Evento</a>
-                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="eventos-publicados">Eventos Publicados</a>
-                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="eventos-borrador">Eventos en Borrador</a>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption"
+                            data-sidebar-key="crear-evento">Crear Evento</a>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption"
+                            data-sidebar-key="eventos-publicados">Eventos Publicados</a>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption"
+                            data-sidebar-key="eventos-borrador">Eventos en Borrador</a>
                     </section>
 
                     <section class="gestionEditorMenuGroup d-flex flex-column gap-2" aria-label="Menu de usuarios">
                         <p class="gestionEditorMenuTitle">Usuarios</p>
-                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="crear-lista-difusion">Crear lista de difusión</a>
-                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="listas-difusion">Listas de Difusión</a>
-                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="suscriptores">Suscriptores</a>
-                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="consultas">Consultas</a>
-                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="aprobacion-inscripciones">Aprobación de Inscripciones</a>
-                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="inscritos-eventos">Inscritos a eventos</a>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption"
+                            data-sidebar-key="crear-lista-difusion">Crear lista de difusión</a>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption"
+                            data-sidebar-key="listas-difusion">Listas de Difusión</a>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption"
+                            data-sidebar-key="suscriptores">Suscriptores</a>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption"
+                            data-sidebar-key="consultas">Consultas</a>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption"
+                            data-sidebar-key="aprobacion-inscripciones">Aprobación de Inscripciones</a>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption"
+                            data-sidebar-key="inscritos-eventos">Inscritos a eventos</a>
                     </section>
                 </nav>
             </aside>
@@ -112,8 +142,46 @@
                             </li>
                         </ol>
                     </nav>
-                    <div class="formularioCrearEvento">
-                        
+                    <div class="desarrolloEditor">
+                        <div class="container-fluid">
+                            <div class="row d-flex flex-column gap-4 mt-5">
+                                <div class="col-12 d-flex justify-content-center align-items-center">
+                                    <h2 class="fw-bold">Lista de Difusión</h2>
+                                </div>
+                                <div class="col-12 d-flex justify-content-center align-items-center">
+                                    <p class="txtCrearLista">Información de la Lista</p>
+                                </div>
+                                <div class="col-12 d-flex justify-content-center align-items-center">
+                                    <form class="w-100" style="max-width: 800px;">
+                                        <div class="mb-4">
+                                            <div class="row align-items-center">
+                                                <label for="nombreLista" class="col-12 col-lg-3 form-label ">*Nombre de la lista</label>
+                                                <div class="col-12 col-lg-9">
+                                                    <input type="text" class="form-control" id="nombreLista" placeholder="Introduzca el dato solicitado">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <div class="row align-items-start">
+                                                <label for="descripcionLista" class="col-12 col-lg-3 form-label">*Descripción de la lista de difusión</label>
+                                                <div class="col-12 col-lg-9">
+                                                    <textarea class="form-control" id="descripcionLista" rows="5" placeholder="Introduzca el dato solicitado"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <button type="submit" class="btn btnCrearLista">
+                                                <i class="fa-solid fa-circle-check me-2" aria-hidden="true"></i>Crear
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cardsEventosBorrador  container-fluid mt-3" id="cardsEventosBorrador">
+
+                        </div>
                     </div>
                 </div>
             </section>
@@ -122,6 +190,7 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/pages/evento-borrador.js"></script>
 </body>
 
 </html>
