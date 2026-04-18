@@ -40,7 +40,7 @@
   height: 28px;
   border-radius: 50%;
   background-color: #ccc;
-  color: #fff;
+  color: #1f1f1f;
   font-weight: 700;
   font-size: 0.9rem;
   display: inline-flex;
@@ -196,6 +196,29 @@
   font-style: italic;
 }
 
+.ceInput-error,
+.ceSelect-error,
+.ceTextarea-error,
+.ceRichEditor-error {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, 0.15);
+}
+
+.ceRichEditor-error {
+  background-color: #fff5f5;
+}
+
+.ceLinkInput-error,
+.ceFileInput-error {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, 0.15);
+}
+
+.ceLinkInput-error .ceLinkIcon,
+.ceFileInput-error .ceFileIcon {
+  color: #dc3545;
+}
+
 /* Link input (icono + campo) */
 
 .ceLinkInput {
@@ -249,7 +272,7 @@
 }
 
 .ceCircleBtnRemove {
-  background-color: #e05;
+  background-color: #b00020;
   color: #fff;
 }
 

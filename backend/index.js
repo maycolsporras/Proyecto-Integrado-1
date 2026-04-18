@@ -2,12 +2,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const path = require('path');
+const path = require('node:path');
 require('dotenv').config();
 
 // Importaciones de modelos y rutas
 const Usuario = require('./models/usuario.model.js');
 const usuarioRoutes = require('./routes/usuario.route.js');
+const formEventoRoutes = require('./routes/form-evento.route.js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -67,6 +68,7 @@ mongoose.connect(process.env.MONGODB_URI)
 
 // Rutas
 app.use('/api/auth', usuarioRoutes);
+app.use('/api/form-evento', formEventoRoutes);
 
 app.get('/', (req, res) => {
     res.send('Servidor en funcionamiento');

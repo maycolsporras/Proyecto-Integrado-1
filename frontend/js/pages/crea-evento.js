@@ -1,3 +1,180 @@
+const maxFileSizeBytes = 10 * 1024 * 1024;
+
+const validationErrorClasses = [
+    'ceInput-error',
+    'ceSelect-error',
+    'ceTextarea-error',
+    'ceRichEditor-error',
+    'ceLinkInput-error',
+    'ceFileInput-error',
+]
+
+function getValidationTarget(field) {
+    if (!field) {
+        return null;
+    }
+
+    if (field.classList.contains('ceLinkField')) {
+        return field.closest('.ceLinkInput') || field;
+    }
+
+    if (field.type === 'file') {
+        return field.closest('.ceFileInput') || field;
+    }
+
+    return field;
+}
+
+function limpiarValidacionCampo(field) {
+    const validationTarget = getValidationTarget(field);
+
+    validationTarget?.classList.remove(...validationErrorClasses);
+    validationTarget?.removeAttribute('aria-invalid');
+
+    if (validationTarget !== field) {
+        field.classList.remove(...validationErrorClasses);
+        field.removeAttribute('aria-invalid');
+    }
+}
+
+function marcarValidacionCampo(field) {
+    const validationTarget = getValidationTarget(field);
+
+    if (field.classList.contains('ceInput')) {
+        validationTarget?.classList.add('ceInput-error');
+    } else if (field.classList.contains('ceSelect') || field.classList.contains('ceSelectFull')) {
+        validationTarget?.classList.add('ceSelect-error');
+    } else if (field.classList.contains('ceTextarea')) {
+        validationTarget?.classList.add('ceTextarea-error');
+    } else if (field.classList.contains('ceRichEditor')) {
+        validationTarget?.classList.add('ceRichEditor-error');
+    } else if (field.classList.contains('ceLinkField')) {
+        validationTarget?.classList.add('ceLinkInput-error');
+    } else if (field.type === 'file') {
+        validationTarget?.classList.add('ceFileInput-error');
+    } else {
+        validationTarget?.classList.add('ceInput-error');
+    }
+
+    validationTarget?.setAttribute('aria-invalid', 'true');
+}
+
+function enfocarPrimerError(field) {
+    const validationTarget = getValidationTarget(field);
+
+    validationTarget?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    if (typeof field.focus === 'function') {
+        field.focus({ preventScroll: true });
+    }
+}
+
+function esCorreoValido(valor) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
+}
+
+function esUrlValida(valor) {
+    try {
+        const url = new URL(valor);
+        return Boolean(url.protocol && url.host);
+    } catch {
+        return false;
+    }
+}
+
+function validarCampo(field, { requerido = true, archivoObligatorio = false } = {}) {
+    limpiarValidacionCampo(field);
+
+    const valor = typeof field.value === 'string' ? field.value.trim() : '';
+    let esInvalido = false;
+
+    if (field.getAttribute('contenteditable') === 'true') {
+        esInvalido = field.textContent.trim() === '';
+    } else if (field.type === 'file') {
+        const archivo = field.files?.[0];
+
+        if (!archivo) {
+            esInvalido = archivoObligatorio;
+        } else if (archivo.size > maxFileSizeBytes) {
+            esInvalido = true;
+        }
+    } else if (field.tagName === 'SELECT') {
+        esInvalido = valor === '' || valor === '0000';
+    } else if (field.type === 'email') {
+        esInvalido = valor === '' || !esCorreoValido(valor);
+    } else if (field.type === 'url') {
+        esInvalido = valor === '' || !esUrlValida(valor);
+    } else {
+        esInvalido = requerido ? valor === '' : false;
+    }
+
+    if (esInvalido) {
+        marcarValidacionCampo(field);
+    }
+
+    return !esInvalido;
+}
+
+function actualizarBotonesArchivo(wrapper) {
+    const filas = wrapper.querySelectorAll('.ceFileRow');
+
+    filas.forEach((fila) => {
+        fila.querySelector('.ceCircleBtnRemove').disabled = filas.length === 1;
+    });
+}
+
+function marcarSelectsRequeridos(root, selector) {
+    root?.querySelectorAll(selector).forEach((select) => {
+        select.setAttribute('aria-required', 'true');
+    });
+}
+
+function mostrarModalEventoIncompleto() {
+    const modalElement = document.getElementById('modalEventoIncompleto');
+
+    if (!modalElement) {
+        return false;
+    }
+
+    if (!globalThis.bootstrap?.Modal) {
+        return false;
+    }
+
+    globalThis.bootstrap.Modal.getOrCreateInstance(modalElement).show();
+    return true;
+}
+
+function mostrarModalEventoEnviado() {
+    const modalElement = document.getElementById('modalEventoEnviado');
+
+    if (!modalElement) {
+        return false;
+    }
+
+    if (!globalThis.bootstrap?.Modal) {
+        return false;
+    }
+
+    globalThis.bootstrap.Modal.getOrCreateInstance(modalElement).show();
+    return true;
+}
+
+function normalizarHtmlEditor(editorElement) {
+    if (!editorElement) {
+        return '';
+    }
+
+    return editorElement.innerHTML.trim();
+}
+
+function crearIsoFecha({ anio, mes, dia }) {
+    if (!anio || !mes || !dia) {
+        return '';
+    }
+
+    return `${anio}-${mes}-${dia}`;
+}
+
 function initCrearEvento() {
     const formRoot = document.querySelector('.ceCard');
     if (!formRoot) {
@@ -73,6 +250,8 @@ function initCrearEvento() {
     generarHoras(document.getElementById('horaInicio'), '14');
     generarHoras(document.getElementById('horaFin'), '17');
 
+    marcarSelectsRequeridos(formRoot, '#fechaPubAnio, #fechaPubMes, #fechaPubDia, #horaInicio, #horaFin, #fechaFinAnio, #fechaFinMes, #fechaFinDia');
+
     // Fecha de visualización final (paso 2)
     generarAnios(document.getElementById('fechaFinAnio'));
     generarMeses(document.getElementById('fechaFinMes'));
@@ -87,6 +266,7 @@ function initCrearEvento() {
         const fechaSelects = fechaRow.querySelectorAll('select');
         fechaSelects.forEach(select => {
             select.innerHTML = '';
+            select.setAttribute('aria-required', 'true');
         });
         generarAnios(fechaSelects[0]);
         generarMeses(fechaSelects[1]);
@@ -129,13 +309,13 @@ function initCrearEvento() {
         const btnAdd = e.target.closest('.ceCircleBtnAdd');
         const btnRemove = e.target.closest('.ceCircleBtnRemove');
 
-        if (btnAdd && btnAdd.closest('.ceFechaRow')) {
+        if (btnAdd?.closest('.ceFechaRow')) {
             const filas = fechasWrapper.querySelectorAll('.ceFechaRow');
             fechasWrapper.appendChild(crearFechaRow(filas.length));
             actualizarBotonesFechas();
         }
 
-        if (btnRemove && btnRemove.closest('.ceFechaRow')) {
+        if (btnRemove?.closest('.ceFechaRow')) {
             const filas = fechasWrapper.querySelectorAll('.ceFechaRow');
             if (filas.length > 1) {
                 btnRemove.closest('.ceFechaRow').remove();
@@ -166,13 +346,6 @@ function initCrearEvento() {
       </button>
     `;
         return div;
-    }
-
-    function actualizarBotonesArchivo(wrapper) {
-        const filas = wrapper.querySelectorAll('.ceFileRow');
-        filas.forEach(fila => {
-            fila.querySelector('.ceCircleBtnRemove').disabled = filas.length === 1;
-        });
     }
 
     actualizarBotonesArchivo(imagenesWrapper);
@@ -245,7 +418,7 @@ function initCrearEvento() {
         const btnAdd = e.target.closest('.ceCircleBtnAdd');
         const btnRemove = e.target.closest('.ceCircleBtnRemove');
 
-        if (btnAdd && btnAdd.closest('.ceRefRow')) {
+                if (btnAdd?.closest('.ceRefRow')) {
             const nuevaFila = document.createElement('div');
             nuevaFila.className = 'ceRefRow mt-2';
             nuevaFila.innerHTML = `
@@ -259,11 +432,11 @@ function initCrearEvento() {
         </button>
       `;
             const linkRef = referenciasWrapper.querySelector('.ceLinkInput');
-            referenciasWrapper.insertBefore(nuevaFila, linkRef);
+            linkRef.before(nuevaFila);
             actualizarBotonesReferencias();
         }
 
-        if (btnRemove && btnRemove.closest('.ceRefRow')) {
+        if (btnRemove?.closest('.ceRefRow')) {
             const filas = referenciasWrapper.querySelectorAll('.ceRefRow');
             if (filas.length > 1) {
                 btnRemove.closest('.ceRefRow').remove();
@@ -307,6 +480,278 @@ function initCrearEvento() {
     const stepDot1 = document.getElementById('stepDot1');
     const stepDot2 = document.getElementById('stepDot2');
     const stepLabel = document.getElementById('stepLabel');
+    function validarArchivos(wrapperSelector, { requerido = false } = {}) {
+        const inputs = Array.from(formRoot.querySelectorAll(wrapperSelector));
+
+        if (!inputs.length) {
+            return true;
+        }
+
+        let esValido = true;
+        let hayArchivo = false;
+        let primerError = null;
+
+        inputs.forEach((input) => {
+            limpiarValidacionCampo(input);
+
+            const archivo = input.files?.[0];
+            if (archivo) {
+                hayArchivo = true;
+
+                if (archivo.size > maxFileSizeBytes) {
+                    marcarValidacionCampo(input);
+                    primerError = primerError || input;
+                    esValido = false;
+                }
+            }
+        });
+
+        if (requerido && !hayArchivo) {
+            marcarValidacionCampo(inputs[0]);
+            primerError = primerError || inputs[0];
+            esValido = false;
+        }
+
+        if (!esValido && primerError) {
+            enfocarPrimerError(primerError);
+        }
+
+        return esValido;
+    }
+
+    function validarCampos(selectores, opciones = {}) {
+        let esValido = true;
+        let primerError = null;
+
+        selectores.forEach((selector) => {
+            const campos = formRoot.querySelectorAll(selector);
+
+            campos.forEach((campo) => {
+                if (!validarCampo(campo, opciones)) {
+                    primerError = primerError || campo;
+                    esValido = false;
+                }
+            });
+        });
+
+        if (!esValido && primerError) {
+            enfocarPrimerError(primerError);
+        }
+
+        return esValido;
+    }
+
+    function validarPaso1() {
+        return validarCampos([
+            '#fechaPubAnio',
+            '#fechaPubMes',
+            '#fechaPubDia',
+            '#nombreEvento',
+            '#fechasEventoWrapper select',
+            '#horaInicio',
+            '#horaFin',
+            '#lugarEvento',
+            '#linkCalendar',
+            '#descripcionEvento',
+            '#objetivosEditor',
+            '#agendaEditor',
+            '#agendaFacilEditor',
+        ]);
+    }
+
+    function validarPaso2() {
+        const esValido = validarCampos([
+            '#contactoNombre',
+            '#contactoCorreo',
+            '#descImagen',
+            '#publicoMeta',
+            '#tipoFormulario',
+            '#cupoEvento',
+            '#fechaFinAnio',
+            '#fechaFinMes',
+            '#fechaFinDia',
+            '#infoAdicionalEditor',
+        ]);
+
+        const imagenesValidas = validarArchivos('#imagenesWrapper input[type="file"]', { requerido: true });
+        const videosValidos = validarArchivos('#videosWrapper input[type="file"]');
+
+        return esValido && imagenesValidas && videosValidos;
+    }
+
+    function limpiarErroresCrearEvento() {
+        formRoot.querySelectorAll('input, textarea, select, [contenteditable="true"], .ceLinkInput, .ceFileInput').forEach((field) => {
+            field.classList.remove(...validationErrorClasses);
+            field.removeAttribute('aria-invalid');
+        });
+    }
+
+    function obtenerFechaDesdeSelects(anioId, mesId, diaId) {
+        const anio = formRoot.querySelector(`#${anioId}`)?.value || '';
+        const mes = formRoot.querySelector(`#${mesId}`)?.value || '';
+        const dia = formRoot.querySelector(`#${diaId}`)?.value || '';
+
+        return {
+            anio,
+            mes,
+            dia,
+            iso: crearIsoFecha({ anio, mes, dia }),
+        };
+    }
+
+    function obtenerFechasEvento() {
+        return Array.from(formRoot.querySelectorAll('#fechasEventoWrapper .ceFechaRow')).map((fila) => {
+            const selects = fila.querySelectorAll('select');
+            const anio = selects[0]?.value || '';
+            const mes = selects[1]?.value || '';
+            const dia = selects[2]?.value || '';
+
+            return {
+                anio,
+                mes,
+                dia,
+                iso: crearIsoFecha({ anio, mes, dia }),
+            };
+        });
+    }
+
+    function obtenerReferencias() {
+        const textosReferencia = Array.from(formRoot.querySelectorAll('#referenciasWrapper .ceRefRow input[type="text"]'))
+            .map((input) => input.value.trim())
+            .filter(Boolean);
+
+        const linksReferencia = Array.from(formRoot.querySelectorAll('#referenciasWrapper input[type="url"]'))
+            .map((input) => input.value.trim())
+            .filter(Boolean);
+
+        const maxLength = Math.max(textosReferencia.length, linksReferencia.length);
+        const referencias = [];
+
+        for (let i = 0; i < maxLength; i++) {
+            referencias.push({
+                texto: textosReferencia[i] || '',
+                link: linksReferencia[i] || '',
+            });
+        }
+
+        return referencias.filter((item) => item.texto || item.link);
+    }
+
+    function obtenerAspectosFormularioSeleccionados(tipoFormularioSeleccionado) {
+        if (!tipoFormularioSeleccionado) {
+            return [];
+        }
+
+        const subFormId = tipoFormularioSeleccionado === 'inscripcion'
+            ? '#subFormInscripcion'
+            : '#subFormConfirmacion';
+
+        return Array.from(formRoot.querySelectorAll(`${subFormId} input[type="checkbox"]:checked`))
+            .map((checkbox) => checkbox.closest('label')?.textContent?.trim() || '')
+            .filter(Boolean);
+    }
+
+    function construirPayloadFormularioEvento() {
+        const tipoFormularioSeleccionado = formRoot.querySelector('#tipoFormulario')?.value || '';
+
+        const palabrasClave = (formRoot.querySelector('#palabrasClave')?.value || '')
+            .split(',')
+            .map((valor) => valor.trim())
+            .filter(Boolean);
+
+        return {
+            nombreEvento: formRoot.querySelector('#nombreEvento')?.value.trim() || '',
+            fechaPublicacion: obtenerFechaDesdeSelects('fechaPubAnio', 'fechaPubMes', 'fechaPubDia'),
+            fechasEvento: obtenerFechasEvento(),
+            horario: {
+                horaInicio: formRoot.querySelector('#horaInicio')?.value || '',
+                horaFin: formRoot.querySelector('#horaFin')?.value || '',
+            },
+            lugarEvento: formRoot.querySelector('#lugarEvento')?.value.trim() || '',
+            linkCalendar: formRoot.querySelector('#linkCalendar')?.value.trim() || '',
+            descripcionEvento: formRoot.querySelector('#descripcionEvento')?.value.trim() || '',
+            objetivosEvento: normalizarHtmlEditor(formRoot.querySelector('#objetivosEditor')),
+            agendaEvento: normalizarHtmlEditor(formRoot.querySelector('#agendaEditor')),
+            agendaLecturaFacil: normalizarHtmlEditor(formRoot.querySelector('#agendaFacilEditor')),
+            contacto: {
+                nombreCompleto: formRoot.querySelector('#contactoNombre')?.value.trim() || '',
+                correoElectronico: formRoot.querySelector('#contactoCorreo')?.value.trim() || '',
+            },
+            descripcionImagen: formRoot.querySelector('#descImagen')?.value.trim() || '',
+            publicoMeta: formRoot.querySelector('#publicoMeta')?.value.trim() || '',
+            cupoEvento: formRoot.querySelector('#cupoEvento')?.value || '',
+            infoAdicional: normalizarHtmlEditor(formRoot.querySelector('#infoAdicionalEditor')),
+            referencias: obtenerReferencias(),
+            palabrasClave,
+            formularioInteresados: {
+                tipo: tipoFormularioSeleccionado,
+                aspectosSeleccionados: obtenerAspectosFormularioSeleccionados(tipoFormularioSeleccionado),
+            },
+            fijarImportante: (formRoot.querySelector('input[name="fijarImportante"]:checked')?.value || '') === 'si',
+            listaDifusion: formRoot.querySelector('#listaDifusion')?.value || '',
+            fechaFinVisualizacion: obtenerFechaDesdeSelects('fechaFinAnio', 'fechaFinMes', 'fechaFinDia'),
+            redesSociales: Array.from(formRoot.querySelectorAll('input[name="redes"]:checked')).map((input) => input.value),
+            estado: 'pendiente_aprobacion',
+        };
+    }
+
+    function agregarArchivosAFormData(formData) {
+        formRoot.querySelectorAll('#imagenesWrapper input[type="file"]').forEach((input) => {
+            if (input.files?.[0]) {
+                formData.append('imagenes', input.files[0]);
+            }
+        });
+
+        formRoot.querySelectorAll('#videosWrapper input[type="file"]').forEach((input) => {
+            if (input.files?.[0]) {
+                formData.append('videos', input.files[0]);
+            }
+        });
+    }
+
+    async function guardarFormularioEvento() {
+        const payload = construirPayloadFormularioEvento();
+        const formData = new FormData();
+
+        formData.append('nombreEvento', payload.nombreEvento);
+        formData.append('fechaPublicacion', JSON.stringify(payload.fechaPublicacion));
+        formData.append('fechasEvento', JSON.stringify(payload.fechasEvento));
+        formData.append('horario', JSON.stringify(payload.horario));
+        formData.append('lugarEvento', payload.lugarEvento);
+        formData.append('linkCalendar', payload.linkCalendar);
+        formData.append('descripcionEvento', payload.descripcionEvento);
+        formData.append('objetivosEvento', payload.objetivosEvento);
+        formData.append('agendaEvento', payload.agendaEvento);
+        formData.append('agendaLecturaFacil', payload.agendaLecturaFacil);
+        formData.append('contacto', JSON.stringify(payload.contacto));
+        formData.append('descripcionImagen', payload.descripcionImagen);
+        formData.append('publicoMeta', payload.publicoMeta);
+        formData.append('cupoEvento', payload.cupoEvento);
+        formData.append('infoAdicional', payload.infoAdicional);
+        formData.append('referencias', JSON.stringify(payload.referencias));
+        formData.append('palabrasClave', JSON.stringify(payload.palabrasClave));
+        formData.append('formularioInteresados', JSON.stringify(payload.formularioInteresados));
+        formData.append('fijarImportante', String(payload.fijarImportante));
+        formData.append('listaDifusion', payload.listaDifusion);
+        formData.append('fechaFinVisualizacion', JSON.stringify(payload.fechaFinVisualizacion));
+        formData.append('redesSociales', JSON.stringify(payload.redesSociales));
+        formData.append('estado', payload.estado);
+
+        agregarArchivosAFormData(formData);
+
+        const response = await fetch('/api/form-evento', {
+            method: 'POST',
+            body: formData,
+        });
+
+        const responseBody = await response.json();
+
+        if (!response.ok) {
+            throw new Error(responseBody?.mensaje || 'No se pudo guardar el formulario de evento.');
+        }
+
+        return responseBody;
+    }
 
     function asegurarBotonesNavegacion() {
         if (!document.getElementById('btnSiguiente') && paso1) {
@@ -396,10 +841,49 @@ function initCrearEvento() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    btnSiguiente?.addEventListener('click', irAPaso2);
+    btnSiguiente?.addEventListener('click', () => {
+        if (!validarPaso1()) {
+            mostrarModalEventoIncompleto();
+            return;
+        }
+
+        irAPaso2();
+    });
     btnAnterior?.addEventListener('click', irAPaso1);
     stepIndicator1?.addEventListener('click', irAPaso1);
-    stepIndicator2?.addEventListener('click', irAPaso2);
+    stepIndicator2?.addEventListener('click', () => {
+        if (paso1.classList.contains('d-none')) {
+            irAPaso2();
+            return;
+        }
+
+        if (validarPaso1()) {
+            irAPaso2();
+        }
+    });
+
+    btnEnviarAprobacion?.addEventListener('click', async () => {
+        if (!validarPaso2()) {
+            mostrarModalEventoIncompleto();
+            return;
+        }
+
+        btnEnviarAprobacion.disabled = true;
+
+        try {
+            await guardarFormularioEvento();
+            limpiarErroresCrearEvento();
+
+            const draftManager = globalThis.crearEventoDraftManager;
+            draftManager?.discardForm?.();
+            mostrarModalEventoEnviado();
+            irAPaso1();
+        } catch (error) {
+            alert(error.message || 'Ocurrió un error al guardar el evento.');
+        } finally {
+            btnEnviarAprobacion.disabled = false;
+        }
+    });
 
 
 
