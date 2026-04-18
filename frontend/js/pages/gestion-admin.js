@@ -174,6 +174,43 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         </div>
                     </div>
+
+                    <div class="modal fade" id="modalEditarEventoAdmin" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered modalRechazoSuscriptorAncho">
+                            <div class="modal-content modalRechazoSuscriptorContenido">
+                                <div class="modal-body modalRechazoSuscriptorBody">
+                                    <p class="modalRechazoSuscriptorTitulo">Editar Evento</p>
+                                    <p class="modalRechazoSuscriptorDescripcion">
+                                        Modifique los datos necesarios del evento y luego guarde los cambios.
+                                    </p>
+
+                                    <div id="modalEditarEventoAdminFormHost" class="modalRechazoSuscriptorFormulario"></div>
+
+                                    <div class="modalRechazoSuscriptorAcciones d-grid gap-3 d-md-flex justify-content-center my-4">
+                                        <button type="button" class="btn modalRechazoSuscriptorBtnCancelar px-4" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn modalRechazoSuscriptorBtnAceptar modalEditarEventoAdminBtnGuardar px-4">Guardar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="modalEventoEditadoAdmin" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+                            <div class="modal-content modalSuscripcionEnviadaContenido">
+                                <div class="modal-body modalSuscripcionEnviadaBody">
+                                    <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
+                                    <p class="modalSuscripcionEnviadaTitulo">Evento Editado</p>
+                                    <p class="modalSuscripcionEnviadaDescripcion">
+                                        Se editó con éxito el evento seleccionado.
+                                    </p>
+                                    <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar" data-bs-dismiss="modal">Continuar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 
             `,
         },
@@ -264,6 +301,43 @@ document.addEventListener('DOMContentLoaded', () => {
                                         <button type="button" class="btn modalEliminarEventoBtnCancelar px-4" data-bs-dismiss="modal">Cancelar</button>
                                         <button type="button" class="btn modalEliminarEventoBtnEliminar px-4">Eliminar</button>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="modalEditarEventoAdmin" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered modalRechazoSuscriptorAncho">
+                            <div class="modal-content modalRechazoSuscriptorContenido">
+                                <div class="modal-body modalRechazoSuscriptorBody">
+                                    <p class="modalRechazoSuscriptorTitulo">Editar Evento</p>
+                                    <p class="modalRechazoSuscriptorDescripcion">
+                                        Modifique los datos necesarios del evento y luego guarde los cambios.
+                                    </p>
+
+                                    <div id="modalEditarEventoAdminFormHost" class="modalRechazoSuscriptorFormulario"></div>
+
+                                    <div class="modalRechazoSuscriptorAcciones d-grid gap-3 d-md-flex justify-content-center my-4">
+                                        <button type="button" class="btn modalRechazoSuscriptorBtnCancelar px-4" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn modalRechazoSuscriptorBtnAceptar modalEditarEventoAdminBtnGuardar px-4">Guardar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="modalEventoEditadoAdmin" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+                            <div class="modal-content modalSuscripcionEnviadaContenido">
+                                <div class="modal-body modalSuscripcionEnviadaBody">
+                                    <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
+                                    <p class="modalSuscripcionEnviadaTitulo">Evento Editado</p>
+                                    <p class="modalSuscripcionEnviadaDescripcion">
+                                        Se editó con éxito el evento seleccionado.
+                                    </p>
+                                    <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar" data-bs-dismiss="modal">Continuar</button>
                                 </div>
                             </div>
                         </div>

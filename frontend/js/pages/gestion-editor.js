@@ -611,9 +611,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <div class="col-12 mb-4">
                                     <div class="row g-2 align-items-center">
                                         <div class="col-12 col-sm-4 col-md-auto">
-                                            <label class="visually-hidden" for="gestionEventosFiltro">Filtro de
+                                            <label class="visually-hidden" for="gestionEventosPublicadosEditorFiltro">Filtro de
                                                 eventos</label>
-                                            <select id="gestionEventosFiltro" class="form-select gestionEventosSelect"
+                                            <select id="gestionEventosPublicadosEditorFiltro" class="form-select gestionEventosSelect"
                                                 aria-label="Tipo de filtro">
                                                 <option selected>Título del Evento</option>
                                                 <option>Fecha del Evento</option>
@@ -622,29 +622,71 @@ document.addEventListener('DOMContentLoaded', () => {
                                         </div>
 
                                         <div class="col-12 col-sm">
-                                            <label class="visually-hidden" for="gestionEventosBusqueda">Dato a
+                                            <label class="visually-hidden" for="gestionEventosPublicadosEditorBusqueda">Dato a
                                                 buscar</label>
-                                            <input id="gestionEventosBusqueda" class="form-control gestionEventosInput"
+                                            <input id="gestionEventosPublicadosEditorBusqueda" class="form-control gestionEventosInput"
                                                 type="text" placeholder="Ingrese el dato indicado"
                                                 aria-label="Ingrese el dato indicado">
                                         </div>
 
                                         <div class="col-12 col-sm-auto d-grid d-sm-inline-flex">
-                                            <button class="btn gestionEventosSearchBtn" type="button" aria-label="Buscar">
+                                            <button id="gestionEventosPublicadosEditorBuscarBtn" class="btn gestionEventosSearchBtn" type="button" aria-label="Buscar">
                                                 <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-12 col-sm-auto d-grid d-sm-inline-flex">
+                                            <button id="eventosPublicadosEditorLimpiarFiltro" class="btn btn-outline-secondary" type="button" aria-label="Limpiar filtros">
+                                                Limpiar
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-12 mt-4 fw-bold d-flex justify-content-end">
-                                    <p>1-20 de 57</p>
+                                    <p id="eventosPublicadosEditorConteo">Cargando...</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="cardsEventosPublicados container-fluid mt-3">
+                        <div class="cardsEventosPublicados container-fluid mt-3" id="cardsEventosPublicadosEditor">
 
                         </div>  
+
+                        <div class="modal fade" id="modalEditarEventoEditor" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered modalRechazoSuscriptorAncho">
+                                <div class="modal-content modalRechazoSuscriptorContenido">
+                                    <div class="modal-body modalRechazoSuscriptorBody">
+                                        <p class="modalRechazoSuscriptorTitulo">Editar Evento</p>
+                                        <p class="modalRechazoSuscriptorDescripcion">
+                                            Modifique los datos necesarios del evento y luego guarde los cambios.
+                                        </p>
+
+                                        <div id="modalEditarEventoEditorFormHost" class="modalRechazoSuscriptorFormulario"></div>
+
+                                        <div class="modalRechazoSuscriptorAcciones d-grid gap-3 d-md-flex justify-content-center my-4">
+                                            <button type="button" class="btn modalRechazoSuscriptorBtnCancelar px-4" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn modalRechazoSuscriptorBtnAceptar modalEditarEventoEditorBtnGuardar px-4">Guardar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="modalEventoEditadoEditor" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+                                <div class="modal-content modalSuscripcionEnviadaContenido">
+                                    <div class="modal-body modalSuscripcionEnviadaBody">
+                                        <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                                            <i class="fa-solid fa-check"></i>
+                                        </div>
+                                        <p class="modalSuscripcionEnviadaTitulo">Evento Editado</p>
+                                        <p class="modalSuscripcionEnviadaDescripcion">
+                                            Se editó con éxito el evento seleccionado.
+                                        </p>
+                                        <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar" data-bs-dismiss="modal">Continuar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                 
             `,
         },
@@ -715,9 +757,67 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         </div>
 
-                        <div class="cardsEventosBorrador  container-fluid mt-3" id="cardsEventosBorrador">
+                        <div class="cardsEventosBorrador  container-fluid mt-3" id="cardsEventosBorradorEditor">
 
                         </div>  
+
+                        <div class="modal fade" id="modalRechazoEventoAnotaciones" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered modalRechazoListaDifusionAncho">
+                                <div class="modal-content modalRechazoListaDifusionContenido">
+                                    <div class="modal-body modalRechazoListaDifusionBody">
+                                        <p class="modalRechazoListaDifusionTitulo">Rechazo de Evento</p>
+                                        <p class="modalRechazoListaDifusionDescripcion">
+                                            El Evento enviado ha sido rechazado, a continuación, presentamos el motivo en las
+                                            anotaciones realizadas por el administrador responsable:
+                                        </p>
+                                        <div id="modalRechazoEventoMotivo" class="modalRechazoEventoAnotaciones"></div>
+                                        <div class="modalRechazoListaDifusionAcciones d-grid gap-3 d-md-flex justify-content-center my-4">
+                                            <button type="button" class="btn modalRechazoListaDifusionBtnCancelar px-4"
+                                                data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn modalRechazoListaDifusionBtnAceptar px-4"
+                                                data-bs-dismiss="modal">Aceptar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="modalEditarEventoEditor" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered modalRechazoSuscriptorAncho">
+                                <div class="modal-content modalRechazoSuscriptorContenido">
+                                    <div class="modal-body modalRechazoSuscriptorBody">
+                                        <p class="modalRechazoSuscriptorTitulo">Editar Evento</p>
+                                        <p class="modalRechazoSuscriptorDescripcion">
+                                            Modifique los datos necesarios del evento y luego guarde los cambios.
+                                        </p>
+
+                                        <div id="modalEditarEventoEditorFormHost" class="modalRechazoSuscriptorFormulario"></div>
+
+                                        <div class="modalRechazoSuscriptorAcciones d-grid gap-3 d-md-flex justify-content-center my-4">
+                                            <button type="button" class="btn modalRechazoSuscriptorBtnCancelar px-4" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn modalRechazoSuscriptorBtnAceptar modalEditarEventoEditorBtnGuardar px-4">Guardar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="modalEventoEditadoEditor" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+                                <div class="modal-content modalSuscripcionEnviadaContenido">
+                                    <div class="modal-body modalSuscripcionEnviadaBody">
+                                        <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                                            <i class="fa-solid fa-check"></i>
+                                        </div>
+                                        <p class="modalSuscripcionEnviadaTitulo">Evento Editado</p>
+                                        <p class="modalSuscripcionEnviadaDescripcion">
+                                            Se editó con éxito el evento seleccionado.
+                                        </p>
+                                        <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar" data-bs-dismiss="modal">Continuar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
             
             `,
@@ -1007,7 +1107,11 @@ document.addEventListener('DOMContentLoaded', () => {
             modalElement.addEventListener('hidden.bs.modal', () => {
                 if (deleteConfirmed) {
                     deleteConfirmed = false;
-                    navigateAfterDraftDecision(true);
+
+                    if (pendingNavigationLink) {
+                        navigateAfterDraftDecision(true);
+                    }
+
                     return;
                 }
 
@@ -1112,9 +1216,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (sidebarKey === 'crear-evento' && typeof globalThis.initCrearEvento === 'function') {
             globalThis.initCrearEvento();
             const draftManager = getDraftManager();
+            const hasPreload = Boolean(sessionStorage.getItem('gestionEditor.crearEventoPreload'));
+
             draftManager?.resetDraftKey?.();
             draftManager?.clearLocalDraft?.();
-            draftManager?.clearFormData?.();
+
+            if (hasPreload) {
+                globalThis.applyPendingCrearEventoPreload?.();
+            } else {
+                draftManager?.clearEditContext?.();
+                draftManager?.clearFormData?.();
+            }
+
             updateDraftState();
         }
 
@@ -1124,6 +1237,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (sidebarKey === 'listas-difusion' && typeof globalThis.initListaDifusionEdit === 'function') {
             globalThis.initListaDifusionEdit();
+        }
+
+        if (sidebarKey === 'eventos-publicados' && typeof globalThis.initEventosPublicadosEditor === 'function') {
+            globalThis.initEventosPublicadosEditor();
         }
     };
 

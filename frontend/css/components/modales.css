@@ -652,7 +652,8 @@
     margin: 0 auto 1rem;
 }
 
-.modalRechazoListaDifusionCajaMotivo {
+.modalRechazoListaDifusionCajaMotivo, 
+.modalRechazoEventoMotivo {
     border: 1px solid #a4a4a4;
     border-radius: 2px;
     color: #4b4b4b;

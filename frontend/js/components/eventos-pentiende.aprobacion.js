@@ -2,6 +2,9 @@
     let pendingDeleteEventId = null;
     let pendingRejectEventId = null;
     let pendingApproveEventId = null;
+    let pendingEditEventId = null;
+    let pendingEditEventData = null;
+    let adminEditFormTemplateCache = '';
     let allPendingEvents = [];
     let pendingFilterText = '';
 
@@ -326,6 +329,237 @@
         return getModalInstanceById('modalEliminarEvento');
     };
 
+    const fechaToInputDate = (fecha) => {
+        const parsedDate = parseFecha(fecha);
+
+        if (!parsedDate) {
+            return '';
+        }
+
+        const anio = parsedDate.getFullYear();
+        const mes = String(parsedDate.getMonth() + 1).padStart(2, '0');
+        const dia = String(parsedDate.getDate()).padStart(2, '0');
+        return `${anio}-${mes}-${dia}`;
+    };
+
+    const inputDateToFecha = (inputDate) => {
+        if (!inputDate || !String(inputDate).includes('-')) {
+            return { anio: '', mes: '', dia: '', iso: '' };
+        }
+
+        const [anio, mes, dia] = String(inputDate).split('-');
+        return {
+            anio,
+            mes,
+            dia,
+            iso: `${anio}-${mes}-${dia}`,
+        };
+    };
+
+    const fetchEventoById = async (eventoId) => {
+        const response = await fetch(`/api/form-evento/${encodeURIComponent(eventoId)}`);
+
+        if (!response.ok) {
+            throw new Error('No se pudo consultar la información del evento.');
+        }
+
+        const data = await response.json();
+        return data?.evento || null;
+    };
+
+    const ensureCreateEventoScriptLoaded = async () => {
+        if (typeof globalThis.initCrearEvento === 'function') {
+            return;
+        }
+
+        const existingScript = document.querySelector('script[data-admin-create-evento="true"]');
+        if (existingScript) {
+            await new Promise((resolve) => {
+                if (typeof globalThis.initCrearEvento === 'function') {
+                    resolve();
+                    return;
+                }
+
+                existingScript.addEventListener('load', () => resolve(), { once: true });
+                existingScript.addEventListener('error', () => resolve(), { once: true });
+            });
+            return;
+        }
+
+        await new Promise((resolve) => {
+            const script = document.createElement('script');
+            script.src = '../js/pages/crea-evento.js';
+            script.dataset.adminCreateEvento = 'true';
+            script.addEventListener('load', () => resolve(), { once: true });
+            script.addEventListener('error', () => resolve(), { once: true });
+            document.body.appendChild(script);
+        });
+    };
+
+    const loadAdminEditFormTemplate = async () => {
+        if (adminEditFormTemplateCache) {
+            return adminEditFormTemplateCache;
+        }
+
+        const response = await fetch('../js/pages/gestion-editor.js', { cache: 'no-store' });
+        if (!response.ok) {
+            throw new Error('No se pudo cargar la plantilla de edición.');
+        }
+
+        const scriptText = await response.text();
+        const createTemplateRegex = /'crear-evento':\s*\{[\s\S]*?html:\s*`([\s\S]*?)`,\s*\},/;
+        const match = createTemplateRegex.exec(scriptText);
+
+        if (!match?.[1]) {
+            throw new Error('No se encontró la plantilla del formulario de evento.');
+        }
+
+        adminEditFormTemplateCache = match[1];
+        return adminEditFormTemplateCache;
+    };
+
+    const renderAdminEditFormInModal = async () => {
+        const host = document.getElementById('modalEditarEventoAdminFormHost');
+        if (!host) {
+            throw new Error('No se encontró el contenedor del formulario de edición.');
+        }
+
+        if (!host.querySelector('.ceCard')) {
+            const templateHtml = await loadAdminEditFormTemplate();
+            host.innerHTML = templateHtml;
+            await ensureCreateEventoScriptLoaded();
+            globalThis.initCrearEvento?.();
+
+            host.querySelector('nav.breadcrumbEventos')?.remove();
+            const sendButton = host.querySelector('#btnEnviarAprobacion');
+            if (sendButton) {
+                sendButton.style.display = 'none';
+            }
+        }
+
+        return host;
+    };
+
+    const setSelectIfExists = (selectEl, value) => {
+        if (!selectEl || value === undefined || value === null) {
+            return;
+        }
+
+        const valueString = String(value);
+        if (Array.from(selectEl.options).some((opt) => opt.value === valueString)) {
+            selectEl.value = valueString;
+            selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    };
+
+    const populateEditarEventoModal = (evento, modalRoot) => {
+        const nombreInput = modalRoot?.querySelector('#nombreEvento');
+        const lugarInput = modalRoot?.querySelector('#lugarEvento');
+        const linkInput = modalRoot?.querySelector('#linkCalendar');
+        const descripcionInput = modalRoot?.querySelector('#descripcionEvento');
+        const objetivosEditor = modalRoot?.querySelector('#objetivosEditor');
+        const agendaEditor = modalRoot?.querySelector('#agendaEditor');
+        const agendaFacilEditor = modalRoot?.querySelector('#agendaFacilEditor');
+        const fechaPubAnio = modalRoot?.querySelector('#fechaPubAnio');
+        const fechaPubMes = modalRoot?.querySelector('#fechaPubMes');
+        const fechaPubDia = modalRoot?.querySelector('#fechaPubDia');
+
+        if (nombreInput) {
+            nombreInput.value = evento?.nombreEvento || '';
+        }
+
+        setSelectIfExists(fechaPubAnio, evento?.fechaPublicacion?.anio);
+        setSelectIfExists(fechaPubMes, evento?.fechaPublicacion?.mes);
+        setSelectIfExists(fechaPubDia, evento?.fechaPublicacion?.dia);
+
+        if (lugarInput) {
+            lugarInput.value = evento?.lugarEvento || '';
+        }
+
+        if (linkInput) {
+            linkInput.value = evento?.linkCalendar || '';
+        }
+
+        if (descripcionInput) {
+            descripcionInput.value = evento?.descripcionEvento || '';
+        }
+
+        if (objetivosEditor) {
+            objetivosEditor.innerHTML = evento?.objetivosEvento || '';
+        }
+
+        if (agendaEditor) {
+            agendaEditor.innerHTML = evento?.agendaEvento || '';
+        }
+
+        if (agendaFacilEditor) {
+            agendaFacilEditor.innerHTML = evento?.agendaLecturaFacil || '';
+        }
+    };
+
+    const buildEventoEditFormData = (eventoBase, edits) => {
+        const formData = new FormData();
+
+        formData.append('nombreEvento', edits.nombreEvento || eventoBase?.nombreEvento || '');
+        formData.append('fechaPublicacion', JSON.stringify(edits.fechaPublicacion || eventoBase?.fechaPublicacion || {}));
+        formData.append('fechasEvento', JSON.stringify(eventoBase?.fechasEvento || []));
+        formData.append('horario', JSON.stringify(eventoBase?.horario || {}));
+        formData.append('lugarEvento', edits.lugarEvento || eventoBase?.lugarEvento || '');
+        formData.append('linkCalendar', edits.linkCalendar || eventoBase?.linkCalendar || '');
+        formData.append('descripcionEvento', edits.descripcionEvento || eventoBase?.descripcionEvento || '');
+        formData.append('objetivosEvento', eventoBase?.objetivosEvento || '');
+        formData.append('agendaEvento', eventoBase?.agendaEvento || '');
+        formData.append('agendaLecturaFacil', eventoBase?.agendaLecturaFacil || '');
+        formData.append('contacto', JSON.stringify(eventoBase?.contacto || {}));
+        formData.append('descripcionImagen', eventoBase?.descripcionImagen || '');
+        formData.append('publicoMeta', eventoBase?.publicoMeta || '');
+        formData.append('cupoEvento', eventoBase?.cupoEvento || '');
+        formData.append('infoAdicional', eventoBase?.infoAdicional || '');
+        formData.append('referencias', JSON.stringify(eventoBase?.referencias || []));
+        formData.append('palabrasClave', JSON.stringify(eventoBase?.palabrasClave || []));
+        formData.append('formularioInteresados', JSON.stringify(eventoBase?.formularioInteresados || {}));
+        formData.append('fijarImportante', String(Boolean(eventoBase?.fijarImportante)));
+        formData.append('listaDifusion', eventoBase?.listaDifusion || '');
+        formData.append('fechaFinVisualizacion', JSON.stringify(eventoBase?.fechaFinVisualizacion || {}));
+        formData.append('redesSociales', JSON.stringify(eventoBase?.redesSociales || []));
+        formData.append('estado', eventoBase?.estado || 'pendiente_aprobacion');
+
+        return formData;
+    };
+
+    const saveAdminEventEdition = async (eventoId, eventoBase, edits) => {
+        const formData = buildEventoEditFormData(eventoBase, edits);
+
+        const response = await fetch(`/api/form-evento/${encodeURIComponent(eventoId)}`, {
+            method: 'PATCH',
+            body: formData,
+        });
+
+        if (!response.ok) {
+            throw new Error('No se pudo guardar la edición del evento.');
+        }
+    };
+
+    const openEditModal = async (eventoId) => {
+        const modalInstance = getModalInstanceById('modalEditarEventoAdmin');
+
+        if (!modalInstance) {
+            return;
+        }
+
+        const evento = await fetchEventoById(eventoId);
+        if (!evento) {
+            throw new Error('No se encontró el evento a editar.');
+        }
+
+        const modalRoot = await renderAdminEditFormInModal();
+
+        pendingEditEventId = eventoId;
+        pendingEditEventData = evento;
+        populateEditarEventoModal(evento, modalRoot);
+        modalInstance.show();
+    };
+
     const openDeleteModal = (eventoId) => {
         const modalInstance = getDeleteModalInstance();
         if (!modalInstance) {
@@ -496,6 +730,63 @@
         modalAprobar.dataset.approveBound = 'true';
     };
 
+    const bindEditarEventoModalActions = () => {
+        const modalElement = document.getElementById('modalEditarEventoAdmin');
+        const successModalElement = document.getElementById('modalEventoEditadoAdmin');
+
+        if (!modalElement || !successModalElement || modalElement.dataset.editBound === 'true') {
+            return;
+        }
+
+        const getEditField = (selector) => modalElement.querySelector(`#modalEditarEventoAdminFormHost ${selector}`);
+        const guardarBtn = modalElement.querySelector('.modalEditarEventoAdminBtnGuardar');
+
+        guardarBtn?.addEventListener('click', async () => {
+            if (!pendingEditEventId || !pendingEditEventData) {
+                return;
+            }
+
+            guardarBtn.disabled = true;
+
+            try {
+                const edits = {
+                    nombreEvento: getEditField('#nombreEvento')?.value?.trim() || '',
+                    fechaPublicacion: {
+                        anio: getEditField('#fechaPubAnio')?.value || '',
+                        mes: getEditField('#fechaPubMes')?.value || '',
+                        dia: getEditField('#fechaPubDia')?.value || '',
+                        iso: inputDateToFecha(fechaToInputDate({
+                            anio: getEditField('#fechaPubAnio')?.value,
+                            mes: getEditField('#fechaPubMes')?.value,
+                            dia: getEditField('#fechaPubDia')?.value,
+                        })).iso,
+                    },
+                    lugarEvento: getEditField('#lugarEvento')?.value?.trim() || '',
+                    linkCalendar: getEditField('#linkCalendar')?.value?.trim() || '',
+                    descripcionEvento: getEditField('#descripcionEvento')?.value?.trim() || '',
+                };
+
+                await saveAdminEventEdition(pendingEditEventId, pendingEditEventData, edits);
+
+                getModalInstanceById('modalEditarEventoAdmin')?.hide();
+                getModalInstanceById('modalEventoEditadoAdmin')?.show();
+
+                await loadAprobacionEventosAdmin();
+            } catch (error) {
+                console.error(error);
+            } finally {
+                guardarBtn.disabled = false;
+            }
+        });
+
+        modalElement.addEventListener('hidden.bs.modal', () => {
+            pendingEditEventId = null;
+            pendingEditEventData = null;
+        });
+
+        modalElement.dataset.editBound = 'true';
+    };
+
     const loadAprobacionEventosAdmin = async () => {
         const container = document.getElementById('aprobacionEventosAdmin');
         const conteo = document.getElementById('aprobacionEventosConteo');
@@ -555,6 +846,12 @@
 
                 if (accion === 'eliminar' && eventoId) {
                     openDeleteModal(eventoId);
+                } else if (accion === 'editar' && eventoId) {
+                    try {
+                        await openEditModal(eventoId);
+                    } catch (error) {
+                        console.error(error);
+                    }
                 }
 
                 return;
@@ -605,6 +902,7 @@
         bindDeleteModalActions();
         bindRechazoEventoModalActions();
         bindAprobarEventoModalActions();
+        bindEditarEventoModalActions();
         bindAprobacionEventosActions();
         await loadAprobacionEventosAdmin();
     };

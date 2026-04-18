@@ -220,6 +220,101 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+router.patch('/:id', upload.fields([
+    { name: 'imagenes', maxCount: 10 },
+    { name: 'videos', maxCount: 5 },
+]), async (req, res) => {
+    try {
+        const eventoExistente = await FormEvento.findById(req.params.id);
+
+        if (!eventoExistente) {
+            return res.status(404).json({
+                ok: false,
+                mensaje: 'No se encontró el evento solicitado.',
+            });
+        }
+
+        const fechaPublicacion = parseJsonField(req.body.fechaPublicacion, eventoExistente.fechaPublicacion);
+        const fechasEvento = parseJsonField(req.body.fechasEvento, eventoExistente.fechasEvento);
+        const horario = parseJsonField(req.body.horario, eventoExistente.horario);
+        const contacto = parseJsonField(req.body.contacto, eventoExistente.contacto);
+        const referencias = parseJsonField(req.body.referencias, eventoExistente.referencias);
+        const palabrasClave = parseJsonField(req.body.palabrasClave, eventoExistente.palabrasClave);
+        const formularioInteresados = parseJsonField(req.body.formularioInteresados, eventoExistente.formularioInteresados);
+        const fechaFinVisualizacion = parseJsonField(req.body.fechaFinVisualizacion, eventoExistente.fechaFinVisualizacion);
+        const redesSociales = parseJsonField(req.body.redesSociales, eventoExistente.redesSociales);
+
+        const estadoRecibido = req.body.estado;
+        if (estadoRecibido && !estadosPermitidos.has(estadoRecibido)) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'El estado enviado no es válido.',
+            });
+        }
+
+        const estadoFinal = estadoRecibido || eventoExistente.estado;
+
+        const actualizaciones = {
+            nombreEvento: req.body.nombreEvento,
+            fechaPublicacion,
+            fechasEvento,
+            horario,
+            lugarEvento: req.body.lugarEvento,
+            linkCalendar: req.body.linkCalendar,
+            descripcionEvento: req.body.descripcionEvento,
+            objetivosEvento: req.body.objetivosEvento,
+            agendaEvento: req.body.agendaEvento,
+            agendaLecturaFacil: req.body.agendaLecturaFacil,
+            contacto,
+            descripcionImagen: req.body.descripcionImagen,
+            publicoMeta: req.body.publicoMeta,
+            cupoEvento: req.body.cupoEvento,
+            infoAdicional: req.body.infoAdicional,
+            referencias,
+            palabrasClave,
+            formularioInteresados,
+            fijarImportante: req.body.fijarImportante === 'true',
+            listaDifusion: req.body.listaDifusion,
+            fechaFinVisualizacion,
+            redesSociales,
+            estado: estadoFinal,
+        };
+
+        const imagenes = buildArchivoMetadata(req.files?.imagenes || []);
+        if (imagenes.length > 0) {
+            actualizaciones.imagenes = imagenes;
+        }
+
+        const videos = buildArchivoMetadata(req.files?.videos || []);
+        if (videos.length > 0) {
+            actualizaciones.videos = videos;
+        }
+
+        if (estadoFinal !== 'rechazado') {
+            actualizaciones.motivoRechazo = '';
+            actualizaciones.fechaRechazo = null;
+        }
+
+        const eventoActualizado = await FormEvento.findByIdAndUpdate(
+            req.params.id,
+            actualizaciones,
+            { new: true, runValidators: true },
+        );
+
+        return res.status(200).json({
+            ok: true,
+            mensaje: 'Evento actualizado correctamente.',
+            evento: buildEventoResponse(eventoActualizado),
+        });
+    } catch (error) {
+        return res.status(400).json({
+            ok: false,
+            mensaje: 'No se pudo actualizar el evento.',
+            detalle: error.message,
+        });
+    }
+});
+
 router.patch('/:id/estado', async (req, res) => {
     try {
         const estado = req.body?.estado;

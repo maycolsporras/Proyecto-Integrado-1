@@ -159,6 +159,51 @@ function mostrarModalEventoEnviado() {
     return true;
 }
 
+function mostrarModalEventoEditado() {
+    const modalElement = document.getElementById('modalEventoEditado');
+
+    if (!modalElement) {
+        return false;
+    }
+
+    if (!globalThis.bootstrap?.Modal) {
+        return false;
+    }
+
+    globalThis.bootstrap.Modal.getOrCreateInstance(modalElement).show();
+    return true;
+}
+
+function confirmarEdicionEvento() {
+    const modalElement = document.getElementById('modalConfirmarEdicionEvento');
+    const acceptButton = modalElement?.querySelector('.modalEliminarEventoBtnEliminar');
+
+    if (!modalElement || !acceptButton || !globalThis.bootstrap?.Modal) {
+        return Promise.resolve(globalThis.confirm('¿Desea guardar los cambios del evento?'));
+    }
+
+    const modalInstance = globalThis.bootstrap.Modal.getOrCreateInstance(modalElement);
+
+    return new Promise((resolve) => {
+        let confirmed = false;
+
+        const onAccept = () => {
+            confirmed = true;
+            modalInstance.hide();
+        };
+
+        const onHidden = () => {
+            acceptButton.removeEventListener('click', onAccept);
+            modalElement.removeEventListener('hidden.bs.modal', onHidden);
+            resolve(confirmed);
+        };
+
+        acceptButton.addEventListener('click', onAccept);
+        modalElement.addEventListener('hidden.bs.modal', onHidden);
+        modalInstance.show();
+    });
+}
+
 function normalizarHtmlEditor(editorElement) {
     if (!editorElement) {
         return '';
@@ -173,6 +218,12 @@ function crearIsoFecha({ anio, mes, dia }) {
     }
 
     return `${anio}-${mes}-${dia}`;
+}
+
+function isPendingEditionContext(context) {
+    return context?.source === 'evento'
+        && Boolean(context?.eventoId)
+        && context?.estado === 'pendiente_aprobacion';
 }
 
 function initCrearEvento() {
@@ -837,8 +888,7 @@ function initCrearEvento() {
         });
     }
 
-    async function guardarFormularioEvento() {
-        const payload = construirPayloadFormularioEvento();
+    function construirFormDataEvento(payload) {
         const formData = new FormData();
 
         formData.append('nombreEvento', payload.nombreEvento);
@@ -867,6 +917,13 @@ function initCrearEvento() {
 
         agregarArchivosAFormData(formData);
 
+        return formData;
+    }
+
+    async function guardarFormularioEvento() {
+        const payload = construirPayloadFormularioEvento();
+        const formData = construirFormDataEvento(payload);
+
         const response = await fetch('/api/form-evento', {
             method: 'POST',
             body: formData,
@@ -876,6 +933,26 @@ function initCrearEvento() {
 
         if (!response.ok) {
             throw new Error(responseBody?.mensaje || 'No se pudo guardar el formulario de evento.');
+        }
+
+        return responseBody;
+    }
+
+    async function actualizarFormularioEvento(eventoId, estadoEvento = 'pendiente_aprobacion') {
+        const payload = construirPayloadFormularioEvento();
+        payload.estado = estadoEvento;
+
+        const formData = construirFormDataEvento(payload);
+
+        const response = await fetch(`/api/form-evento/${encodeURIComponent(eventoId)}`, {
+            method: 'PATCH',
+            body: formData,
+        });
+
+        const responseBody = await response.json();
+
+        if (!response.ok) {
+            throw new Error(responseBody?.mensaje || 'No se pudo actualizar el evento.');
         }
 
         return responseBody;
@@ -938,6 +1015,7 @@ function initCrearEvento() {
     const btnSiguiente = document.getElementById('btnSiguiente');
     const btnAnterior = document.getElementById('btnAnterior');
     const btnEnviarAprobacion = document.getElementById('btnEnviarAprobacion');
+    const btnGuardarIcono = formRoot.querySelector('.ceIconBtn[aria-label="Guardar borrador"]');
 
     [btnSiguiente, btnAnterior, btnEnviarAprobacion].forEach((btn) => {
         if (!btn) {
@@ -1014,6 +1092,44 @@ function initCrearEvento() {
         }
     });
 
+    btnGuardarIcono?.addEventListener('click', async () => {
+        btnGuardarIcono.disabled = true;
+
+        try {
+            const editContext = getCrearEventoEditContext();
+
+            if (isPendingEditionContext(editContext)) {
+                const confirmed = await confirmarEdicionEvento();
+                if (!confirmed) {
+                    return;
+                }
+
+                await actualizarFormularioEvento(editContext.eventoId, editContext.estado);
+                limpiarErroresCrearEvento();
+
+                await clearCrearEventoDraft();
+                clearCrearEventoEditContext();
+                clearCrearEventoFormData();
+
+                mostrarModalEventoEditado();
+                irAPaso1();
+                return;
+            }
+
+            await saveCrearEventoDraft();
+            resetCrearEventoDraftKey();
+            clearCrearEventoLocalDraft();
+            clearCrearEventoEditContext();
+            clearCrearEventoFormData();
+            irAPaso1();
+            alert('Borrador guardado correctamente.');
+        } catch (error) {
+            alert(error.message || 'No se pudieron guardar los cambios.');
+        } finally {
+            btnGuardarIcono.disabled = false;
+        }
+    });
+
 
 
     // ── Mostrar nombre de archivo seleccionado  
@@ -1033,6 +1149,8 @@ function initCrearEvento() {
 
 const crearEventoDraftStorageKey = 'gestionEditor.crearEventoDraft';
 const crearEventoDraftKeyStorageKey = 'gestionEditor.crearEventoDraftKey';
+const crearEventoPreloadStorageKey = 'gestionEditor.crearEventoPreload';
+const crearEventoEditContextStorageKey = 'gestionEditor.crearEventoEditContext';
 const crearEventoDraftEndpoint = '/api/form-borrador';
 
 function getCrearEventoDraftKey() {
@@ -1053,6 +1171,34 @@ function clearCrearEventoDraftKey() {
 
 function resetCrearEventoDraftKey() {
     clearCrearEventoDraftKey();
+}
+
+function getCrearEventoEditContext() {
+    const raw = sessionStorage.getItem(crearEventoEditContextStorageKey);
+
+    if (!raw) {
+        return null;
+    }
+
+    try {
+        return JSON.parse(raw);
+    } catch {
+        sessionStorage.removeItem(crearEventoEditContextStorageKey);
+        return null;
+    }
+}
+
+function setCrearEventoEditContext(context) {
+    if (!context || typeof context !== 'object') {
+        sessionStorage.removeItem(crearEventoEditContextStorageKey);
+        return;
+    }
+
+    sessionStorage.setItem(crearEventoEditContextStorageKey, JSON.stringify(context));
+}
+
+function clearCrearEventoEditContext() {
+    sessionStorage.removeItem(crearEventoEditContextStorageKey);
 }
 
 async function saveCrearEventoDraftToBackend(snapshot) {
@@ -1127,6 +1273,182 @@ async function deleteCrearEventoDraftFromBackend() {
 
 function getCrearEventoRoot() {
     return document.querySelector('.ceCard');
+}
+
+function setSelectIfExists(selectEl, value) {
+    if (!selectEl || value === null || value === undefined) {
+        return;
+    }
+
+    const stringValue = String(value);
+    if (Array.from(selectEl.options).some((opt) => opt.value === stringValue)) {
+        selectEl.value = stringValue;
+        selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+}
+
+function setInputIfExists(root, selector, value = '') {
+    const element = root.querySelector(selector);
+    if (!element) {
+        return;
+    }
+
+    element.value = String(value || '');
+}
+
+function setEditorIfExists(root, selector, value = '') {
+    const element = root.querySelector(selector);
+    if (!element) {
+        return;
+    }
+
+    element.innerHTML = String(value || '');
+}
+
+function setFechaFromObject(root, prefix, fecha = {}) {
+    const anioEl = root.querySelector(`#${prefix}Anio`);
+    const mesEl = root.querySelector(`#${prefix}Mes`);
+    const diaEl = root.querySelector(`#${prefix}Dia`);
+
+    setSelectIfExists(anioEl, fecha.anio);
+    setSelectIfExists(mesEl, fecha.mes);
+    setSelectIfExists(diaEl, fecha.dia);
+}
+
+function clearExtraRows(root, wrapperSelector, rowSelector) {
+    const wrapper = root.querySelector(wrapperSelector);
+    if (!wrapper) {
+        return;
+    }
+
+    const rows = wrapper.querySelectorAll(rowSelector);
+    rows.forEach((row, index) => {
+        if (index > 0) {
+            row.remove();
+        }
+    });
+}
+
+function ensureRows(root, wrapperSelector, rowSelector, targetCount) {
+    const wrapper = root.querySelector(wrapperSelector);
+    if (!wrapper || targetCount <= 1) {
+        return;
+    }
+
+    while (wrapper.querySelectorAll(rowSelector).length < targetCount) {
+        const lastRow = wrapper.querySelector(`${rowSelector}:last-child`);
+        const addButton = lastRow?.querySelector('.ceCircleBtnAdd');
+        addButton?.click();
+    }
+}
+
+function applyEventoDataToCrearEventoForm(root, evento) {
+    if (!root || !evento) {
+        return;
+    }
+
+    setInputIfExists(root, '#nombreEvento', evento.nombreEvento);
+    setFechaFromObject(root, 'fechaPub', evento.fechaPublicacion);
+
+    const fechasEvento = Array.isArray(evento.fechasEvento) ? evento.fechasEvento : [];
+    clearExtraRows(root, '#fechasEventoWrapper', '.ceFechaRow');
+    ensureRows(root, '#fechasEventoWrapper', '.ceFechaRow', Math.max(1, fechasEvento.length));
+
+    const fechaRows = root.querySelectorAll('#fechasEventoWrapper .ceFechaRow');
+    fechaRows.forEach((row, index) => {
+        const fecha = fechasEvento[index] || fechasEvento[0] || {};
+        const selects = row.querySelectorAll('select');
+        setSelectIfExists(selects[0], fecha.anio);
+        setSelectIfExists(selects[1], fecha.mes);
+        setSelectIfExists(selects[2], fecha.dia);
+    });
+
+    setSelectIfExists(root.querySelector('#horaInicio'), evento?.horario?.horaInicio);
+    setSelectIfExists(root.querySelector('#horaFin'), evento?.horario?.horaFin);
+    setInputIfExists(root, '#lugarEvento', evento.lugarEvento);
+    setInputIfExists(root, '#linkCalendar', evento.linkCalendar);
+    setInputIfExists(root, '#descripcionEvento', evento.descripcionEvento);
+    setEditorIfExists(root, '#objetivosEditor', evento.objetivosEvento);
+    setEditorIfExists(root, '#agendaEditor', evento.agendaEvento);
+    setEditorIfExists(root, '#agendaFacilEditor', evento.agendaLecturaFacil);
+    setInputIfExists(root, '#contactoNombre', evento?.contacto?.nombreCompleto);
+    setInputIfExists(root, '#contactoCorreo', evento?.contacto?.correoElectronico);
+    setInputIfExists(root, '#descImagen', evento.descripcionImagen);
+    setInputIfExists(root, '#publicoMeta', evento.publicoMeta);
+    setSelectIfExists(root.querySelector('#cupoEvento'), evento.cupoEvento);
+    setEditorIfExists(root, '#infoAdicionalEditor', evento.infoAdicional);
+    setInputIfExists(root, '#palabrasClave', Array.isArray(evento.palabrasClave) ? evento.palabrasClave.join(', ') : '');
+    setSelectIfExists(root.querySelector('#tipoFormulario'), evento?.formularioInteresados?.tipo);
+    root.querySelector('#tipoFormulario')?.dispatchEvent(new Event('change', { bubbles: true }));
+    setSelectIfExists(root.querySelector('#listaDifusion'), evento.listaDifusion);
+    setFechaFromObject(root, 'fechaFin', evento.fechaFinVisualizacion);
+
+    const fijarImportanteSi = root.querySelector('input[name="fijarImportante"][value="si"]');
+    const fijarImportanteNo = root.querySelector('input[name="fijarImportante"][value="no"]');
+    const isImportant = Boolean(evento.fijarImportante);
+    if (fijarImportanteSi) {
+        fijarImportanteSi.checked = isImportant;
+    }
+    if (fijarImportanteNo) {
+        fijarImportanteNo.checked = !isImportant;
+    }
+
+    const redes = new Set(Array.isArray(evento.redesSociales) ? evento.redesSociales : []);
+    root.querySelectorAll('input[name="redes"]').forEach((checkbox) => {
+        checkbox.checked = redes.has(checkbox.value);
+    });
+
+    const aspectos = new Set(Array.isArray(evento?.formularioInteresados?.aspectosSeleccionados)
+        ? evento.formularioInteresados.aspectosSeleccionados
+        : []);
+    root.querySelectorAll('#subFormInscripcion input[type="checkbox"], #subFormConfirmacion input[type="checkbox"]').forEach((checkbox) => {
+        const text = checkbox.closest('label')?.textContent?.trim() || '';
+        checkbox.checked = aspectos.has(text);
+    });
+}
+
+function applyPendingCrearEventoPreload() {
+    const preloadRaw = sessionStorage.getItem(crearEventoPreloadStorageKey);
+
+    if (!preloadRaw) {
+        return;
+    }
+
+    let preload;
+    try {
+        preload = JSON.parse(preloadRaw);
+    } catch {
+        sessionStorage.removeItem(crearEventoPreloadStorageKey);
+        return;
+    }
+
+    sessionStorage.removeItem(crearEventoPreloadStorageKey);
+
+    const formRoot = getCrearEventoRoot();
+    if (!formRoot) {
+        return;
+    }
+
+    if (preload?.type === 'snapshot' && Array.isArray(preload?.snapshot)) {
+        clearCrearEventoEditContext();
+        clearCrearEventoFormData();
+        restoreCrearEventoForm(formRoot, preload.snapshot);
+        return;
+    }
+
+    if (preload?.type === 'evento' && preload?.evento) {
+        setCrearEventoEditContext({
+            source: preload?.editContext?.source || 'evento',
+            eventoId: preload?.editContext?.eventoId || preload?.evento?._id || '',
+            estado: preload?.editContext?.estado || preload?.evento?.estado || '',
+            statusTab: preload?.editContext?.statusTab || '',
+        });
+        clearCrearEventoFormData();
+        applyEventoDataToCrearEventoForm(formRoot, preload.evento);
+        return;
+    }
+
+    clearCrearEventoEditContext();
 }
 
 function serializeCrearEventoForm(formRoot) {
@@ -1419,12 +1741,16 @@ globalThis.crearEventoDraftManager = {
     resetDraftKey: resetCrearEventoDraftKey,
     clearLocalDraft: clearCrearEventoLocalDraft,
     clearDraft: clearCrearEventoDraft,
+    clearEditContext: clearCrearEventoEditContext,
     clearFormData: clearCrearEventoFormData,
     discardForm: async () => {
         clearCrearEventoFormData();
+        clearCrearEventoEditContext();
         await clearCrearEventoDraft();
     },
 };
+
+globalThis.applyPendingCrearEventoPreload = applyPendingCrearEventoPreload;
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initCrearEvento);
