@@ -740,6 +740,8 @@ function initEventoBorrador() {
 		}
 
 		if (accion === 'ver') {
+			await ensureCreateEventoScriptLoaded();
+			await globalThis.mostrarVistaPreviaEventoPorId(id, source === 'borrador' ? 'borrador' : 'evento');
 			return;
 		}
 

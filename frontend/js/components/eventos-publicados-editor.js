@@ -463,7 +463,17 @@
             const accion = btn.dataset.accion;
             const eventoId = btn.dataset.eventoId;
 
-            if (accion !== 'editar' || !eventoId) {
+            if (!eventoId) {
+                return;
+            }
+
+            if (accion === 'ver') {
+                await ensureCreateEventoScriptLoaded();
+                await globalThis.mostrarVistaPreviaEventoPorId(eventoId, 'evento');
+                return;
+            }
+
+            if (accion !== 'editar') {
                 return;
             }
 

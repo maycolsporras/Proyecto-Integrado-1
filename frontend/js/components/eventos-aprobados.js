@@ -638,7 +638,8 @@
             }
 
             if (accion === 'ver') {
-                console.info('Accion ver pendiente para evento:', eventoId);
+                await ensureCreateEventoScriptLoaded();
+                await globalThis.mostrarVistaPreviaEventoPorId(eventoId, 'evento');
                 return;
             }
 

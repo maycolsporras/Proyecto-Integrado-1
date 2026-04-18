@@ -846,6 +846,9 @@
 
                 if (accion === 'eliminar' && eventoId) {
                     openDeleteModal(eventoId);
+                } else if (accion === 'ver' && eventoId) {
+                    await ensureCreateEventoScriptLoaded();
+                    await globalThis.mostrarVistaPreviaEventoPorId(eventoId, 'evento');
                 } else if (accion === 'editar' && eventoId) {
                     try {
                         await openEditModal(eventoId);

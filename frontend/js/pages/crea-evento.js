@@ -1934,6 +1934,233 @@ globalThis.crearEventoDraftManager = {
 
 globalThis.applyPendingCrearEventoPreload = applyPendingCrearEventoPreload;
 
+async function fetchEventoPreviewById(eventoId) {
+    if (!eventoId) {
+        return null;
+    }
+
+    try {
+        const response = await fetch(`/api/form-evento/${encodeURIComponent(eventoId)}`);
+        if (!response.ok) {
+            return null;
+        }
+
+        const data = await response.json();
+        return data?.evento || null;
+    } catch {
+        return null;
+    }
+}
+
+async function fetchBorradorPreviewByKey(draftKey) {
+    if (!draftKey) {
+        return null;
+    }
+
+    try {
+        const response = await fetch(`/api/form-borrador/${encodeURIComponent(draftKey)}`);
+        if (!response.ok) {
+            return null;
+        }
+
+        const data = await response.json();
+        return data?.borrador || null;
+    } catch {
+        return null;
+    }
+}
+
+function normalizarRutaImagenPreview(ruta) {
+    if (!ruta) {
+        return '';
+    }
+
+    return ruta.replace(/\\/g, '/').replace(/^[\/]+/, '');
+}
+
+function construirPreviewDesdeBorradorSnapshot(snapshot) {
+    if (!Array.isArray(snapshot)) {
+        return {};
+    }
+
+    const getValue = (idx) => {
+        const item = snapshot[idx];
+        return item?.kind === 'value' ? String(item.value || '').trim() : '';
+    };
+
+    const getHtml = (idx) => {
+        const item = snapshot[idx];
+        return item?.kind === 'contenteditable' ? String(item.html || '').trim() : '';
+    };
+
+    const primeraFechaEvento = {
+        anio: getValue(4),
+        mes: getValue(5),
+        dia: getValue(6),
+        iso: crearIsoFecha({
+            anio: getValue(4),
+            mes: getValue(5),
+            dia: getValue(6),
+        }),
+    };
+
+    return {
+        nombreEvento: getValue(3) || 'Sin título',
+        descripcionEvento: getValue(11) || '',
+        objetivosEvento: getHtml(12) || '',
+        agendaEvento: getHtml(13) || '',
+        infoAdicional: getHtml(22) || '',
+        publicoMeta: getValue(20) || '',
+        cupoEvento: getValue(21) || '',
+        lugarEvento: getValue(9) || '',
+        linkCalendar: getValue(10) || '',
+        contacto: {
+            nombreCompleto: getValue(15) || '',
+            correoElectronico: getValue(16) || '',
+        },
+        fechasEvento: (primeraFechaEvento.anio && primeraFechaEvento.mes && primeraFechaEvento.dia) ? [primeraFechaEvento] : [],
+        fechaPublicacion: {
+            anio: getValue(0),
+            mes: getValue(1),
+            dia: getValue(2),
+            iso: crearIsoFecha({
+                anio: getValue(0),
+                mes: getValue(1),
+                dia: getValue(2),
+            }),
+        },
+        horario: {
+            horaInicio: getValue(7) || '',
+            horaFin: getValue(8) || '',
+        },
+        imagenes: [],
+    };
+}
+
+function formatearTextoFecha(fecha) {
+    if (!fecha || !fecha.iso) {
+        return '';
+    }
+
+    const fechaObj = new Date(fecha.iso);
+    if (Number.isNaN(fechaObj.getTime())) {
+        return '';
+    }
+
+    return fechaObj.toLocaleDateString('es-CR', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+    });
+}
+
+function formatearFechaCorta(fecha) {
+    if (!fecha || !fecha.iso) {
+        return { dia: '', mes: '' };
+    }
+
+    const fechaObj = new Date(fecha.iso);
+    if (Number.isNaN(fechaObj.getTime())) {
+        return { dia: '', mes: '' };
+    }
+
+    return {
+        dia: String(fechaObj.getDate()).padStart(2, '0'),
+        mes: fechaObj.toLocaleString('es-CR', { month: 'short' }).toUpperCase(),
+    };
+}
+
+async function renderModalVistaPreviaGlobal(evento) {
+    const modalElement = document.getElementById('modalVistaPreviaEvento');
+    if (!modalElement) {
+        return;
+    }
+
+    const imagenHero = modalElement.querySelector('#previewHeroImg');
+    const previewEnlaceSection = modalElement.querySelector('#previewEnlaceSection');
+    const enlaceEl = modalElement.querySelector('#previewEnlace');
+    const objetivoEl = modalElement.querySelector('#previewObjetivos');
+    const agendaEl = modalElement.querySelector('#previewAgenda');
+    const infoAdicionalEl = modalElement.querySelector('#previewInfoAdicional');
+
+    const fecha = Array.isArray(evento?.fechasEvento) && evento.fechasEvento.length > 0
+        ? evento.fechasEvento[0]
+        : evento?.fechaPublicacion;
+
+    const fechaCorta = formatearFechaCorta(fecha);
+
+    modalElement.querySelector('#previewDia').textContent = fechaCorta.dia || '00';
+    modalElement.querySelector('#previewMes').textContent = fechaCorta.mes || '...';
+    modalElement.querySelector('#previewTitulo').textContent = evento?.nombreEvento || 'Sin título';
+    modalElement.querySelector('#previewDescripcion').textContent = evento?.descripcionEvento || 'No hay descripción disponible.';
+    modalElement.querySelector('#previewFechaCompleta').textContent = formatearTextoFecha(fecha) || 'Sin fecha disponible';
+    modalElement.querySelector('#previewHorario').textContent = evento?.horario?.horaInicio && evento?.horario?.horaFin
+        ? `${evento.horario.horaInicio} - ${evento.horario.horaFin}`
+        : 'No definido';
+    modalElement.querySelector('#previewLugar').textContent = evento?.lugarEvento || 'No definido';
+    modalElement.querySelector('#previewContactoNombre').textContent = evento?.contacto?.nombreCompleto || evento?.contacto?.nombre || 'No definido';
+    modalElement.querySelector('#previewContactoCorreo').textContent = evento?.contacto?.correoElectronico || evento?.contacto?.correo || '';
+    modalElement.querySelector('#previewContactoCorreo').href = evento?.contacto?.correoElectronico || evento?.contacto?.correo ? `mailto:${evento?.contacto?.correoElectronico || evento?.contacto?.correo}` : '#';
+    modalElement.querySelector('#previewPublicoMeta').textContent = evento?.publicoMeta || 'No definido';
+    modalElement.querySelector('#previewCupos').textContent = evento?.cupoEvento ? `${evento.cupoEvento} cupos disponibles` : 'No definido';
+    modalElement.querySelector('#previewInfoAdicional').innerHTML = evento?.infoAdicional || '<p>No hay información adicional.</p>';
+    objetivoEl.innerHTML = evento?.objetivosEvento || '<p>No hay objetivos especificados.</p>';
+    agendaEl.innerHTML = evento?.agendaEvento || '<p>No hay agenda registrada.</p>';
+
+    if (evento?.linkCalendar) {
+        previewEnlaceSection.style.display = 'block';
+        enlaceEl.href = evento.linkCalendar;
+        enlaceEl.textContent = evento.linkCalendar;
+    } else {
+        previewEnlaceSection.style.display = 'none';
+    }
+
+    let imagenFuente = '';
+    if (evento?.imagenes && Array.isArray(evento.imagenes) && evento.imagenes.length > 0) {
+        const ruta = normalizarRutaImagenPreview(evento.imagenes[0].ruta);
+        if (ruta) {
+            imagenFuente = `/${ruta}`;
+        }
+    }
+
+    if (imagenFuente) {
+        imagenHero.src = imagenFuente;
+        imagenHero.style.display = 'block';
+    } else {
+        imagenHero.src = '';
+        imagenHero.style.display = 'none';
+    }
+
+    const modalInstance = globalThis.bootstrap?.Modal?.getOrCreateInstance(modalElement);
+    if (modalInstance) {
+        modalInstance.show();
+    }
+}
+
+async function mostrarVistaPreviaEventoPorId(eventoId, source = 'evento') {
+    if (!eventoId) {
+        return;
+    }
+
+    let evento = null;
+    if (source === 'borrador') {
+        const borrador = await fetchBorradorPreviewByKey(eventoId);
+        if (borrador) {
+            evento = construirPreviewDesdeBorradorSnapshot(borrador.snapshot);
+        }
+    } else {
+        evento = await fetchEventoPreviewById(eventoId);
+    }
+
+    if (!evento) {
+        return;
+    }
+
+    await renderModalVistaPreviaGlobal(evento);
+}
+
+globalThis.mostrarVistaPreviaEventoPorId = mostrarVistaPreviaEventoPorId;
+
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initCrearEvento);
 } else {
