@@ -110,6 +110,42 @@
     margin: 0.2rem 0 0;
 }
 
+/* Animación para retroalimentación de errores en el formulario */
+@keyframes sacudidaError {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-6px);
+    }
+
+    75% {
+        transform: translateX(6px);
+    }
+}
+
+.animacion-sacudida {
+    animation: sacudidaError 0.4s ease-in-out;
+}
+
+/* Estilos de validación siguiendo WCAG para contraste y claridad */
+.invalid-feedback {
+    font-size: 0.85rem;
+    color: #b02a37;
+    /* Rojo con mejor contraste para accesibilidad */
+    margin-top: 0.25rem;
+    font-weight: 500;
+}
+
+/* Resaltado de bordes en campos inválidos */
+.was-validated .form-control:invalid {
+    border-color: #b02a37 !important;
+    box-shadow: 0 0 0 0.2rem rgba(176, 42, 55, 0.15);
+}
+
 @media (min-width: 576px) {
     .inicioSesionPanel {
         padding: 3.5rem 2rem 3rem;
