@@ -221,6 +221,31 @@ function initCrearEvento() {
         });
     }
 
+    function actualizarDiasDisponibles(selectAnio, selectMes, selectDia) {
+        const anioSeleccionado = Number.parseInt(selectAnio.value, 10);
+        const mesSeleccionado = Number.parseInt(selectMes.value, 10);
+
+        const dias = selectDia.querySelectorAll('option');
+        dias.forEach(opcion => {
+            const diaValor = Number.parseInt(opcion.value, 10);
+            const esAnioActual = anioSeleccionado === anioActual;
+            const esMesActual = mesSeleccionado === Number.parseInt(mesActual, 10);
+            const esAnioYMesActual = esAnioActual && esMesActual;
+
+            if (esAnioYMesActual && diaValor < Number.parseInt(diaActual, 10)) {
+                opcion.disabled = true;
+                opcion.textContent = `${String(diaValor).padStart(2, '0')} (pasado)`;
+            } else {
+                opcion.disabled = false;
+                opcion.textContent = String(diaValor).padStart(2, '0');
+            }
+        });
+
+        if (selectDia.selectedOptions?.[0]?.disabled) {
+            selectDia.value = '';
+        }
+    }
+
     function generarDias(selectEl, diaSeleccionado = diaActual) {
         for (let d = 1; d <= 31; d++) {
             const opt = document.createElement('option');
@@ -244,18 +269,46 @@ function initCrearEvento() {
 
     // ── Inicializar selects del paso 1 ────────────────────────────
 
-    generarAnios(document.getElementById('fechaPubAnio'));
-    generarMeses(document.getElementById('fechaPubMes'));
-    generarDias(document.getElementById('fechaPubDia'));
+    const selectFechaPubAnio = document.getElementById('fechaPubAnio');
+    const selectFechaPubMes = document.getElementById('fechaPubMes');
+    const selectFechaPubDia = document.getElementById('fechaPubDia');
+
+    generarAnios(selectFechaPubAnio);
+    generarMeses(selectFechaPubMes);
+    generarDias(selectFechaPubDia);
     generarHoras(document.getElementById('horaInicio'), '14');
     generarHoras(document.getElementById('horaFin'), '17');
+
+    actualizarDiasDisponibles(selectFechaPubAnio, selectFechaPubMes, selectFechaPubDia);
+
+    selectFechaPubAnio.addEventListener('change', () => {
+        actualizarDiasDisponibles(selectFechaPubAnio, selectFechaPubMes, selectFechaPubDia);
+    });
+
+    selectFechaPubMes.addEventListener('change', () => {
+        actualizarDiasDisponibles(selectFechaPubAnio, selectFechaPubMes, selectFechaPubDia);
+    });
 
     marcarSelectsRequeridos(formRoot, '#fechaPubAnio, #fechaPubMes, #fechaPubDia, #horaInicio, #horaFin, #fechaFinAnio, #fechaFinMes, #fechaFinDia');
 
     // Fecha de visualización final (paso 2)
-    generarAnios(document.getElementById('fechaFinAnio'));
-    generarMeses(document.getElementById('fechaFinMes'));
-    generarDias(document.getElementById('fechaFinDia'));
+    const selectFechaFinAnio = document.getElementById('fechaFinAnio');
+    const selectFechaFinMes = document.getElementById('fechaFinMes');
+    const selectFechaFinDia = document.getElementById('fechaFinDia');
+
+    generarAnios(selectFechaFinAnio);
+    generarMeses(selectFechaFinMes);
+    generarDias(selectFechaFinDia);
+
+    actualizarDiasDisponibles(selectFechaFinAnio, selectFechaFinMes, selectFechaFinDia);
+
+    selectFechaFinAnio.addEventListener('change', () => {
+        actualizarDiasDisponibles(selectFechaFinAnio, selectFechaFinMes, selectFechaFinDia);
+    });
+
+    selectFechaFinMes.addEventListener('change', () => {
+        actualizarDiasDisponibles(selectFechaFinAnio, selectFechaFinMes, selectFechaFinDia);
+    });
 
     // ── Fechas del evento dinámicas (+ / -) ───────────────────────
 
@@ -271,6 +324,16 @@ function initCrearEvento() {
         generarAnios(fechaSelects[0]);
         generarMeses(fechaSelects[1]);
         generarDias(fechaSelects[2]);
+
+        actualizarDiasDisponibles(fechaSelects[0], fechaSelects[1], fechaSelects[2]);
+
+        fechaSelects[0].addEventListener('change', () => {
+            actualizarDiasDisponibles(fechaSelects[0], fechaSelects[1], fechaSelects[2]);
+        });
+
+        fechaSelects[1].addEventListener('change', () => {
+            actualizarDiasDisponibles(fechaSelects[0], fechaSelects[1], fechaSelects[2]);
+        });
     }
 
     function crearFechaRow(idx) {
@@ -541,8 +604,33 @@ function initCrearEvento() {
         return esValido;
     }
 
+    function compararFechas(anio, mes, dia) {
+        const fechaIngresada = new Date(anio, mes - 1, dia);
+        const hoy = new Date();
+        const hoySinHora = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+        return fechaIngresada < hoySinHora;
+    }
+
+    function validarFechasNoMenoresActual() {
+        const fechaPub = obtenerFechaDesdeSelects('fechaPubAnio', 'fechaPubMes', 'fechaPubDia');
+        if (compararFechas(fechaPub.anio, fechaPub.mes, fechaPub.dia)) {
+            alert('La fecha de publicación no puede ser anterior a la fecha actual.');
+            return false;
+        }
+
+        const fechasEvento = obtenerFechasEvento();
+        for (const fecha of fechasEvento) {
+            if (fecha.anio && fecha.mes && fecha.dia && compararFechas(fecha.anio, fecha.mes, fecha.dia)) {
+                alert('Las fechas del evento no pueden ser anteriores a la fecha actual.');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     function validarPaso1() {
-        return validarCampos([
+        const camposValidos = validarCampos([
             '#fechaPubAnio',
             '#fechaPubMes',
             '#fechaPubDia',
@@ -557,6 +645,12 @@ function initCrearEvento() {
             '#agendaEditor',
             '#agendaFacilEditor',
         ]);
+
+        if (!camposValidos) {
+            return false;
+        }
+
+        return validarFechasNoMenoresActual();
     }
 
     function validarPaso2() {
@@ -573,10 +667,24 @@ function initCrearEvento() {
             '#infoAdicionalEditor',
         ]);
 
+        if (!esValido) {
+            return false;
+        }
+
         const imagenesValidas = validarArchivos('#imagenesWrapper input[type="file"]', { requerido: true });
         const videosValidos = validarArchivos('#videosWrapper input[type="file"]');
 
-        return esValido && imagenesValidas && videosValidos;
+        if (!imagenesValidas || !videosValidos) {
+            return false;
+        }
+
+        const fechaFin = obtenerFechaDesdeSelects('fechaFinAnio', 'fechaFinMes', 'fechaFinDia');
+        if (compararFechas(fechaFin.anio, fechaFin.mes, fechaFin.dia)) {
+            alert('La fecha de visualización final no puede ser anterior a la fecha actual.');
+            return false;
+        }
+
+        return true;
     }
 
     function limpiarErroresCrearEvento() {

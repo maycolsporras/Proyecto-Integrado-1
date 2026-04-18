@@ -668,7 +668,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <div class="iconoAprobacionEventos">
                                         <i class="fa-solid fa-file-circle-check"></i>
                                     </div>
-                                    <p class="txtAprobacionEventos mb-0">Eventos Publicados</p>
+                                    <p class="txtAprobacionEventos mb-0">Eventos en Borrador</p>
                                 </div>
                                 <div class="col-12 d-flex flex-column flex-lg-row justify-content-center align-items-center gap-2 gap-sm-3 mt-4 aprobacionEventosSubtitle">
                                     <button type="button" class="btn btnEventosBorrador btnEventosEnEdicion is-active" data-status="edicion">En edición</button>

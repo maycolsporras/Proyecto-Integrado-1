@@ -4,6 +4,8 @@ const path = require('node:path');
 const FormEvento = require('../models/form-evento.model.js');
 
 const router = express.Router();
+const estadosPermitidos = new Set(['pendiente_aprobacion', 'aprobado', 'rechazado', 'borrador']);
+const estadosVigenciaPermitidos = new Set(['activo', 'eliminado']);
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -41,6 +43,58 @@ const buildArchivoMetadata = (files = []) => {
         mimetype: file.mimetype || '',
         tamano: file.size || 0,
     }));
+};
+
+const toDateOnly = (dateValue) => {
+    if (!(dateValue instanceof Date) || Number.isNaN(dateValue.getTime())) {
+        return null;
+    }
+
+    return new Date(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate());
+};
+
+const parseFechaIso = (fecha) => {
+    const isoValue = fecha?.iso;
+
+    if (!isoValue) {
+        return null;
+    }
+
+    const parsedDate = new Date(isoValue);
+    return toDateOnly(parsedDate);
+};
+
+const getFechaFinEvento = (evento) => {
+    const fechasEvento = Array.isArray(evento.fechasEvento) ? evento.fechasEvento : [];
+    const fechasValidas = fechasEvento
+        .map((fecha) => parseFechaIso(fecha))
+        .filter(Boolean)
+        .sort((a, b) => a - b);
+
+    if (fechasValidas.length > 0) {
+        return fechasValidas[fechasValidas.length - 1];
+    }
+
+    return parseFechaIso(evento.fechaFinVisualizacion) || parseFechaIso(evento.fechaPublicacion);
+};
+
+const getEstadoVigenciaEvento = (evento) => {
+    const fechaFinEvento = getFechaFinEvento(evento);
+
+    if (!fechaFinEvento) {
+        return 'activo';
+    }
+
+    const hoy = toDateOnly(new Date());
+    return fechaFinEvento < hoy ? 'eliminado' : 'activo';
+};
+
+const buildEventoResponse = (evento) => {
+    const eventoPlano = evento.toObject();
+    return {
+        ...eventoPlano,
+        estadoVigencia: getEstadoVigenciaEvento(eventoPlano),
+    };
 };
 
 router.post('/', upload.fields([
@@ -100,6 +154,141 @@ router.post('/', upload.fields([
         return res.status(400).json({
             ok: false,
             mensaje: 'No se pudo guardar el formulario del evento',
+            detalle: error.message,
+        });
+    }
+});
+
+router.get('/', async (req, res) => {
+    try {
+        const filtros = {};
+
+        if (req.query.estado && estadosPermitidos.has(req.query.estado)) {
+            filtros.estado = req.query.estado;
+        }
+
+        const eventos = await FormEvento.find(filtros).sort({ createdAt: -1 });
+        const eventosConVigencia = eventos.map((evento) => buildEventoResponse(evento));
+
+        let resultado = eventosConVigencia;
+        if (req.query.estadoVigencia && estadosVigenciaPermitidos.has(req.query.estadoVigencia)) {
+            resultado = eventosConVigencia.filter((evento) => evento.estadoVigencia === req.query.estadoVigencia);
+        }
+
+        return res.status(200).json({
+            ok: true,
+            eventos: resultado,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            mensaje: 'No se pudieron consultar los eventos.',
+            detalle: error.message,
+        });
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    try {
+        const evento = await FormEvento.findById(req.params.id);
+
+        if (!evento) {
+            return res.status(404).json({
+                ok: false,
+                mensaje: 'No se encontró el evento solicitado.',
+            });
+        }
+
+        return res.status(200).json({
+            ok: true,
+            evento: buildEventoResponse(evento),
+        });
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            mensaje: 'No se pudo consultar el evento.',
+            detalle: error.message,
+        });
+    }
+});
+
+router.patch('/:id/estado', async (req, res) => {
+    try {
+        const estado = req.body?.estado;
+        const motivoRechazo = req.body?.motivoRechazo;
+
+        if (!estado || !estadosPermitidos.has(estado)) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'El estado enviado no es válido.',
+            });
+        }
+
+        const actualizaciones = { estado };
+
+        if (estado === 'rechazado') {
+            const motivoNormalizado = typeof motivoRechazo === 'string' ? motivoRechazo.trim() : '';
+
+            if (!motivoNormalizado) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'Debe incluir un motivo para rechazar el evento.',
+                });
+            }
+
+            actualizaciones.motivoRechazo = motivoNormalizado;
+            actualizaciones.fechaRechazo = new Date();
+        } else {
+            actualizaciones.motivoRechazo = '';
+            actualizaciones.fechaRechazo = null;
+        }
+
+        const eventoActualizado = await FormEvento.findByIdAndUpdate(
+            req.params.id,
+            actualizaciones,
+            { new: true },
+        );
+
+        if (!eventoActualizado) {
+            return res.status(404).json({
+                ok: false,
+                mensaje: 'No se encontró el evento solicitado.',
+            });
+        }
+
+        return res.status(200).json({
+            ok: true,
+            mensaje: 'Estado del evento actualizado correctamente.',
+            evento: buildEventoResponse(eventoActualizado),
+        });
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            mensaje: 'No se pudo actualizar el estado del evento.',
+            detalle: error.message,
+        });
+    }
+});
+
+router.delete('/:id', async (req, res) => {
+    try {
+        const eventoEliminado = await FormEvento.findByIdAndDelete(req.params.id);
+
+        if (!eventoEliminado) {
+            return res.status(404).json({
+                ok: false,
+                mensaje: 'No se encontró el evento solicitado.',
+            });
+        }
+
+        return res.status(200).json({
+            ok: true,
+            mensaje: 'Evento eliminado correctamente.',
+        });
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            mensaje: 'No se pudo eliminar el evento.',
             detalle: error.message,
         });
     }

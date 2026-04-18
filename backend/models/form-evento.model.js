@@ -59,6 +59,8 @@ const formEventoSchema = new mongoose.Schema({
         enum: ['pendiente_aprobacion', 'aprobado', 'rechazado', 'borrador'],
         default: 'pendiente_aprobacion',
     },
+    motivoRechazo: { type: String, default: '' },
+    fechaRechazo: { type: Date, default: null },
 }, {
     versionKey: false,
     timestamps: true,
