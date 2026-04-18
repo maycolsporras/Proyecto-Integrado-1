@@ -123,27 +123,40 @@ function obtenerUrlImagenEvento(imagenes) {
     return '';
   }
 
-  const rutaOriginal = String(imagenes[0]?.ruta || '').trim();
+  const primeraImagen = imagenes[0];
+  let rutaOriginal = '';
+
+  if (typeof primeraImagen === 'string') {
+    rutaOriginal = primeraImagen;
+  } else if (primeraImagen && typeof primeraImagen === 'object') {
+    rutaOriginal = String(
+      primeraImagen.ruta
+      || primeraImagen.url
+      || primeraImagen.path
+      || (primeraImagen.nombreArchivo ? `/uploads/${primeraImagen.nombreArchivo}` : ''),
+    ).trim();
+  }
+
   if (!rutaOriginal) {
     return '';
   }
 
-  const ruta = rutaOriginal.replace(/\\/g, '/');
+  const ruta = rutaOriginal.replaceAll('\\', '/');
   if (/^https?:\/\//i.test(ruta)) {
-    return ruta;
+    return encodeURI(ruta);
   }
 
-  if (/^\/uploads\//.test(ruta)) {
-    return ruta;
+  if (ruta.startsWith('/uploads/')) {
+    return encodeURI(ruta);
   }
 
   const uploadsIndex = ruta.indexOf('uploads/');
   if (uploadsIndex !== -1) {
-    return `/${ruta.slice(uploadsIndex)}`;
+    return encodeURI(`/${ruta.slice(uploadsIndex)}`);
   }
 
   const nombreArchivo = ruta.split('/').pop();
-  return nombreArchivo ? `/uploads/${nombreArchivo}` : '';
+  return nombreArchivo ? encodeURI(`/uploads/${nombreArchivo}`) : '';
 }
 
 function parsearFecha(fecha) {
@@ -211,11 +224,12 @@ function crearCardEvento(evento) {
   const horaFin = evento.horario?.horaFin || 'Pendiente';
   const lugar = evento.lugarEvento || 'Lugar por confirmar';
   const nombreEvento = evento.nombreEvento || 'Evento sin título';
+  const imagen = obtenerUrlImagenEvento(evento.imagenes) || './assets/img/eventos-discapacidad.webp';
 
   return `
     <article class="eventoPoliticaCard">
       <div class="eventoPoliticaImg">
-        <img src="./assets/img/eventos-discapacidad.webp" alt="${escapeHtml(nombreEvento)}">
+        <img src="${escapeHtml(imagen)}" alt="${escapeHtml(nombreEvento)}">
       </div>
       <div class="eventoPoliticaBody">
         <div class="eventoPoliticaTop">
