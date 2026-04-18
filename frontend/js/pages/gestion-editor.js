@@ -31,12 +31,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="ceStepper" aria-label="Pasos del formulario">
                         <button type="button" class="ceStep ceStepActive" id="stepIndicator1" aria-current="step"
                             aria-label="Ir al paso 1">
-                            <span class="ceStepCircle">1</span>
+                            <span class="ceStepCircle text-white">1</span>
                             <span class="ceStepDot ceStepDotActive" id="stepDot1" aria-hidden="true"></span>
                         </button>
                         <div class="ceStepLine"></div>
                         <button type="button" class="ceStep" id="stepIndicator2" aria-label="Ir al paso 2">
-                            <span class="ceStepCircle">2</span>
+                            <span class="ceStepCircle text-white">2</span>
                             <span class="ceStepDot" id="stepDot2" aria-hidden="true"></span>
                         </button>
                         </div>
