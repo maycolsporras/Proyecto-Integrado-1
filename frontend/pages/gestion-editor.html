@@ -233,6 +233,89 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modalVistaPreviaEvento" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content modalVistaPreviaContenido">
+                <div class="modal-header modalVistaPreviaHeader">
+                    <h5 class="modal-title">Vista previa del evento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body modalVistaPreviaBody">
+                    <div class="evento-preview-hero">
+                        <img id="previewHeroImg" src="" alt="Imagen del evento" />
+                    </div>
+                    <div class="evento-preview-encabezado">
+                        <div class="evento-fecha-badge preview">
+                            <span id="previewDia" class="dia">01</span>
+                            <span id="previewMes" class="mes">ENE</span>
+                        </div>
+                        <div class="evento-preview-titulo">
+                            <h2 id="previewTitulo">Título del evento</h2>
+                        </div>
+                    </div>
+                    <div class="evento-preview-grid">
+                        <div class="evento-preview-main">
+                            <section class="preview-section" aria-labelledby="previewDescripcionTitle">
+                                <h3 id="previewDescripcionTitle">Descripción</h3>
+                                <p id="previewDescripcion">Cargando...</p>
+                            </section>
+                            <section class="preview-section" id="previewEnlaceSection" aria-labelledby="previewEnlaceTitle">
+                                <h3 id="previewEnlaceTitle">Enlace del evento</h3>
+                                <a id="previewEnlace" href="#" target="_blank" rel="noopener">Abrir enlace</a>
+                            </section>
+                            <section class="preview-section" aria-labelledby="previewObjetivosTitle">
+                                <h3 id="previewObjetivosTitle">Objetivos</h3>
+                                <div id="previewObjetivos"></div>
+                            </section>
+                            <section class="preview-section" aria-labelledby="previewAgendaTitle">
+                                <h3 id="previewAgendaTitle">Programa / Agenda</h3>
+                                <div id="previewAgenda"></div>
+                            </section>
+                            <section class="preview-section" aria-labelledby="previewInfoAdicionalTitle">
+                                <h3 id="previewInfoAdicionalTitle">Información adicional</h3>
+                                <div id="previewInfoAdicional"></div>
+                            </section>
+                        </div>
+                        <aside class="evento-preview-sidebar" aria-label="Información del evento">
+                            <div class="evento-info-card">
+                                <h3>Detalles del evento</h3>
+                                <ul class="evento-info-lista">
+                                    <li>
+                                        <strong>Fecha:</strong>
+                                        <span id="previewFechaCompleta"></span>
+                                    </li>
+                                    <li>
+                                        <strong>Horario:</strong>
+                                        <span id="previewHorario"></span>
+                                    </li>
+                                    <li>
+                                        <strong>Lugar:</strong>
+                                        <span id="previewLugar"></span>
+                                    </li>
+                                    <li>
+                                        <strong>Contacto:</strong>
+                                        <span id="previewContactoNombre"></span><br />
+                                        <span id="previewContactoCorreo"></span>
+                                    </li>
+                                    <li>
+                                        <strong>Público meta:</strong>
+                                        <span id="previewPublicoMeta"></span>
+                                    </li>
+                                    <li>
+                                        <strong>Cupos:</strong>
+                                        <span id="previewCupos"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+                <div class="modal-footer modalVistaPreviaFooter">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/pages/crea-evento.js"></script>

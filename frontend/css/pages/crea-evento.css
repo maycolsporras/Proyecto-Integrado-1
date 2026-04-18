@@ -616,3 +616,134 @@
     min-width: unset;
   }
 }
+
+.modalVistaPreviaContenido {
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.modalVistaPreviaBody {
+  padding: 0;
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+.modalVistaPreviaHeader,
+.modalVistaPreviaFooter {
+  border: none;
+  padding: 1rem 1.25rem;
+}
+
+.evento-preview-hero img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  display: block;
+}
+
+.evento-preview-encabezado {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.2rem 1.5rem 0.75rem;
+}
+
+.evento-fecha-badge.preview {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #164a98;
+  color: #fff;
+  min-width: 70px;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.evento-fecha-badge.preview .dia {
+  font-size: 1.7rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.evento-fecha-badge.preview .mes {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.evento-preview-titulo h2 {
+  font-size: 1.45rem;
+  color: #164a98;
+  margin: 0;
+}
+
+.evento-preview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 1.5rem;
+  padding: 0 1.5rem 1.5rem;
+}
+
+.evento-preview-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.preview-section h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #164a98;
+  margin-bottom: 0.75rem;
+}
+
+.preview-section p,
+.preview-section div {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.6;
+}
+
+.evento-preview-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.evento-info-card {
+  background: #f5f5f5;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.evento-info-card h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  color: #164a98;
+}
+
+.evento-info-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.evento-info-lista li {
+  font-size: 0.92rem;
+  color: #333;
+}
+
+.evento-info-lista strong {
+  display: inline-block;
+  min-width: 90px;
+  color: #164a98;
+}
+
+@media (max-width: 992px) {
+  .evento-preview-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -557,7 +557,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <!-- Botones paso 2 -->
                         <div class="ceActions mt-4">
                             <div class="ceActionIcons">
-                            <button type="button" class="ceIconBtn" aria-label="Vista previa del evento">
+                            <button type="button" id="btnPreviewEvento" class="ceIconBtn" aria-label="Vista previa del evento">
                                 <i class="fa-regular fa-eye" aria-hidden="true"></i>
                             </button>
                             <button type="button" class="ceIconBtn" aria-label="Guardar borrador">

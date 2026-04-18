@@ -21,6 +21,7 @@ app.use(cors());
 
 // Servir archivos estáticos del Frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 require("node:dns/promises").setServers(["1.1.1.1", "8.8.8.8"]);
 
