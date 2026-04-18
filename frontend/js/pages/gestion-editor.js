@@ -853,9 +853,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <div class="col-12 mb-4">
                                     <div class="row g-2 align-items-center">
                                         <div class="col-12 col-sm-4 col-md-auto">
-                                            <label class="visually-hidden" for="gestionEventosFiltro">Filtro de
+                                            <label class="visually-hidden" for="gestionEventosFinalizadosFiltro">Filtro de
                                                 eventos</label>
-                                            <select id="gestionEventosFiltro" class="form-select gestionEventosSelect"
+                                            <select id="gestionEventosFinalizadosFiltro" class="form-select gestionEventosSelect"
                                                 aria-label="Tipo de filtro">
                                                 <option selected>Título del Evento</option>
                                                 <option>Fecha del Evento</option>
@@ -864,9 +864,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                         </div>
 
                                         <div class="col-12 col-sm">
-                                            <label class="visually-hidden" for="gestionEventosBusqueda">Dato a
+                                            <label class="visually-hidden" for="gestionEventosFinalizadosBusqueda">Dato a
                                                 buscar</label>
-                                            <input id="gestionEventosBusqueda" class="form-control gestionEventosInput"
+                                            <input id="gestionEventosFinalizadosBusqueda" class="form-control gestionEventosInput"
                                                 type="text" placeholder="Ingrese el dato indicado"
                                                 aria-label="Ingrese el dato indicado">
                                         </div>
@@ -879,15 +879,70 @@ document.addEventListener('DOMContentLoaded', () => {
                                     </div>
                                 </div>
                                 <div class="col-12 mt-4 fw-bold d-flex justify-content-end">
-                                    <p>1-20 de 57</p>
+                                    <p id="eventosFinalizadosEditorConteo">0 eventos finalizados</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="cardsEventosFinalizadosEditor container-fluid mt-3">
+                        <div class="cardsEventosFinalizadosEditor container-fluid mt-3" id="cardsEventosFinalizadosEditor"></div>
 
-                        </div>  
-                
+                        <div class="modal fade" id="modalVistaPreviaEventoFinalizado" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title fw-bold" id="modalVistaPreviaEventoFinalizadoTitulo">Vista previa del evento</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="text-muted mb-4" id="modalVistaPreviaEventoFinalizadoSubtitulo">Revisión rápida del evento finalizado.</p>
+
+                                        <div class="row g-3">
+                                            <div class="col-12 col-md-6">
+                                                <p class="mb-1 fw-semibold">Título</p>
+                                                <p class="mb-0" id="modalVistaPreviaEventoFinalizadoNombre"></p>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <p class="mb-1 fw-semibold">Editor</p>
+                                                <p class="mb-0" id="modalVistaPreviaEventoFinalizadoEditor"></p>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <p class="mb-1 fw-semibold">Fecha de creación</p>
+                                                <p class="mb-0" id="modalVistaPreviaEventoFinalizadoCreacion"></p>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <p class="mb-1 fw-semibold">Fecha de finalización</p>
+                                                <p class="mb-0" id="modalVistaPreviaEventoFinalizadoFinalizacion"></p>
+                                            </div>
+                                            <div class="col-12">
+                                                <p class="mb-1 fw-semibold">Fechas del evento</p>
+                                                <ul class="mb-0 ps-3" id="modalVistaPreviaEventoFinalizadoFechas"></ul>
+                                            </div>
+                                            <div class="col-12">
+                                                <p class="mb-1 fw-semibold">Lugar</p>
+                                                <p class="mb-0" id="modalVistaPreviaEventoFinalizadoLugar"></p>
+                                            </div>
+                                            <div class="col-12">
+                                                <p class="mb-1 fw-semibold">Descripción</p>
+                                                <p class="mb-0" id="modalVistaPreviaEventoFinalizadoDescripcion"></p>
+                                            </div>
+                                            <div class="col-12">
+                                                <p class="mb-1 fw-semibold">Objetivos</p>
+                                                <p class="mb-0" id="modalVistaPreviaEventoFinalizadoObjetivos"></p>
+                                            </div>
+                                            <div class="col-12">
+                                                <p class="mb-1 fw-semibold">Agenda</p>
+                                                <p class="mb-0" id="modalVistaPreviaEventoFinalizadoAgenda"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+
             `,
         },
         'crear-lista-difusion': {
@@ -936,10 +991,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                         </div>
                                     </form>
                                 </div>
+                                </div>
                             </div>
                         </div>
 
-            
             `,
         },
         'listas-difusion': {
@@ -1050,6 +1105,417 @@ document.addEventListener('DOMContentLoaded', () => {
     let deleteEventModalInstance = null;
     let openingDeleteConfirmation = false;
     let deleteConfirmed = false;
+    let finalizadosPreviewModalInstance = null;
+    const finalizadosState = {
+        eventos: [],
+        filtroTexto: '',
+        filtroSeleccionado: 'Título del Evento',
+    };
+
+    const escapeHtml = (text) => {
+        if (text === null || text === undefined) {
+            return '';
+        }
+
+        return String(text)
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    };
+
+    const normalizarTexto = (value) => {
+        return String(value || '')
+            .normalize('NFD')
+            .replaceAll(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .trim();
+    };
+
+    const parseFinalizadosFecha = (fecha) => {
+        if (!fecha) {
+            return null;
+        }
+
+        if (fecha instanceof Date) {
+            return Number.isNaN(fecha.getTime()) ? null : fecha;
+        }
+
+        if (typeof fecha === 'string') {
+            const date = new Date(fecha);
+            return Number.isNaN(date.getTime()) ? null : date;
+        }
+
+        if (typeof fecha !== 'object') {
+            return null;
+        }
+
+        const anio = Number.parseInt(fecha.anio, 10);
+        const mes = Number.parseInt(fecha.mes, 10);
+        const dia = Number.parseInt(fecha.dia, 10);
+
+        if (!Number.isNaN(anio) && !Number.isNaN(mes) && !Number.isNaN(dia)) {
+            const date = new Date(anio, mes - 1, dia);
+            return Number.isNaN(date.getTime()) ? null : date;
+        }
+
+        if (fecha.iso) {
+            const isoDate = new Date(fecha.iso);
+            return Number.isNaN(isoDate.getTime()) ? null : isoDate;
+        }
+
+        return null;
+    };
+
+    const formatFinalizadosFecha = (fecha) => {
+        const parsedDate = parseFinalizadosFecha(fecha);
+
+        if (!parsedDate) {
+            return 'N/A';
+        }
+
+        return parsedDate.toLocaleDateString('es-CR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+        });
+    };
+
+    const obtenerFechaFinalizadaPrincipal = (evento) => {
+        const fechasEvento = Array.isArray(evento?.fechasEvento) ? evento.fechasEvento : [];
+        const fechasValidas = fechasEvento
+            .map((fecha) => parseFinalizadosFecha(fecha))
+            .filter(Boolean)
+            .sort((a, b) => a - b);
+
+        if (fechasValidas.length > 0) {
+            return fechasValidas[fechasValidas.length - 1];
+        }
+
+        return parseFinalizadosFecha(evento?.fechaFinVisualizacion)
+            || parseFinalizadosFecha(evento?.fechaPublicacion)
+            || parseFinalizadosFecha(evento?.updatedAt)
+            || null;
+    };
+
+    const getFinalizadosFilterValue = (evento, filtroSeleccionado) => {
+        if (filtroSeleccionado === 'Fecha del Evento') {
+            return formatFinalizadosFecha(obtenerFechaFinalizadaPrincipal(evento));
+        }
+
+        if (filtroSeleccionado === 'Nombre del Editor') {
+            return evento?.contacto?.nombreCompleto || '';
+        }
+
+        return evento?.nombreEvento || '';
+    };
+
+    const compareFinalizadosByFilter = (a, b, filtroSeleccionado) => {
+        if (filtroSeleccionado === 'Fecha del Evento') {
+            const dateA = obtenerFechaFinalizadaPrincipal(a);
+            const dateB = obtenerFechaFinalizadaPrincipal(b);
+            const timeA = dateA instanceof Date && !Number.isNaN(dateA.getTime()) ? dateA.getTime() : Number.MAX_SAFE_INTEGER;
+            const timeB = dateB instanceof Date && !Number.isNaN(dateB.getTime()) ? dateB.getTime() : Number.MAX_SAFE_INTEGER;
+
+            return timeB - timeA;
+        }
+
+        const valueA = normalizarTexto(getFinalizadosFilterValue(a, filtroSeleccionado));
+        const valueB = normalizarTexto(getFinalizadosFilterValue(b, filtroSeleccionado));
+        return valueA.localeCompare(valueB, 'es', { sensitivity: 'base' });
+    };
+
+    const getFinalizadosModalInstance = () => {
+        const modalElement = document.getElementById('modalVistaPreviaEventoFinalizado');
+
+        if (!modalElement || !globalThis.bootstrap?.Modal) {
+            return null;
+        }
+
+        return globalThis.bootstrap.Modal.getOrCreateInstance(modalElement);
+    };
+
+    const renderFinalizadosPreviewModal = (evento) => {
+        const modalElement = document.getElementById('modalVistaPreviaEventoFinalizado');
+
+        if (!modalElement) {
+            return;
+        }
+
+        const nombre = modalElement.querySelector('#modalVistaPreviaEventoFinalizadoNombre');
+        const editor = modalElement.querySelector('#modalVistaPreviaEventoFinalizadoEditor');
+        const creacion = modalElement.querySelector('#modalVistaPreviaEventoFinalizadoCreacion');
+        const finalizacion = modalElement.querySelector('#modalVistaPreviaEventoFinalizadoFinalizacion');
+        const fechas = modalElement.querySelector('#modalVistaPreviaEventoFinalizadoFechas');
+        const lugar = modalElement.querySelector('#modalVistaPreviaEventoFinalizadoLugar');
+        const descripcion = modalElement.querySelector('#modalVistaPreviaEventoFinalizadoDescripcion');
+        const objetivos = modalElement.querySelector('#modalVistaPreviaEventoFinalizadoObjetivos');
+        const agenda = modalElement.querySelector('#modalVistaPreviaEventoFinalizadoAgenda');
+
+        if (nombre) nombre.textContent = evento?.nombreEvento || 'Sin título';
+        if (editor) editor.textContent = evento?.contacto?.nombreCompleto || 'N/A';
+        if (creacion) creacion.textContent = formatFinalizadosFecha(evento?.createdAt);
+        if (finalizacion) finalizacion.textContent = formatFinalizadosFecha(obtenerFechaFinalizadaPrincipal(evento));
+        if (lugar) lugar.textContent = evento?.lugarEvento || 'N/A';
+        if (descripcion) descripcion.textContent = evento?.descripcionEvento || 'N/A';
+        if (objetivos) objetivos.textContent = evento?.objetivosEvento || 'N/A';
+        if (agenda) agenda.textContent = evento?.agendaEvento || 'N/A';
+
+        if (fechas) {
+            fechas.innerHTML = '';
+            const fechasEvento = Array.isArray(evento?.fechasEvento) ? evento.fechasEvento : [];
+            const fechasValidas = fechasEvento
+                .map((fecha) => formatFinalizadosFecha(fecha))
+                .filter((fecha) => fecha && fecha !== 'N/A');
+
+            if (fechasValidas.length === 0) {
+                const item = document.createElement('li');
+                item.textContent = 'N/A';
+                fechas.appendChild(item);
+            } else {
+                fechasValidas.forEach((fecha) => {
+                    const item = document.createElement('li');
+                    item.textContent = fecha;
+                    fechas.appendChild(item);
+                });
+            }
+        }
+    };
+
+    const aplicarFiltrosFinalizados = () => {
+        const filtroSelect = document.getElementById('gestionEventosFinalizadosFiltro');
+        const terminoBusqueda = normalizarTexto(finalizadosState.filtroTexto);
+        const filtroSeleccionado = filtroSelect?.value || finalizadosState.filtroSeleccionado || 'Título del Evento';
+        finalizadosState.filtroSeleccionado = filtroSeleccionado;
+
+        const ordenados = [...finalizadosState.eventos].sort((a, b) => compareFinalizadosByFilter(a, b, filtroSeleccionado));
+
+        if (!terminoBusqueda) {
+            return {
+                ordered: ordenados,
+                matches: ordenados.length,
+                total: ordenados.length,
+            };
+        }
+
+        const matches = [];
+        const restantes = [];
+
+        ordenados.forEach((evento) => {
+            const valor = normalizarTexto(getFinalizadosFilterValue(evento, filtroSeleccionado));
+
+            if (valor.includes(terminoBusqueda)) {
+                matches.push(evento);
+            } else {
+                restantes.push(evento);
+            }
+        });
+
+        return {
+            ordered: [...matches, ...restantes],
+            matches: matches.length,
+            total: ordenados.length,
+        };
+    };
+
+    const renderEventosFinalizados = (eventos = [], filterStats = null) => {
+        const container = document.getElementById('cardsEventosFinalizadosEditor');
+        const conteo = document.getElementById('eventosFinalizadosEditorConteo');
+
+        if (!container) {
+            return;
+        }
+
+        if (conteo) {
+            if (filterStats && normalizarTexto(finalizadosState.filtroTexto)) {
+                conteo.textContent = `${filterStats.matches} coincidencia(s) de ${filterStats.total} eventos finalizados`;
+            } else {
+                conteo.textContent = `${eventos.length} eventos finalizados`;
+            }
+        }
+
+        if (!Array.isArray(eventos) || eventos.length === 0) {
+            container.innerHTML = `
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <p class="text-muted">No hay eventos finalizados.</p>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = eventos.map((evento) => {
+            const eventId = escapeHtml(evento?._id || '');
+            const titulo = escapeHtml(evento?.nombreEvento || 'Sin título');
+            const fechaCreacion = formatFinalizadosFecha(evento?.createdAt);
+            const fechaFinalizacion = formatFinalizadosFecha(obtenerFechaFinalizadaPrincipal(evento));
+
+            return `
+                <div class="row border-bottom border-1 border-secondary-subtle py-3">
+                    <div class="col-12">
+                        <div class="eventoCardPublicada d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 p-3" aria-label="Evento finalizado">
+                            <div class="eventoCardPublicadaHeader ms-lg-5">
+                                <p class="eventoCardPublicadaTitulo fw-bold mb-1">${titulo}</p>
+                                <p class="eventoCardPublicadaMeta mb-1"><span>Fecha de creación:</span> ${fechaCreacion}</p>
+                                <p class="eventoCardPublicadaMeta mb-1"><span>Fecha final:</span> ${fechaFinalizacion}</p>
+                            </div>
+
+                            <div class="eventoCardPublicadaAcciones d-flex flex-wrap align-items-center gap-2 mt-2 mt-lg-0" aria-label="Acciones del evento finalizado">
+                                <button class="btn btn-sm btn-outline-secondary px-3" type="button" aria-label="Agregar link de memoria" data-finalizado-accion="memoria" data-evento-id="${eventId}">
+                                    Agregar Link de Memoria
+                                </button>
+                                <button class="btn eventoCardBtnIcon" type="button" aria-label="Ver evento" data-finalizado-accion="ver" data-evento-id="${eventId}">
+                                    <i class="fa-regular fa-eye" aria-hidden="true"></i>
+                                </button>
+                                <button class="btn eventoCardBtnIcon" type="button" aria-label="Editar evento" data-finalizado-accion="editar" data-evento-id="${eventId}">
+                                    <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
+                                </button>
+                                <button class="btn eventoCardBtnIcon text-danger" type="button" aria-label="Eliminar evento" data-finalizado-accion="eliminar" data-evento-id="${eventId}">
+                                    <i class="fa-regular fa-trash-can" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    };
+
+    const aplicarYRenderizarFinalizados = () => {
+        const filteredResult = aplicarFiltrosFinalizados();
+        renderEventosFinalizados(filteredResult.ordered, filteredResult);
+    };
+
+    const cargarEventosFinalizados = async () => {
+        const container = document.getElementById('cardsEventosFinalizadosEditor');
+
+        if (!container) {
+            return;
+        }
+
+        container.innerHTML = '<p class="text-muted">Cargando eventos finalizados...</p>';
+
+        try {
+            const response = await fetch('/api/form-evento?estado=aprobado&estadoVigencia=eliminado');
+
+            if (!response.ok) {
+                throw new Error('No se pudieron cargar los eventos finalizados.');
+            }
+
+            const data = await response.json();
+            finalizadosState.eventos = Array.isArray(data.eventos) ? data.eventos : [];
+            aplicarYRenderizarFinalizados();
+        } catch (error) {
+            console.error('Error al cargar los eventos finalizados:', error);
+            container.innerHTML = '<div class="alert alert-warning mb-0">No se pudieron cargar los eventos finalizados.</div>';
+        }
+    };
+
+    const eliminarEventoFinalizado = async (eventoId) => {
+        const response = await fetch(`/api/form-evento/${encodeURIComponent(eventoId)}`, {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('No se pudo eliminar el evento.');
+        }
+
+        finalizadosState.eventos = finalizadosState.eventos.filter((evento) => String(evento?._id) !== String(eventoId));
+        aplicarYRenderizarFinalizados();
+    };
+
+    const initEventosFinalizadosEditor = async () => {
+        const filtroSelect = document.getElementById('gestionEventosFinalizadosFiltro');
+        const busquedaInput = document.getElementById('gestionEventosFinalizadosBusqueda');
+        const searchButton = contentPanel?.querySelector('.gestionEventosSearchBtn');
+        const cardsContainer = document.getElementById('cardsEventosFinalizadosEditor');
+
+        if (!cardsContainer) {
+            return;
+        }
+
+        finalizadosPreviewModalInstance = getFinalizadosModalInstance();
+
+        if (filtroSelect) {
+            filtroSelect.value = finalizadosState.filtroSeleccionado;
+
+            if (filtroSelect.dataset.finalizadosBound !== 'true') {
+                filtroSelect.addEventListener('change', () => {
+                    finalizadosState.filtroSeleccionado = filtroSelect.value || 'Título del Evento';
+                    aplicarYRenderizarFinalizados();
+                });
+
+                filtroSelect.dataset.finalizadosBound = 'true';
+            }
+        }
+
+        if (busquedaInput) {
+            busquedaInput.value = finalizadosState.filtroTexto;
+
+            if (busquedaInput.dataset.finalizadosBound !== 'true') {
+                busquedaInput.addEventListener('input', () => {
+                    finalizadosState.filtroTexto = busquedaInput.value || '';
+                    aplicarYRenderizarFinalizados();
+                });
+
+                busquedaInput.dataset.finalizadosBound = 'true';
+            }
+        }
+
+        if (searchButton && searchButton.dataset.finalizadosBound !== 'true') {
+            searchButton.addEventListener('click', () => {
+                finalizadosState.filtroTexto = busquedaInput?.value || '';
+                aplicarYRenderizarFinalizados();
+            });
+
+            searchButton.dataset.finalizadosBound = 'true';
+        }
+
+        if (cardsContainer.dataset.finalizadosActionsBound !== 'true') {
+            cardsContainer.addEventListener('click', async (event) => {
+                const actionButton = event.target.closest('[data-finalizado-accion]');
+
+                if (!actionButton) {
+                    return;
+                }
+
+                const action = actionButton.dataset.finalizadoAccion;
+                const eventoId = actionButton.dataset.eventoId;
+                const eventoSeleccionado = finalizadosState.eventos.find((evento) => String(evento?._id) === String(eventoId));
+
+                if (!eventoId) {
+                    return;
+                }
+
+                if (action === 'ver') {
+                    renderFinalizadosPreviewModal(eventoSeleccionado);
+                    finalizadosPreviewModalInstance?.show();
+                    return;
+                }
+
+                if (action === 'eliminar') {
+                    if (!globalThis.confirm('¿Eliminar este evento finalizado?')) {
+                        return;
+                    }
+
+                    try {
+                        await eliminarEventoFinalizado(eventoId);
+                    } catch (error) {
+                        console.error('Error al eliminar el evento finalizado:', error);
+                        globalThis.alert('No se pudo eliminar el evento.');
+                    }
+
+                    return;
+                }
+            });
+
+            cardsContainer.dataset.finalizadosActionsBound = 'true';
+        }
+
+        await cargarEventosFinalizados();
+    };
 
     const getSidebarKey = (link) => link.dataset.sidebarKey || link.textContent.trim();
     const getDraftManager = () => globalThis.crearEventoDraftManager;
@@ -1233,6 +1699,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (sidebarKey === 'eventos-borrador' && typeof globalThis.initEventoBorrador === 'function') {
             globalThis.initEventoBorrador();
+        }
+
+        if (sidebarKey === 'eventos-finalizados' && typeof initEventosFinalizadosEditor === 'function') {
+            initEventosFinalizadosEditor();
         }
 
         if (sidebarKey === 'listas-difusion' && typeof globalThis.initListaDifusionEdit === 'function') {

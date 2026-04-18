@@ -7,6 +7,7 @@ require('dotenv').config();
 
 // Importaciones de modelos y rutas
 const Usuario = require('./models/usuario.model.js');
+const FormEvento = require('./models/form-evento.model.js');
 const usuarioRoutes = require('./routes/usuario.route.js');
 const formEventoRoutes = require('./routes/form-evento.route.js');
 const formBorradorRoutes = require('./routes/form-borrador.route.js');
@@ -59,12 +60,129 @@ const crearUsuariosIniciales = async () => {
     }
 };
 
+const construirFechaEvento = (fecha) => ({
+    anio: String(fecha.getFullYear()),
+    mes: String(fecha.getMonth() + 1).padStart(2, '0'),
+    dia: String(fecha.getDate()).padStart(2, '0'),
+    iso: fecha.toISOString(),
+});
+
+const construirFechaSemilla = (anio, mes, dia) => {
+    const fecha = new Date(anio, mes - 1, dia, 12, 0, 0, 0);
+    return construirFechaEvento(fecha);
+};
+
+const crearEventoFinalizadoInicial = async () => {
+    try {
+        const semillasEventosFinalizados = [
+            {
+                nombreEvento: 'Evento Finalizado de Prueba',
+                fechaCreacion: construirFechaSemilla(2025, 6, 25),
+                fechaPublicacion: construirFechaSemilla(2025, 7, 3),
+                fechasEvento: [
+                    construirFechaSemilla(2025, 7, 20),
+                    construirFechaSemilla(2025, 7, 22),
+                ],
+                fechaFinVisualizacion: construirFechaSemilla(2025, 8, 30),
+            },
+            {
+                nombreEvento: 'Evento Finalizado de Prueba 2',
+                fechaCreacion: construirFechaSemilla(2025, 8, 28),
+                fechaPublicacion: construirFechaSemilla(2025, 9, 5),
+                fechasEvento: [
+                    construirFechaSemilla(2025, 9, 18),
+                    construirFechaSemilla(2025, 9, 19),
+                ],
+                fechaFinVisualizacion: construirFechaSemilla(2025, 10, 25),
+            },
+            {
+                nombreEvento: 'Evento Finalizado de Prueba 3',
+                fechaCreacion: construirFechaSemilla(2025, 10, 24),
+                fechaPublicacion: construirFechaSemilla(2025, 11, 2),
+                fechasEvento: [
+                    construirFechaSemilla(2025, 11, 15),
+                    construirFechaSemilla(2025, 11, 17),
+                ],
+                fechaFinVisualizacion: construirFechaSemilla(2025, 12, 20),
+            },
+        ];
+
+        let sincronizados = 0;
+
+        for (const semilla of semillasEventosFinalizados) {
+            const payloadEvento = {
+                nombreEvento: semilla.nombreEvento,
+                fechaPublicacion: semilla.fechaPublicacion,
+                fechasEvento: semilla.fechasEvento,
+                horario: {
+                    horaInicio: '08:00',
+                    horaFin: '10:00',
+                },
+                lugarEvento: 'https://maps.google.com/?q=San+Jose+Costa+Rica',
+                linkCalendar: 'https://calendar.google.com/',
+                descripcionEvento: 'Evento de prueba para validar la vista de eventos finalizados.',
+                objetivosEvento: 'Mostrar un evento finalizado con fechas historicas en el modulo de eventos finalizados.',
+                agendaEvento: '08:00 Apertura | 09:00 Presentacion | 10:00 Cierre del evento',
+                agendaLecturaFacil: 'Apertura, presentacion y cierre del evento.',
+                contacto: {
+                    nombreCompleto: 'Editor de Eventos',
+                    correoElectronico: 'editorEventos@conapdis.com',
+                },
+                descripcionImagen: 'Imagen de referencia del evento finalizado.',
+                imagenes: [],
+                videos: [],
+                publicoMeta: 'Publico general',
+                cupoEvento: '100',
+                infoAdicional: 'Este registro se crea automaticamente al iniciar el servidor.',
+                referencias: [],
+                palabrasClave: ['finalizado', 'demo', 'seed'],
+                formularioInteresados: {
+                    tipo: 'ninguno',
+                    aspectosSeleccionados: [],
+                },
+                fijarImportante: false,
+                listaDifusion: 'Lista General',
+                fechaFinVisualizacion: semilla.fechaFinVisualizacion,
+                redesSociales: [],
+                estado: 'aprobado',
+            };
+
+            const eventoSincronizado = await FormEvento.findOneAndUpdate(
+                { nombreEvento: semilla.nombreEvento },
+                { $set: payloadEvento },
+                { upsert: true, new: true },
+            );
+
+            // Fuerza una fecha de creacion historica para que se muestre coherente con la fecha final.
+            const fechaCreacionHistorica = semilla.fechaCreacion?.iso ? new Date(semilla.fechaCreacion.iso) : null;
+            if (eventoSincronizado?._id && fechaCreacionHistorica && !Number.isNaN(fechaCreacionHistorica.getTime())) {
+                await FormEvento.collection.updateOne(
+                    { _id: eventoSincronizado._id },
+                    {
+                        $set: {
+                            createdAt: fechaCreacionHistorica,
+                            updatedAt: fechaCreacionHistorica,
+                        },
+                    },
+                );
+            }
+
+            sincronizados += 1;
+        }
+
+        console.log(`Se sincronizaron ${sincronizados} evento(s) finalizado(s) de prueba con fechas historicas`);
+    } catch (error) {
+        console.error('Error al crear el evento finalizado inicial:', error);
+    }
+};
+
 
 // Conexión a MongoDB
 mongoose.connect(process.env.MONGODB_URI)
-    .then(() => {
+    .then(async () => {
         console.log('MongoDB Atlas conectado');
-        crearUsuariosIniciales();
+        await crearUsuariosIniciales();
+        await crearEventoFinalizadoInicial();
     })
     .catch(error => console.log('Ocurrió un error al conectarse con MongoDB: ', error));
 
