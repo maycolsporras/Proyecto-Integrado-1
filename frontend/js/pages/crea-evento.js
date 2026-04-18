@@ -418,7 +418,7 @@ function initCrearEvento() {
         const btnAdd = e.target.closest('.ceCircleBtnAdd');
         const btnRemove = e.target.closest('.ceCircleBtnRemove');
 
-                if (btnAdd?.closest('.ceRefRow')) {
+        if (btnAdd?.closest('.ceRefRow')) {
             const nuevaFila = document.createElement('div');
             nuevaFila.className = 'ceRefRow mt-2';
             nuevaFila.innerHTML = `
@@ -903,6 +903,98 @@ function initCrearEvento() {
 }
 
 const crearEventoDraftStorageKey = 'gestionEditor.crearEventoDraft';
+const crearEventoDraftKeyStorageKey = 'gestionEditor.crearEventoDraftKey';
+const crearEventoDraftEndpoint = '/api/form-borrador';
+
+function getCrearEventoDraftKey() {
+    const existingDraftKey = localStorage.getItem(crearEventoDraftKeyStorageKey);
+
+    if (existingDraftKey) {
+        return existingDraftKey;
+    }
+
+    const newDraftKey = `draft-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    localStorage.setItem(crearEventoDraftKeyStorageKey, newDraftKey);
+    return newDraftKey;
+}
+
+function clearCrearEventoDraftKey() {
+    localStorage.removeItem(crearEventoDraftKeyStorageKey);
+}
+
+function resetCrearEventoDraftKey() {
+    clearCrearEventoDraftKey();
+}
+
+async function saveCrearEventoDraftToBackend(snapshot) {
+    const draftKey = getCrearEventoDraftKey();
+    const response = await fetch(crearEventoDraftEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            draftKey,
+            snapshot,
+        }),
+    });
+
+    if (!response.ok) {
+        throw new Error('No se pudo guardar el borrador.');
+    }
+
+    return response.json();
+}
+
+function sendCrearEventoDraftBeacon(snapshot) {
+    const draftKey = getCrearEventoDraftKey();
+    const payload = JSON.stringify({
+        draftKey,
+        snapshot,
+    });
+
+    if (navigator.sendBeacon) {
+        navigator.sendBeacon(crearEventoDraftEndpoint, new Blob([payload], { type: 'application/json' }));
+        return;
+    }
+
+    fetch(crearEventoDraftEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: payload,
+        keepalive: true,
+    }).catch(() => {});
+}
+
+async function loadCrearEventoDraftFromBackend() {
+    const draftKey = localStorage.getItem(crearEventoDraftKeyStorageKey);
+
+    if (!draftKey) {
+        return null;
+    }
+
+    const response = await fetch(`${crearEventoDraftEndpoint}/${encodeURIComponent(draftKey)}`);
+
+    if (!response.ok) {
+        return null;
+    }
+
+    const data = await response.json();
+    return data?.borrador?.snapshot || null;
+}
+
+async function deleteCrearEventoDraftFromBackend() {
+    const draftKey = localStorage.getItem(crearEventoDraftKeyStorageKey);
+
+    sessionStorage.removeItem(crearEventoDraftStorageKey);
+    clearCrearEventoDraftKey();
+
+    if (!draftKey) {
+        return;
+    }
+
+    await fetch(`${crearEventoDraftEndpoint}/${encodeURIComponent(draftKey)}`, {
+        method: 'DELETE',
+    }).catch(() => {});
+}
 
 function getCrearEventoRoot() {
     return document.querySelector('.ceCard');
@@ -934,6 +1026,7 @@ function serializeCrearEventoForm(formRoot) {
             return {
                 kind: 'file',
                 hasFiles: field.files?.length > 0,
+                fileName: field.files?.[0]?.name || '',
             };
         }
 
@@ -942,6 +1035,26 @@ function serializeCrearEventoForm(formRoot) {
             value: field.value,
         };
     });
+}
+
+function applyCrearEventoContentEditableSnapshot(field, fieldSnapshot) {
+    field.innerHTML = fieldSnapshot.html || '';
+}
+
+function applyCrearEventoCheckableSnapshot(field, fieldSnapshot) {
+    field.checked = Boolean(fieldSnapshot.checked);
+}
+
+function applyCrearEventoValueSnapshot(field, fieldSnapshot) {
+    field.value = fieldSnapshot.value || '';
+}
+
+function applyCrearEventoFileSnapshot(field, fieldSnapshot) {
+    const fileNameEl = field.closest('.ceFileInput')?.querySelector('.ceFileName');
+
+    if (fileNameEl) {
+        fileNameEl.textContent = fieldSnapshot.fileName || 'Adjuntar Documento';
+    }
 }
 
 function restoreCrearEventoForm(formRoot, snapshot) {
@@ -957,17 +1070,22 @@ function restoreCrearEventoForm(formRoot, snapshot) {
         const fieldSnapshot = snapshot[i];
 
         if (fieldSnapshot.kind === 'contenteditable' && field.getAttribute('contenteditable') === 'true') {
-            field.innerHTML = fieldSnapshot.html || '';
+            applyCrearEventoContentEditableSnapshot(field, fieldSnapshot);
             continue;
         }
 
         if (fieldSnapshot.kind === 'checkable' && (field.type === 'checkbox' || field.type === 'radio')) {
-            field.checked = Boolean(fieldSnapshot.checked);
+            applyCrearEventoCheckableSnapshot(field, fieldSnapshot);
             continue;
         }
 
         if (fieldSnapshot.kind === 'value' && 'value' in field) {
-            field.value = fieldSnapshot.value || '';
+            applyCrearEventoValueSnapshot(field, fieldSnapshot);
+            continue;
+        }
+
+        if (fieldSnapshot.kind === 'file' && field.type === 'file') {
+            applyCrearEventoFileSnapshot(field, fieldSnapshot);
         }
     }
 }
@@ -990,19 +1108,32 @@ function hasAnyTypedData(formRoot) {
     return hasText || hasTextarea || hasEditorText || hasFiles;
 }
 
-function saveCrearEventoDraft() {
+async function saveCrearEventoDraft(options = {}) {
     const formRoot = getCrearEventoRoot();
     const draftSnapshot = serializeCrearEventoForm(formRoot);
 
     if (!draftSnapshot.length) {
-        return;
+        return null;
     }
 
     sessionStorage.setItem(crearEventoDraftStorageKey, JSON.stringify(draftSnapshot));
+
+    if (options.background) {
+        sendCrearEventoDraftBeacon(draftSnapshot);
+        return draftSnapshot;
+    }
+
+    await saveCrearEventoDraftToBackend(draftSnapshot);
+    return draftSnapshot;
 }
 
-function clearCrearEventoDraft() {
+function clearCrearEventoLocalDraft() {
     sessionStorage.removeItem(crearEventoDraftStorageKey);
+}
+
+async function clearCrearEventoDraft() {
+    clearCrearEventoLocalDraft();
+    await deleteCrearEventoDraftFromBackend();
 }
 
 function clearCrearEventoFormData() {
@@ -1043,19 +1174,32 @@ function clearCrearEventoFormData() {
     });
 }
 
-function restoreCrearEventoDraft() {
+async function restoreCrearEventoDraft() {
     const formRoot = getCrearEventoRoot();
     const rawSnapshot = sessionStorage.getItem(crearEventoDraftStorageKey);
 
-    if (!formRoot || !rawSnapshot) {
+    if (!formRoot) {
         return;
     }
 
+    if (rawSnapshot) {
+        try {
+            const snapshot = JSON.parse(rawSnapshot);
+            restoreCrearEventoForm(formRoot, snapshot);
+            return;
+        } catch {
+            sessionStorage.removeItem(crearEventoDraftStorageKey);
+        }
+    }
+
     try {
-        const snapshot = JSON.parse(rawSnapshot);
-        restoreCrearEventoForm(formRoot, snapshot);
+        const snapshot = await loadCrearEventoDraftFromBackend();
+        if (snapshot) {
+            sessionStorage.setItem(crearEventoDraftStorageKey, JSON.stringify(snapshot));
+            restoreCrearEventoForm(formRoot, snapshot);
+        }
     } catch {
-        clearCrearEventoDraft();
+        sessionStorage.removeItem(crearEventoDraftStorageKey);
     }
 }
 
@@ -1063,11 +1207,13 @@ globalThis.crearEventoDraftManager = {
     hasTypedData: () => hasAnyTypedData(getCrearEventoRoot()),
     saveDraft: saveCrearEventoDraft,
     restoreDraft: restoreCrearEventoDraft,
+    resetDraftKey: resetCrearEventoDraftKey,
+    clearLocalDraft: clearCrearEventoLocalDraft,
     clearDraft: clearCrearEventoDraft,
     clearFormData: clearCrearEventoFormData,
-    discardForm: () => {
+    discardForm: async () => {
         clearCrearEventoFormData();
-        clearCrearEventoDraft();
+        await clearCrearEventoDraft();
     },
 };
 

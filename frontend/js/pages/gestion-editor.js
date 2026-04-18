@@ -964,19 +964,21 @@ document.addEventListener('DOMContentLoaded', () => {
         hasDraftChanges = Boolean(draftManager?.hasTypedData?.());
     };
 
-    const clearCrearEventoDraft = () => {
+    const clearCrearEventoDraft = async () => {
         const draftManager = getDraftManager();
-        draftManager?.clearDraft?.();
+        await draftManager?.clearDraft?.();
     };
 
-    const restoreCrearEventoDraft = () => {
-        const draftManager = getDraftManager();
-        draftManager?.restoreDraft?.();
-    };
-
-    const navigateAfterDraftDecision = () => {
-        // Al continuar o eliminar, el flujo deja el formulario local en limpio.
-        clearCrearEventoDraft();
+    const navigateAfterDraftDecision = async (shouldDeleteDraft = false) => {
+        if (shouldDeleteDraft) {
+            await clearCrearEventoDraft();
+        } else {
+            const draftManager = getDraftManager();
+            await draftManager?.saveDraft?.();
+            draftManager?.resetDraftKey?.();
+            draftManager?.clearLocalDraft?.();
+            draftManager?.clearFormData?.();
+        }
 
         hasDraftChanges = false;
 
@@ -1005,7 +1007,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalElement.addEventListener('hidden.bs.modal', () => {
                 if (deleteConfirmed) {
                     deleteConfirmed = false;
-                    navigateAfterDraftDecision();
+                    navigateAfterDraftDecision(true);
                     return;
                 }
 
@@ -1056,8 +1058,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const deleteEventButton = modalElement.querySelector('.modalEventoBorradorBtnEliminar');
 
         if (modalElement.dataset.draftGuardBound !== 'true') {
-            keepDraftButton?.addEventListener('click', () => {
-                navigateAfterDraftDecision();
+            keepDraftButton?.addEventListener('click', async () => {
+                await navigateAfterDraftDecision(false);
             });
 
             deleteEventButton?.addEventListener('click', () => {
@@ -1086,7 +1088,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        navigateAfterDraftDecision();
+        navigateAfterDraftDecision(false);
     };
 
     const defaultPanelHtml = `
@@ -1109,7 +1111,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (sidebarKey === 'crear-evento' && typeof globalThis.initCrearEvento === 'function') {
             globalThis.initCrearEvento();
-            restoreCrearEventoDraft();
+            const draftManager = getDraftManager();
+            draftManager?.resetDraftKey?.();
+            draftManager?.clearLocalDraft?.();
+            draftManager?.clearFormData?.();
             updateDraftState();
         }
 
@@ -1181,19 +1186,20 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'hidden' && activeSidebarKey === 'crear-evento') {
             const draftManager = getDraftManager();
-            draftManager?.discardForm?.();
-            hasDraftChanges = false;
+            draftManager?.saveDraft?.({ background: true });
+            updateDraftState();
         }
     });
 
-    globalThis.addEventListener('beforeunload', () => {
-        if (activeSidebarKey !== 'crear-evento') {
-            return;
+    globalThis.onbeforeunload = () => {
+        if (activeSidebarKey !== 'crear-evento' || !hasDraftChanges) {
+            return undefined;
         }
 
         const draftManager = getDraftManager();
-        draftManager?.clearDraft?.();
-    });
+        draftManager?.saveDraft?.({ background: true });
+        return '';
+    };
 
     sidebarLinks.forEach((link) => {
         link.addEventListener('click', (event) => {
