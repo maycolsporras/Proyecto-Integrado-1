@@ -54,6 +54,14 @@ const toDateOnly = (dateValue) => {
 };
 
 const parseFechaIso = (fecha) => {
+    const anio = Number.parseInt(fecha?.anio, 10);
+    const mes = Number.parseInt(fecha?.mes, 10);
+    const dia = Number.parseInt(fecha?.dia, 10);
+
+    if (!Number.isNaN(anio) && !Number.isNaN(mes) && !Number.isNaN(dia)) {
+        return toDateOnly(new Date(anio, mes - 1, dia));
+    }
+
     const isoValue = fecha?.iso;
 
     if (!isoValue) {

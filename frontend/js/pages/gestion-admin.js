@@ -55,6 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                                         </button>
                                     </div>
+                                    <div class="col-12 col-sm-auto d-grid d-sm-inline-flex">
+                                        <button id="aprobacionEventosLimpiarFiltro" class="btn btn-outline-secondary" type="button" aria-label="Limpiar filtros">
+                                            Limpiar
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-12 d-flex justify-content-start align-items-center gap-3 mt-4 aprobacionEventosTitle">
@@ -217,6 +222,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <div class="col-12 col-sm-auto d-grid d-sm-inline-flex">
                                         <button class="btn gestionEventosSearchBtn" type="button" aria-label="Buscar">
                                             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-12 col-sm-auto d-grid d-sm-inline-flex">
+                                        <button id="eventosPublicadosLimpiarFiltro" class="btn btn-outline-secondary" type="button" aria-label="Limpiar filtros">
+                                            Limpiar
                                         </button>
                                     </div>
                                 </div>

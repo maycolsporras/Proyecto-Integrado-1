@@ -2,6 +2,8 @@
     let pendingDeleteEventId = null;
     let pendingRejectEventId = null;
     let pendingApproveEventId = null;
+    let allPendingEvents = [];
+    let pendingFilterText = '';
 
     const escapeHtml = (text) => {
         if (text === null || text === undefined) {
@@ -21,6 +23,17 @@
             return null;
         }
 
+        const anio = Number.parseInt(fecha.anio, 10);
+        const mes = Number.parseInt(fecha.mes, 10);
+        const dia = Number.parseInt(fecha.dia, 10);
+
+        if (!Number.isNaN(anio) && !Number.isNaN(mes) && !Number.isNaN(dia)) {
+            const parsedFromParts = new Date(anio, mes - 1, dia);
+            if (!Number.isNaN(parsedFromParts.getTime())) {
+                return parsedFromParts;
+            }
+        }
+
         if (fecha.iso) {
             const parsedFromIso = new Date(fecha.iso);
             if (!Number.isNaN(parsedFromIso.getTime())) {
@@ -28,20 +41,7 @@
             }
         }
 
-        const anio = Number.parseInt(fecha.anio, 10);
-        const mes = Number.parseInt(fecha.mes, 10);
-        const dia = Number.parseInt(fecha.dia, 10);
-
-        if (Number.isNaN(anio) || Number.isNaN(mes) || Number.isNaN(dia)) {
-            return null;
-        }
-
-        const parsedFromParts = new Date(anio, mes - 1, dia);
-        if (Number.isNaN(parsedFromParts.getTime())) {
-            return null;
-        }
-
-        return parsedFromParts;
+        return null;
     };
 
     const formatFecha = (fecha) => {
@@ -84,7 +84,79 @@
         });
     };
 
-    const renderAprobacionEventosCards = (eventos = []) => {
+    const normalizarTexto = (value) => {
+        return String(value || '')
+            .normalize('NFD')
+            .replaceAll(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .trim();
+    };
+
+    const getPendingFilterValue = (evento, filtroSeleccionado) => {
+        if (filtroSeleccionado === 'Fecha del Evento') {
+            return formatFechaFromDate(getFechaEventoPrincipal(evento));
+        }
+
+        if (filtroSeleccionado === 'Nombre del Editor') {
+            return evento?.contacto?.nombreCompleto || '';
+        }
+
+        return evento?.nombreEvento || '';
+    };
+
+    const comparePendingByFilter = (a, b, filtroSeleccionado) => {
+        if (filtroSeleccionado === 'Fecha del Evento') {
+            const dateA = getFechaEventoPrincipal(a);
+            const dateB = getFechaEventoPrincipal(b);
+            const timeA = dateA instanceof Date && !Number.isNaN(dateA.getTime()) ? dateA.getTime() : Number.MAX_SAFE_INTEGER;
+            const timeB = dateB instanceof Date && !Number.isNaN(dateB.getTime()) ? dateB.getTime() : Number.MAX_SAFE_INTEGER;
+            return timeA - timeB;
+        }
+
+        const valueA = normalizarTexto(getPendingFilterValue(a, filtroSeleccionado));
+        const valueB = normalizarTexto(getPendingFilterValue(b, filtroSeleccionado));
+        return valueA.localeCompare(valueB, 'es', { sensitivity: 'base' });
+    };
+
+    const applyPendingFilters = (eventos = []) => {
+        const filtroSelect = document.getElementById('gestionEventosFiltro');
+        const filtroSeleccionado = filtroSelect?.value || 'Título del Evento';
+        const termino = normalizarTexto(pendingFilterText);
+        const baseOrdenada = [...eventos].sort((a, b) => comparePendingByFilter(a, b, filtroSeleccionado));
+
+        if (!termino) {
+            return {
+                ordered: baseOrdenada,
+                matches: baseOrdenada.length,
+                total: baseOrdenada.length,
+            };
+        }
+
+        const matches = [];
+        const restantes = [];
+
+        baseOrdenada.forEach((evento) => {
+            const valor = normalizarTexto(getPendingFilterValue(evento, filtroSeleccionado));
+            if (valor.includes(termino)) {
+                matches.push(evento);
+            } else {
+                restantes.push(evento);
+            }
+        });
+
+        return {
+            ordered: [...matches, ...restantes],
+            matches: matches.length,
+            total: eventos.length,
+        };
+    };
+
+    const applyCurrentPendingFilters = () => {
+        const filteredResult = applyPendingFilters(allPendingEvents);
+        renderAprobacionEventosCards(filteredResult.ordered, filteredResult);
+    };
+
+    const renderAprobacionEventosCards = (eventos = [], filterStats = null) => {
         const container = document.getElementById('aprobacionEventosAdmin');
         const conteo = document.getElementById('aprobacionEventosConteo');
 
@@ -93,7 +165,11 @@
         }
 
         if (conteo) {
-            conteo.textContent = `${eventos.length} pendientes`;
+            if (filterStats && pendingFilterText.trim()) {
+                conteo.textContent = `${filterStats.matches} coincidencia(s) de ${filterStats.total} pendientes`;
+            } else {
+                conteo.textContent = `${eventos.length} pendientes`;
+            }
         }
 
         if (!eventos.length) {
@@ -157,6 +233,53 @@
                 </div>
             `;
         }).join('');
+    };
+
+    const bindPendingFilterControls = () => {
+        const filtroSelect = document.getElementById('gestionEventosFiltro');
+        const busquedaInput = document.getElementById('gestionEventosBusqueda');
+        const buscarBtn = document.querySelector('.gestionEventosSearchBtn');
+        const limpiarBtn = document.getElementById('aprobacionEventosLimpiarFiltro');
+
+        if (!filtroSelect || !busquedaInput) {
+            return;
+        }
+
+        if (filtroSelect.dataset.pendingFiltersBound === 'true') {
+            return;
+        }
+
+        const ejecutarBusqueda = () => {
+            pendingFilterText = busquedaInput.value || '';
+            applyCurrentPendingFilters();
+        };
+
+        buscarBtn?.addEventListener('click', ejecutarBusqueda);
+
+        busquedaInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                ejecutarBusqueda();
+            }
+        });
+
+        busquedaInput.addEventListener('input', () => {
+            pendingFilterText = busquedaInput.value || '';
+            applyCurrentPendingFilters();
+        });
+
+        filtroSelect.addEventListener('change', () => {
+            applyCurrentPendingFilters();
+        });
+
+        limpiarBtn?.addEventListener('click', () => {
+            pendingFilterText = '';
+            busquedaInput.value = '';
+            filtroSelect.selectedIndex = 0;
+            applyCurrentPendingFilters();
+        });
+
+        filtroSelect.dataset.pendingFiltersBound = 'true';
     };
 
     const actualizarEstadoEvento = async (eventoId, estado, motivoRechazo = '') => {
@@ -394,14 +517,14 @@
         }
 
         try {
-            const response = await fetch('/api/form-evento?estado=pendiente_aprobacion&estadoVigencia=activo');
+            const response = await fetch('/api/form-evento?estado=pendiente_aprobacion');
             if (!response.ok) {
                 throw new Error('No se pudo consultar la lista de eventos pendientes.');
             }
 
             const data = await response.json();
-            const eventos = Array.isArray(data?.eventos) ? data.eventos : [];
-            renderAprobacionEventosCards(eventos);
+            allPendingEvents = Array.isArray(data?.eventos) ? data.eventos : [];
+            applyCurrentPendingFilters();
         } catch (error) {
             if (conteo) {
                 conteo.textContent = 'Error';
@@ -478,6 +601,7 @@
     };
 
     globalThis.initAprobacionEventosAdmin = async () => {
+        bindPendingFilterControls();
         bindDeleteModalActions();
         bindRechazoEventoModalActions();
         bindAprobarEventoModalActions();

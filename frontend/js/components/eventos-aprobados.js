@@ -1,5 +1,7 @@
 (function initEventosAprobadosModule() {
     let pendingDeleteEventId = null;
+    let allPublishedEvents = [];
+    let publishedFilterText = '';
 
     const escapeHtml = (text) => {
         if (text === null || text === undefined) {
@@ -59,6 +61,78 @@
         return `${dia}/${meses}/${anio}`;
     };
 
+    const normalizarTexto = (value) => {
+        return String(value || '')
+            .normalize('NFD')
+            .replaceAll(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .trim();
+    };
+
+    const getPublishedFilterValue = (evento, filtroSeleccionado) => {
+        if (filtroSeleccionado === 'Fecha del Evento') {
+            return formatFecha(evento?.updatedAt);
+        }
+
+        if (filtroSeleccionado === 'Nombre del Editor') {
+            return evento?.contacto?.nombreCompleto || '';
+        }
+
+        return evento?.nombreEvento || '';
+    };
+
+    const comparePublishedByFilter = (a, b, filtroSeleccionado) => {
+        if (filtroSeleccionado === 'Fecha del Evento') {
+            const dateA = parseFechaValue(a?.updatedAt);
+            const dateB = parseFechaValue(b?.updatedAt);
+            const timeA = dateA instanceof Date && !Number.isNaN(dateA.getTime()) ? dateA.getTime() : Number.MAX_SAFE_INTEGER;
+            const timeB = dateB instanceof Date && !Number.isNaN(dateB.getTime()) ? dateB.getTime() : Number.MAX_SAFE_INTEGER;
+            return timeA - timeB;
+        }
+
+        const valueA = normalizarTexto(getPublishedFilterValue(a, filtroSeleccionado));
+        const valueB = normalizarTexto(getPublishedFilterValue(b, filtroSeleccionado));
+        return valueA.localeCompare(valueB, 'es', { sensitivity: 'base' });
+    };
+
+    const applyPublishedFilters = (eventos = []) => {
+        const filtroSelect = document.getElementById('gestionEventosFiltro');
+        const filtroSeleccionado = filtroSelect?.value || 'Título del Evento';
+        const termino = normalizarTexto(publishedFilterText);
+        const baseOrdenada = [...eventos].sort((a, b) => comparePublishedByFilter(a, b, filtroSeleccionado));
+
+        if (!termino) {
+            return {
+                ordered: baseOrdenada,
+                matches: baseOrdenada.length,
+                total: baseOrdenada.length,
+            };
+        }
+
+        const matches = [];
+        const restantes = [];
+
+        baseOrdenada.forEach((evento) => {
+            const valor = normalizarTexto(getPublishedFilterValue(evento, filtroSeleccionado));
+            if (valor.includes(termino)) {
+                matches.push(evento);
+            } else {
+                restantes.push(evento);
+            }
+        });
+
+        return {
+            ordered: [...matches, ...restantes],
+            matches: matches.length,
+            total: eventos.length,
+        };
+    };
+
+    const applyCurrentPublishedFilters = () => {
+        const filteredResult = applyPublishedFilters(allPublishedEvents);
+        renderEventosAprobadosCards(filteredResult.ordered, filteredResult);
+    };
+
     const getModalInstanceById = (modalId) => {
         const modalElement = document.getElementById(modalId);
         if (!modalElement) {
@@ -68,7 +142,7 @@
         return globalThis.bootstrap.Modal.getInstance(modalElement) || new globalThis.bootstrap.Modal(modalElement);
     };
 
-    const renderEventosAprobadosCards = (eventos) => {
+    const renderEventosAprobadosCards = (eventos, filterStats = null) => {
         const container = document.getElementById('cardsEventosPublicadosAdmin');
         const conteo = document.getElementById('eventosPublicadosConteo');
 
@@ -77,7 +151,11 @@
         }
 
         if (conteo) {
-            conteo.textContent = `${eventos.length} publicados`;
+            if (filterStats && publishedFilterText.trim()) {
+                conteo.textContent = `${filterStats.matches} coincidencia(s) de ${filterStats.total} publicados`;
+            } else {
+                conteo.textContent = `${eventos.length} publicados`;
+            }
         }
 
         if (!Array.isArray(eventos) || eventos.length === 0) {
@@ -137,6 +215,53 @@
 
         container.innerHTML = cardsHtml;
         bindEventosAprobadosActions();
+    };
+
+    const bindPublishedFilterControls = () => {
+        const filtroSelect = document.getElementById('gestionEventosFiltro');
+        const busquedaInput = document.getElementById('gestionEventosBusqueda');
+        const buscarBtn = document.querySelector('.gestionEventosSearchBtn');
+        const limpiarBtn = document.getElementById('eventosPublicadosLimpiarFiltro');
+
+        if (!filtroSelect || !busquedaInput) {
+            return;
+        }
+
+        if (filtroSelect.dataset.publishedFiltersBound === 'true') {
+            return;
+        }
+
+        const ejecutarBusqueda = () => {
+            publishedFilterText = busquedaInput.value || '';
+            applyCurrentPublishedFilters();
+        };
+
+        buscarBtn?.addEventListener('click', ejecutarBusqueda);
+
+        busquedaInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                ejecutarBusqueda();
+            }
+        });
+
+        busquedaInput.addEventListener('input', () => {
+            publishedFilterText = busquedaInput.value || '';
+            applyCurrentPublishedFilters();
+        });
+
+        filtroSelect.addEventListener('change', () => {
+            applyCurrentPublishedFilters();
+        });
+
+        limpiarBtn?.addEventListener('click', () => {
+            publishedFilterText = '';
+            busquedaInput.value = '';
+            filtroSelect.selectedIndex = 0;
+            applyCurrentPublishedFilters();
+        });
+
+        filtroSelect.dataset.publishedFiltersBound = 'true';
     };
 
     const eliminarEvento = async (eventoId) => {
@@ -262,9 +387,8 @@
             }
 
             const data = await response.json();
-            const eventos = Array.isArray(data?.eventos) ? data.eventos : [];
-
-            renderEventosAprobadosCards(eventos);
+            allPublishedEvents = Array.isArray(data?.eventos) ? data.eventos : [];
+            applyCurrentPublishedFilters();
         } catch (error) {
             if (conteo) {
                 conteo.textContent = 'Error';
@@ -282,6 +406,7 @@
     };
 
     globalThis.initEventosAprobadosAdmin = async () => {
+        bindPublishedFilterControls();
         bindDeleteModalActions();
         bindEventosAprobadosActions();
         await loadEventosAprobadosAdmin();

@@ -197,6 +197,8 @@ function initCrearEvento() {
     const anioActual = hoy.getFullYear();
     const mesActual = String(hoy.getMonth() + 1).padStart(2, '0');
     const diaActual = String(hoy.getDate()).padStart(2, '0');
+    const mesActualNumero = Number.parseInt(mesActual, 10);
+    const diaActualNumero = Number.parseInt(diaActual, 10);
 
     // ── Helpers para generar opciones de selects ──────────────────
 
@@ -210,50 +212,77 @@ function initCrearEvento() {
         }
     }
 
-    function generarMeses(selectEl, mesSeleccionado = mesActual) {
-        const meses = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-        meses.forEach(m => {
-            const opt = document.createElement('option');
-            opt.value = m;
-            opt.textContent = m;
-            if (m === mesSeleccionado) opt.selected = true;
-            selectEl.appendChild(opt);
-        });
+    function obtenerMesesDisponibles(anioSeleccionado) {
+        const inicio = anioSeleccionado === anioActual ? mesActualNumero : 1;
+        const meses = [];
+
+        for (let mes = inicio; mes <= 12; mes++) {
+            meses.push(String(mes).padStart(2, '0'));
+        }
+
+        return meses;
     }
 
-    function actualizarDiasDisponibles(selectAnio, selectMes, selectDia) {
-        const anioSeleccionado = Number.parseInt(selectAnio.value, 10);
-        const mesSeleccionado = Number.parseInt(selectMes.value, 10);
+    function generarMeses(selectEl, anioSeleccionado, mesSeleccionado = '') {
+        const mesesDisponibles = obtenerMesesDisponibles(anioSeleccionado);
+        const valorMes = mesesDisponibles.includes(String(mesSeleccionado))
+            ? String(mesSeleccionado)
+            : (mesesDisponibles[0] || '');
 
-        const dias = selectDia.querySelectorAll('option');
-        dias.forEach(opcion => {
-            const diaValor = Number.parseInt(opcion.value, 10);
-            const esAnioActual = anioSeleccionado === anioActual;
-            const esMesActual = mesSeleccionado === Number.parseInt(mesActual, 10);
-            const esAnioYMesActual = esAnioActual && esMesActual;
+        selectEl.innerHTML = '';
 
-            if (esAnioYMesActual && diaValor < Number.parseInt(diaActual, 10)) {
-                opcion.disabled = true;
-                opcion.textContent = `${String(diaValor).padStart(2, '0')} (pasado)`;
-            } else {
-                opcion.disabled = false;
-                opcion.textContent = String(diaValor).padStart(2, '0');
+        mesesDisponibles.forEach((mes) => {
+            const opt = document.createElement('option');
+            opt.value = mes;
+            opt.textContent = mes;
+            if (mes === valorMes) {
+                opt.selected = true;
             }
+            selectEl.appendChild(opt);
         });
-
-        if (selectDia.selectedOptions?.[0]?.disabled) {
-            selectDia.value = '';
-        }
     }
 
-    function generarDias(selectEl, diaSeleccionado = diaActual) {
-        for (let d = 1; d <= 31; d++) {
-            const opt = document.createElement('option');
-            opt.value = String(d).padStart(2, '0');
-            opt.textContent = String(d).padStart(2, '0');
-            if (opt.value === diaSeleccionado) opt.selected = true;
-            selectEl.appendChild(opt);
+    function generarDias(selectEl, anioSeleccionado, mesSeleccionado, diaSeleccionado = '') {
+        const anio = Number.parseInt(anioSeleccionado, 10);
+        const mes = Number.parseInt(mesSeleccionado, 10);
+
+        if (Number.isNaN(anio) || Number.isNaN(mes)) {
+            selectEl.innerHTML = '';
+            return;
         }
+
+        const ultimoDia = new Date(anio, mes, 0).getDate();
+        const inicioDia = anio === anioActual && mes === mesActualNumero ? diaActualNumero : 1;
+        const diasDisponibles = [];
+
+        for (let dia = inicioDia; dia <= ultimoDia; dia++) {
+            diasDisponibles.push(String(dia).padStart(2, '0'));
+        }
+
+        const valorDia = diasDisponibles.includes(String(diaSeleccionado))
+            ? String(diaSeleccionado)
+            : (diasDisponibles[0] || '');
+
+        selectEl.innerHTML = '';
+
+        diasDisponibles.forEach((dia) => {
+            const opt = document.createElement('option');
+            opt.value = dia;
+            opt.textContent = dia;
+            if (dia === valorDia) {
+                opt.selected = true;
+            }
+            selectEl.appendChild(opt);
+        });
+    }
+
+    function sincronizarSelectsFecha(selectAnio, selectMes, selectDia) {
+        const anioSeleccionado = Number.parseInt(selectAnio.value, 10);
+        const mesPrevio = selectMes.value;
+        const diaPrevio = selectDia.value;
+
+        generarMeses(selectMes, anioSeleccionado, mesPrevio);
+        generarDias(selectDia, selectAnio.value, selectMes.value, diaPrevio);
     }
 
     function generarHoras(selectEl, defaultHour = '14') {
@@ -274,19 +303,16 @@ function initCrearEvento() {
     const selectFechaPubDia = document.getElementById('fechaPubDia');
 
     generarAnios(selectFechaPubAnio);
-    generarMeses(selectFechaPubMes);
-    generarDias(selectFechaPubDia);
+    sincronizarSelectsFecha(selectFechaPubAnio, selectFechaPubMes, selectFechaPubDia);
     generarHoras(document.getElementById('horaInicio'), '14');
     generarHoras(document.getElementById('horaFin'), '17');
 
-    actualizarDiasDisponibles(selectFechaPubAnio, selectFechaPubMes, selectFechaPubDia);
-
     selectFechaPubAnio.addEventListener('change', () => {
-        actualizarDiasDisponibles(selectFechaPubAnio, selectFechaPubMes, selectFechaPubDia);
+        sincronizarSelectsFecha(selectFechaPubAnio, selectFechaPubMes, selectFechaPubDia);
     });
 
     selectFechaPubMes.addEventListener('change', () => {
-        actualizarDiasDisponibles(selectFechaPubAnio, selectFechaPubMes, selectFechaPubDia);
+        sincronizarSelectsFecha(selectFechaPubAnio, selectFechaPubMes, selectFechaPubDia);
     });
 
     marcarSelectsRequeridos(formRoot, '#fechaPubAnio, #fechaPubMes, #fechaPubDia, #horaInicio, #horaFin, #fechaFinAnio, #fechaFinMes, #fechaFinDia');
@@ -297,17 +323,14 @@ function initCrearEvento() {
     const selectFechaFinDia = document.getElementById('fechaFinDia');
 
     generarAnios(selectFechaFinAnio);
-    generarMeses(selectFechaFinMes);
-    generarDias(selectFechaFinDia);
-
-    actualizarDiasDisponibles(selectFechaFinAnio, selectFechaFinMes, selectFechaFinDia);
+    sincronizarSelectsFecha(selectFechaFinAnio, selectFechaFinMes, selectFechaFinDia);
 
     selectFechaFinAnio.addEventListener('change', () => {
-        actualizarDiasDisponibles(selectFechaFinAnio, selectFechaFinMes, selectFechaFinDia);
+        sincronizarSelectsFecha(selectFechaFinAnio, selectFechaFinMes, selectFechaFinDia);
     });
 
     selectFechaFinMes.addEventListener('change', () => {
-        actualizarDiasDisponibles(selectFechaFinAnio, selectFechaFinMes, selectFechaFinDia);
+        sincronizarSelectsFecha(selectFechaFinAnio, selectFechaFinMes, selectFechaFinDia);
     });
 
     // ── Fechas del evento dinámicas (+ / -) ───────────────────────
@@ -322,17 +345,14 @@ function initCrearEvento() {
             select.setAttribute('aria-required', 'true');
         });
         generarAnios(fechaSelects[0]);
-        generarMeses(fechaSelects[1]);
-        generarDias(fechaSelects[2]);
-
-        actualizarDiasDisponibles(fechaSelects[0], fechaSelects[1], fechaSelects[2]);
+        sincronizarSelectsFecha(fechaSelects[0], fechaSelects[1], fechaSelects[2]);
 
         fechaSelects[0].addEventListener('change', () => {
-            actualizarDiasDisponibles(fechaSelects[0], fechaSelects[1], fechaSelects[2]);
+            sincronizarSelectsFecha(fechaSelects[0], fechaSelects[1], fechaSelects[2]);
         });
 
         fechaSelects[1].addEventListener('change', () => {
-            actualizarDiasDisponibles(fechaSelects[0], fechaSelects[1], fechaSelects[2]);
+            sincronizarSelectsFecha(fechaSelects[0], fechaSelects[1], fechaSelects[2]);
         });
     }
 
@@ -984,6 +1004,7 @@ function initCrearEvento() {
 
             const draftManager = globalThis.crearEventoDraftManager;
             draftManager?.discardForm?.();
+            draftManager?.resetDraftKey?.();
             mostrarModalEventoEnviado();
             irAPaso1();
         } catch (error) {
@@ -1250,6 +1271,25 @@ function clearCrearEventoFormData() {
         return;
     }
 
+    const keepOnlyFirstRow = (wrapperSelector, rowSelector) => {
+        const wrapper = formRoot.querySelector(wrapperSelector);
+        if (!wrapper) {
+            return;
+        }
+
+        const rows = wrapper.querySelectorAll(rowSelector);
+        rows.forEach((row, index) => {
+            if (index > 0) {
+                row.remove();
+            }
+        });
+    };
+
+    keepOnlyFirstRow('#fechasEventoWrapper', '.ceFechaRow');
+    keepOnlyFirstRow('#imagenesWrapper', '.ceFileRow');
+    keepOnlyFirstRow('#videosWrapper', '.ceFileRow');
+    keepOnlyFirstRow('#referenciasWrapper', '.ceRefRow');
+
     const fields = formRoot.querySelectorAll('input, textarea, select, [contenteditable="true"]');
     fields.forEach((field) => {
         if (field.getAttribute('contenteditable') === 'true') {
@@ -1280,6 +1320,67 @@ function clearCrearEventoFormData() {
     formRoot.querySelectorAll('.ceFileName').forEach((fileNameEl) => {
         fileNameEl.textContent = 'Adjuntar Documento';
     });
+
+    const tipoFormulario = formRoot.querySelector('#tipoFormulario');
+    const subFormInscripcion = formRoot.querySelector('#subFormInscripcion');
+    const subFormConfirmacion = formRoot.querySelector('#subFormConfirmacion');
+
+    if (tipoFormulario) {
+        tipoFormulario.value = '';
+    }
+
+    subFormInscripcion?.classList.add('d-none');
+    subFormConfirmacion?.classList.add('d-none');
+
+    const hoy = new Date();
+    const anio = String(hoy.getFullYear());
+    const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dia = String(hoy.getDate()).padStart(2, '0');
+
+    const setFecha = (anioEl, mesEl, diaEl) => {
+        if (!anioEl || !mesEl || !diaEl) {
+            return;
+        }
+
+        anioEl.value = anio;
+        anioEl.dispatchEvent(new Event('change', { bubbles: true }));
+        if (Array.from(mesEl.options).some((opt) => opt.value === mes)) {
+            mesEl.value = mes;
+            mesEl.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        if (Array.from(diaEl.options).some((opt) => opt.value === dia)) {
+            diaEl.value = dia;
+        }
+    };
+
+    setFecha(
+        formRoot.querySelector('#fechaPubAnio'),
+        formRoot.querySelector('#fechaPubMes'),
+        formRoot.querySelector('#fechaPubDia'),
+    );
+
+    setFecha(
+        formRoot.querySelector('#fechaFinAnio'),
+        formRoot.querySelector('#fechaFinMes'),
+        formRoot.querySelector('#fechaFinDia'),
+    );
+
+    const primeraFechaEvento = formRoot.querySelector('#fechasEventoWrapper .ceFechaRow');
+    if (primeraFechaEvento) {
+        const selects = primeraFechaEvento.querySelectorAll('select');
+        setFecha(selects[0], selects[1], selects[2]);
+    }
+
+    const horaInicio = formRoot.querySelector('#horaInicio');
+    const horaFin = formRoot.querySelector('#horaFin');
+
+    if (horaInicio && Array.from(horaInicio.options).some((opt) => opt.value === '14:00')) {
+        horaInicio.value = '14:00';
+    }
+
+    if (horaFin && Array.from(horaFin.options).some((opt) => opt.value === '17:00')) {
+        horaFin.value = '17:00';
+    }
 }
 
 async function restoreCrearEventoDraft() {
