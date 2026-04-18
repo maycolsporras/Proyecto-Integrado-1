@@ -77,6 +77,19 @@ app.get('/', (req, res) => {
     res.send('Servidor en funcionamiento');
 });
 
+app.use((err, req, res, next) => {
+    console.error('Error no manejado:', err);
+    if (res.headersSent) {
+        return next(err);
+    }
+
+    return res.status(err.status || 500).json({
+        ok: false,
+        mensaje: 'Error interno del servidor',
+        detalle: err.message || 'Se produjo un error inesperado.',
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

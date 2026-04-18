@@ -159,11 +159,20 @@ router.post('/', upload.fields([
             id: guardado._id,
         });
     } catch (error) {
-        return res.status(400).json({
+        console.error('Error en POST /api/form-evento:', error);
+
+        const responsePayload = {
             ok: false,
             mensaje: 'No se pudo guardar el formulario del evento',
             detalle: error.message,
-        });
+        };
+
+        if (error.name === 'ValidationError') {
+            responsePayload.mensaje = 'Datos inválidos en el formulario de evento';
+            responsePayload.errores = error.errors;
+        }
+
+        return res.status(error.name === 'ValidationError' ? 400 : 500).json(responsePayload);
     }
 });
 
@@ -307,11 +316,18 @@ router.patch('/:id', upload.fields([
             evento: buildEventoResponse(eventoActualizado),
         });
     } catch (error) {
-        return res.status(400).json({
+        const responsePayload = {
             ok: false,
             mensaje: 'No se pudo actualizar el evento.',
             detalle: error.message,
-        });
+        };
+
+        if (error.name === 'ValidationError') {
+            responsePayload.mensaje = 'Datos inválidos al actualizar el evento';
+            responsePayload.errores = error.errors;
+        }
+
+        return res.status(error.name === 'ValidationError' ? 400 : 500).json(responsePayload);
     }
 });
 
@@ -395,6 +411,34 @@ router.delete('/:id', async (req, res) => {
             detalle: error.message,
         });
     }
+});
+
+router.use((err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+        console.error('MulterError en /api/form-evento:', err);
+
+        const mensaje = err.code === 'LIMIT_FILE_SIZE'
+            ? 'El tamaño de alguno de los archivos excede el límite permitido.'
+            : `Error de subida de archivos: ${err.message}`;
+
+        return res.status(400).json({
+            ok: false,
+            mensaje,
+            detalle: err.message,
+            codigo: err.code,
+        });
+    }
+
+    console.error('Error no manejado en /api/form-evento:', err);
+    if (res.headersSent) {
+        return next(err);
+    }
+
+    return res.status(err.status || 500).json({
+        ok: false,
+        mensaje: 'Error interno en /api/form-evento',
+        detalle: err.message || 'Ocurrió un error inesperado.',
+    });
 });
 
 module.exports = router;

@@ -82,6 +82,33 @@ function esUrlValida(valor) {
     }
 }
 
+function construirUrlImagenEvento(ruta) {
+    if (!ruta || typeof ruta !== 'string') {
+        return '';
+    }
+
+    const pathNormalizado = ruta.replace(/\\/g, '/').trim();
+    if (!pathNormalizado) {
+        return '';
+    }
+
+    if (/^https?:\/\//i.test(pathNormalizado)) {
+        return pathNormalizado;
+    }
+
+    if (/^\/uploads\//.test(pathNormalizado)) {
+        return pathNormalizado;
+    }
+
+    const uploadsIndex = pathNormalizado.indexOf('uploads/');
+    if (uploadsIndex !== -1) {
+        return `/${pathNormalizado.slice(uploadsIndex)}`;
+    }
+
+    const nombreArchivo = pathNormalizado.split('/').pop();
+    return nombreArchivo ? `/uploads/${nombreArchivo}` : '';
+}
+
 function validarCampo(field, { requerido = true, archivoObligatorio = false } = {}) {
     limpiarValidacionCampo(field);
 
@@ -920,14 +947,6 @@ function initCrearEvento() {
         return formData;
     }
 
-    function normalizarRutaImagenBackend(ruta) {
-        if (!ruta) {
-            return '';
-        }
-
-        return ruta.replace(/\\/g, '/').replace(/^\//, '');
-    }
-
     async function obtenerImagenPrincipalDeFormulario() {
         const primerInput = formRoot.querySelector('#imagenesWrapper input[type="file"]');
         const archivo = primerInput?.files?.[0];
@@ -1050,10 +1069,7 @@ function initCrearEvento() {
 
         let imagenFuente = '';
         if (evento.imagenes && Array.isArray(evento.imagenes) && evento.imagenes.length > 0) {
-            const ruta = normalizarRutaImagenBackend(evento.imagenes[0].ruta);
-            if (ruta) {
-                imagenFuente = `/${ruta}`;
-            }
+            imagenFuente = construirUrlImagenEvento(evento.imagenes[0].ruta);
         }
 
         if (!imagenFuente) {
@@ -1102,6 +1118,16 @@ function initCrearEvento() {
 
     aseguraryConectarBotonVistaPrevia();
 
+    async function parseJsonResponse(response) {
+        const text = await response.text();
+
+        try {
+            return text ? JSON.parse(text) : {};
+        } catch (parseError) {
+            throw new Error(`Respuesta del servidor no válida: ${text}`);
+        }
+    }
+
     async function guardarFormularioEvento() {
         const payload = construirPayloadFormularioEvento();
         const formData = construirFormDataEvento(payload);
@@ -1111,7 +1137,7 @@ function initCrearEvento() {
             body: formData,
         });
 
-        const responseBody = await response.json();
+        const responseBody = await parseJsonResponse(response);
 
         if (!response.ok) {
             throw new Error(responseBody?.mensaje || 'No se pudo guardar el formulario de evento.');
@@ -1131,7 +1157,7 @@ function initCrearEvento() {
             body: formData,
         });
 
-        const responseBody = await response.json();
+        const responseBody = await parseJsonResponse(response);
 
         if (!response.ok) {
             throw new Error(responseBody?.mensaje || 'No se pudo actualizar el evento.');
@@ -1971,11 +1997,7 @@ async function fetchBorradorPreviewByKey(draftKey) {
 }
 
 function normalizarRutaImagenPreview(ruta) {
-    if (!ruta) {
-        return '';
-    }
-
-    return ruta.replace(/\\/g, '/').replace(/^[\/]+/, '');
+    return construirUrlImagenEvento(ruta);
 }
 
 function construirPreviewDesdeBorradorSnapshot(snapshot) {
@@ -2117,10 +2139,7 @@ async function renderModalVistaPreviaGlobal(evento) {
 
     let imagenFuente = '';
     if (evento?.imagenes && Array.isArray(evento.imagenes) && evento.imagenes.length > 0) {
-        const ruta = normalizarRutaImagenPreview(evento.imagenes[0].ruta);
-        if (ruta) {
-            imagenFuente = `/${ruta}`;
-        }
+        imagenFuente = construirUrlImagenEvento(evento.imagenes[0].ruta);
     }
 
     if (imagenFuente) {

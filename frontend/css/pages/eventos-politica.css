@@ -106,3 +106,323 @@
         margin-left: 300px !important;
     }
 }
+
+#contenedorEventosCreados {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    #contenedorEventosCreados {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1200px) {
+    #contenedorEventosCreados {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.eventoPoliticaCard {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    border-radius: 24px;
+    border: 1px solid rgba(22, 74, 152, 0.12);
+    overflow: hidden;
+    box-shadow: 0 10px 28px rgba(22, 74, 152, 0.08);
+    background-color: #ffffff;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.eventoPoliticaCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(22, 74, 152, 0.15);
+}
+
+.eventoPoliticaImg {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+}
+
+.eventoPoliticaImg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.eventoPoliticaBody {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex-grow: 1;
+}
+
+.eventoPoliticaTop {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.eventoCardFecha {
+    min-width: 58px;
+    min-height: 64px;
+    padding: 0.9rem 0.75rem;
+    border-radius: 18px;
+    background-color: #164a98;
+    color: #ffffff;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.eventoCardFecha span {
+    display: block;
+    line-height: 1;
+}
+
+.eventoCardFecha .fechaDia {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.eventoCardFecha .fechaMes {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.eventoPoliticaInfo h3 {
+    font-size: 1rem;
+    line-height: 1.3;
+    margin-bottom: 0.55rem;
+    color: #164a98;
+}
+
+.eventoPoliticaInfo p {
+    margin-bottom: 0.5rem;
+    color: #5b6771;
+}
+
+.eventoPoliticaInfo p i {
+    width: 1rem;
+    display: inline-block;
+    color: #164a98;
+}
+
+.eventoPoliticaFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: auto;
+}
+
+.eventoPoliticaLink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background-color: #164a98;
+    color: #ffffff;
+    font-size: 1.35rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+.eventoPoliticaLink:hover,
+.eventoPoliticaLink:focus {
+    background-color: #0f386d;
+    text-decoration: none;
+}
+
+.eventoPoliticaDetalleContainer {
+    grid-column: 1 / -1;
+}
+
+.eventoPoliticaCardPlaceholder,
+.eventoPoliticaError {
+    padding: 2rem;
+    border-radius: 18px;
+    background-color: rgba(22, 74, 152, 0.05);
+    border: 1px dashed rgba(22, 74, 152, 0.25);
+    color: #164a98;
+    text-align: center;
+}
+
+.eventoPoliticaDetalle {
+    margin-top: 2rem;
+}
+
+.eventoDetalleHero {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.eventoDetalleHero img {
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+    display: block;
+}
+
+.eventoDetalleHeroTexto {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    background: rgba(22, 74, 152, 0.9);
+    color: #ffffff;
+    padding: 1rem 1.2rem;
+    border-radius: 18px;
+    max-width: min(100%, 640px);
+}
+
+.eventoDetalleHeroTexto h2 {
+    font-size: 2rem;
+    line-height: 1.1;
+    margin: 0.25rem 0 0;
+}
+
+.eventoDetalleHeroFecha {
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.eventoDetalleSection {
+    background-color: #ffffff;
+    border-radius: 24px;
+    border: 1px solid rgba(22, 74, 152, 0.12);
+    padding: 1.5rem;
+}
+
+.eventoDetalleSection h3 {
+    margin-bottom: 1rem;
+    color: #164a98;
+}
+
+.eventoDetalleTexto {
+    color: #4d5a6a;
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+.eventoDetalleCard {
+    border-radius: 24px;
+    padding: 1.5rem;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.eventoDetalleCard--primary {
+    background-color: #164a98;
+    color: #ffffff;
+}
+
+.eventoDetalleCard--secondary {
+    background-color: #f1f6fb;
+    color: #163c79;
+}
+
+.eventoDetalleCard h4 {
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
+}
+
+.eventoDetalleCard p,
+.eventoDetalleCard strong {
+    line-height: 1.7;
+}
+
+.eventoDetalleBoton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    margin-top: 1rem;
+    padding: 0.7rem 1.1rem;
+    border-radius: 12px;
+    background-color: #ffffff;
+    color: #164a98;
+    text-decoration: none;
+    font-weight: 700;
+    border: none;
+}
+
+.eventoDetalleBoton:hover,
+.eventoDetalleBoton:focus {
+    background-color: #0f386d;
+    color: #ffffff;
+}
+
+.eventoDetalleVolverBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(22, 74, 152, 0.2);
+    background-color: #ffffff;
+    color: #164a98;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.eventoDetalleVolverBtn:hover,
+.eventoDetalleVolverBtn:focus {
+    background-color: #164a98;
+    color: #ffffff;
+}
+
+.eventoDetalleInfoBox {
+    background-color: #ffffff;
+    border-radius: 24px;
+    border: 1px solid rgba(22, 74, 152, 0.12);
+    padding: 1.5rem;
+}
+
+.eventoDetalleInfoBox h4 {
+    margin-bottom: 1rem;
+    color: #164a98;
+}
+
+.eventoDetalleInfoBox p {
+    margin-bottom: 0.75rem;
+    color: #4d5a6a;
+}
+
+.eventoDetalleInfoBox p i {
+    margin-right: 0.6rem;
+    color: #164a98;
+}
+
+.eventoPoliticaLink {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background-color: #164a98;
+    color: #ffffff;
+    font-size: 1.35rem;
+    border: none;
+}
+
+.eventoPoliticaLink:hover,
+.eventoPoliticaLink:focus {
+    background-color: #0f386d;
+    text-decoration: none;
+}
