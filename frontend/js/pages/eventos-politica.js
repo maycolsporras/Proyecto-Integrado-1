@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const contenedorEventosCreados = document.getElementById('contenedorEventosCreados');
 const filtroNombre = document.getElementById('buscar-evento');
+const formularioFiltros = document.querySelector('form[role="search"][aria-label="Filtros de búsqueda de eventos"]');
 const filtrosFecha = {
   desdeAnio: document.getElementById('desde-anio'),
   desdeMes: document.getElementById('desde-mes'),
@@ -16,6 +17,9 @@ const filtrosFecha = {
 
 async function cargarEventosPolitica() {
   if (!contenedorEventosCreados) return;
+
+  mostrarFiltrosPolitica();
+  desactivarModoDetallePantallaCompleta();
 
   contenedorEventosCreados.innerHTML = '<p class="text-muted">Cargando eventos...</p>';
 
@@ -276,11 +280,15 @@ window.addEventListener('popstate', (evento) => {
 function volverAlListado() {
   window.history.pushState({}, '', './eventos-politica.html');
   restaurarBreadcrumb();
+  mostrarFiltrosPolitica();
   cargarEventosPolitica();
 }
 
 async function cargarDetalleEvento(eventoId, nombreEvento = '') {
   if (!contenedorEventosCreados) return;
+
+  ocultarFiltrosPolitica();
+  activarModoDetallePantallaCompleta();
 
   contenedorEventosCreados.innerHTML = '<div class="eventoPoliticaCardPlaceholder">Cargando detalle del evento...</div>';
 
@@ -292,7 +300,7 @@ async function cargarDetalleEvento(eventoId, nombreEvento = '') {
     }
 
     contenedorEventosCreados.innerHTML = crearDetalleEvento(evento);
-    document.querySelector('.eventoDetalleVolverBtn')?.addEventListener('click', volverAlListado);
+    configurarLecturaFacilEventoDetalle();
     actualizarBreadcrumb(evento.nombreEvento || nombreEvento);
   } catch (error) {
     console.error('Error al cargar el detalle del evento:', error);
@@ -342,6 +350,7 @@ function crearDetalleEvento(evento) {
   const fecha = obtenerFechaPrincipal(evento) || new Date();
   const dia = String(fecha.getDate()).padStart(2, '0');
   const mes = fecha.toLocaleString('es-CR', { month: 'short' }).toUpperCase();
+  const mesLargo = fecha.toLocaleString('es-CR', { month: 'long' });
   const fechaFormateada = fecha.toLocaleDateString('es-CR', {
     day: '2-digit',
     month: 'long',
@@ -355,73 +364,347 @@ function crearDetalleEvento(evento) {
   const imagen = obtenerUrlImagenEvento(evento.imagenes) || './assets/img/eventos-discapacidad.webp';
   const contactoNombre = evento.contacto?.nombreCompleto || 'Contacto disponible';
   const contactoEmail = evento.contacto?.correoElectronico || 'No disponible';
-  const publicoMeta = evento.publicoMeta || 'No disponible';
-  const cupoEvento = evento.cupoEvento || 'No especificado';
   const descripcion = evento.descripcionEvento || '';
+  const publicoMeta = evento.publicoMeta || 'No disponible';
+  const contactoTelefono = evento.contacto?.telefono || 'No disponible';
+  const contactoInstitucion = evento.contacto?.institucion || '';
+  const cupoEvento = evento.cupoEvento ? `${evento.cupoEvento} cupos disponibles` : 'Cupos no especificados';
   const objetivos = evento.objetivosEvento || '';
   const agenda = evento.agendaEvento || '';
   const infoAdicional = evento.infoAdicional || '';
   const linkCalendar = evento.linkCalendar || '#';
 
+  const objetivosHtml = construirListaDesdeTexto(objetivos, 2);
+  const agendaHtml = construirFilasAgendaDesdeTexto(agenda);
+  const infoAdicionalHtml = construirParrafosDesdeTexto(infoAdicional);
+  const imagenesCarrusel = obtenerImagenesCarrusel(evento.imagenes, imagen);
+  const carouselId = `eventoPoliticaCarousel-${String(evento._id || 'detalle').replace(/[^a-zA-Z0-9_-]/g, '')}`;
+
   return `
-    <section class="eventoPoliticaDetalle" aria-labelledby="tituloDetalleEvento">
-      <div class="eventoDetalleHero">
-        <img src="${escapeHtml(imagen)}" alt="Imagen del evento ${escapeHtml(nombreEvento)}">
-        <div class="eventoDetalleHeroTexto">
-          <span class="eventoDetalleHeroFecha">${dia} ${mes}</span>
-          <h2 id="tituloDetalleEvento">${escapeHtml(nombreEvento)}</h2>
-        </div>
-      </div>
-
-      <div class="mt-4">
-        <button type="button" class="eventoDetalleVolverBtn">Volver a Eventos</button>
-      </div>
-
-      <div class="row g-4 mt-4">
-        <div class="col-12 col-xl-8">
-          <div class="eventoDetalleSection">
-            <h3>Descripción</h3>
-            <div class="eventoDetalleTexto">${convertirLineas(descripcion)}</div>
-          </div>
-
-          <div class="eventoDetalleSection d-flex flex-column flex-lg-row gap-4">
-            <div class="eventoDetalleCard eventoDetalleCard--primary">
-              <h4>Público Meta</h4>
-              <p>${escapeHtml(publicoMeta)}</p>
-              <strong>${escapeHtml(cupoEvento)}</strong>
-              <a class="eventoDetalleBoton" href="${escapeHtml(linkCalendar)}" target="_blank" rel="noopener noreferrer">Inscripción a Evento</a>
-            </div>
-
-            <div class="eventoDetalleCard eventoDetalleCard--secondary">
-              <h4>Objetivos</h4>
-              <div class="eventoDetalleTexto">${convertirLineas(objetivos)}</div>
-            </div>
-          </div>
-
-          <div class="eventoDetalleSection">
-            <h3>Programa / Agenda del evento</h3>
-            <div class="eventoDetalleTexto">${convertirLineas(agenda)}</div>
-          </div>
-
-          <div class="eventoDetalleSection">
-            <h3>Información Adicional</h3>
-            <div class="eventoDetalleTexto">${convertirLineas(infoAdicional)}</div>
-          </div>
+    <div class="eventoPoliticaDetalleContainer">
+      <div id="estructuraEventosPolitica" class="eventoPoliticaDetalleWrapper">
+      <section class="eventoPoliticaDetalleVista" aria-labelledby="titulo-evento-politica">
+        <div class="eventoPoliticaHeroPortada">
+          <img src="${escapeHtml(imagen)}" alt="Imagen del evento ${escapeHtml(nombreEvento)}">
         </div>
 
-        <aside class="col-12 col-xl-4">
-          <div class="eventoDetalleInfoBox">
-            <h4>Información del evento</h4>
-            <p><i class="fa-regular fa-calendar"></i> ${fechaFormateada}</p>
-            <p><i class="fa-regular fa-clock"></i> ${escapeHtml(horaInicio)} - ${escapeHtml(horaFin)}</p>
-            <p><i class="fa-solid fa-location-dot"></i> ${escapeHtml(lugar)}</p>
-            <p><i class="fa-solid fa-user"></i> ${escapeHtml(contactoNombre)}</p>
-            <p><i class="fa-solid fa-envelope"></i> ${escapeHtml(contactoEmail)}</p>
+        <div class="eventoPoliticaContenidoInterior px-lg-5">
+          <div class="eventoPoliticaTituloFranja d-flex align-items-center gap-3">
+            <div class="eventoPoliticaFechaBadge" aria-hidden="true">
+              <span class="eventoPoliticaFechaDia">${dia}</span>
+              <span class="eventoPoliticaFechaMes">${mes}</span>
+            </div>
+            <h1 id="titulo-evento-politica" class="eventoPoliticaTituloPrincipal mb-0">${escapeHtml(nombreEvento)}</h1>
           </div>
-        </aside>
+
+          <div class="row g-4 eventoPoliticaContenido pt-4">
+            <div class="col-12 col-lg-7">
+              <section class="eventoPoliticaBloqueContenido" aria-labelledby="titulo-descripcion-evento">
+                <h2 id="titulo-descripcion-evento" class="eventoPoliticaSeccionTitulo">Descripción</h2>
+                <div class="eventoPoliticaInfoAdicionalTexto">${construirParrafosDesdeTexto(descripcion)}</div>
+
+                <h2 class="eventoPoliticaSeccionTitulo mt-4">Objetivos</h2>
+                <ol class="eventoPoliticaListaObjetivos">${objetivosHtml}</ol>
+              </section>
+            </div>
+
+            <div class="col-12 col-lg-5">
+              <aside class="eventoPoliticaSidebar d-flex flex-column gap-3" aria-label="Información complementaria del evento">
+                <section class="eventoPoliticaCaja eventoPoliticaCajaClara" aria-labelledby="titulo-info-evento">
+                  <h2 id="titulo-info-evento" class="eventoPoliticaSeccionTitulo">Información del evento</h2>
+                  <ul class="eventoPoliticaListaInfo">
+                    <li><i class="fa-regular fa-calendar" aria-hidden="true"></i> ${fechaFormateada}</li>
+                    <li><i class="fa-regular fa-clock" aria-hidden="true"></i> ${escapeHtml(horaInicio)} - ${escapeHtml(horaFin)}</li>
+                    <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${escapeHtml(lugar)}</li>
+                  </ul>
+                  <div class="eventoPoliticaContacto">
+                    <p class="mb-1 fw-semibold">${escapeHtml(contactoNombre)}${contactoInstitucion ? `<br>${escapeHtml(contactoInstitucion)}` : ''}</p>
+                    <p class="mb-1">Teléfono: ${escapeHtml(contactoTelefono)}</p>
+                    <p class="mb-0">Correo electrónico: ${escapeHtml(contactoEmail)}</p>
+                  </div>
+                </section>
+
+                <section class="eventoPoliticaCaja eventoPoliticaCajaAzul" aria-labelledby="titulo-publico-meta">
+                  <h2 id="titulo-publico-meta" class="eventoPoliticaSeccionTitulo text-white">Público Meta</h2>
+                  <p class="eventoPoliticaTextoBlanco">${escapeHtml(publicoMeta)}</p>
+                  <div class="eventoPoliticaAccionMeta d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3">
+                    <strong class="eventoPoliticaCupos">${escapeHtml(cupoEvento)}</strong>
+                    <a class="eventoPoliticaBotonInscripcion text-decoration-none" href="${escapeHtml(linkCalendar)}" target="_blank" rel="noopener noreferrer">Inscripción a Evento</a>
+                  </div>
+                </section>
+
+                <section class="eventoPoliticaEnlaceEvento" aria-labelledby="titulo-enlace-evento">
+                  <h2 id="titulo-enlace-evento" class="eventoPoliticaSeccionTitulo">Enlace del evento</h2>
+                  <a href="${escapeHtml(linkCalendar)}" target="_blank" rel="noopener noreferrer">${escapeHtml(linkCalendar)}</a>
+                </section>
+              </aside>
+            </div>
+          </div>
+        </div>
+
+        <div class="eventoPoliticaInfoAdicionalCard mt-5">
+          <div class="eventoPoliticaInfoAdicionalContenido">
+            <section class="eventoPoliticaAgendaSection" aria-labelledby="titulo-agenda-evento">
+              <h2 id="titulo-agenda-evento" class="eventoPoliticaAgendaTitulo">Programa / Agenda del evento</h2>
+
+              <div class="eventoPoliticaAgendaTabla mt-3">
+                <div class="eventoPoliticaAgendaCabecera">Día ${dia} de ${escapeHtml(mesLargo)} ${fecha.getFullYear()}</div>
+                ${agendaHtml}
+              </div>
+            </section>
+
+            <h2 id="titulo-info-adicional" class="eventoPoliticaInfoAdicionalTitulo">Información Adicional</h2>
+            <div class="eventoPoliticaInfoAdicionalTexto">${infoAdicionalHtml}</div>
+
+            <div class="eventoPoliticaInfoAdicionalAcciones d-flex flex-wrap gap-3 mt-4">
+              <button id="btnLecturaFacilEvento" type="button" class="eventoPoliticaInfoAdicionalBtn eventoPoliticaInfoAdicionalBtn--primary" aria-controls="lecturaFacilVentana" aria-expanded="false">Lectura Fácil del Evento</button>
+              <button type="button" class="eventoPoliticaInfoAdicionalBtn eventoPoliticaInfoAdicionalBtn--secondary">Realizar consulta</button>
+            </div>
+
+            <div id="lecturaFacilVentana" class="eventoPoliticaLecturaFacilVentana d-none" role="region" aria-live="polite" aria-labelledby="lecturaFacilTitulo">
+              <h3 id="lecturaFacilTitulo" class="eventoPoliticaLecturaFacilTitulo"></h3>
+              <div id="lecturaFacilContenido" class="eventoPoliticaLecturaFacilContenido"></div>
+            </div>
+
+            <div id="${carouselId}" class="carousel slide eventoPoliticaCarruselWrap mt-5" data-bs-ride="false" aria-label="Galería del evento">
+              <div class="carousel-indicators eventoPoliticaCarruselIndicadores">
+                ${imagenesCarrusel
+                  .map((_, indice) => `<button type="button" data-bs-target="#${carouselId}" data-bs-slide-to="${indice}" class="eventoPoliticaCarruselDot ${indice === 0 ? 'active' : ''}" ${indice === 0 ? 'aria-current="true"' : ''} aria-label="Diapositiva ${indice + 1}"></button>`)
+                  .join('')}
+              </div>
+
+              <div class="carousel-inner eventoPoliticaCarruselVista">
+                ${imagenesCarrusel
+                  .map((src, indice) => `<div class="carousel-item ${indice === 0 ? 'active' : ''}"><img src="${escapeHtml(src)}" class="d-block w-100 eventoPoliticaCarruselImagen" alt="Imagen ${indice + 1} del evento ${escapeHtml(nombreEvento)}"></div>`)
+                  .join('')}
+              </div>
+
+              <button class="carousel-control-prev eventoPoliticaCarruselControl" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev" aria-label="Ver imagen anterior">
+                <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+              </button>
+              <button class="carousel-control-next eventoPoliticaCarruselControl" type="button" data-bs-target="#${carouselId}" data-bs-slide="next" aria-label="Ver imagen siguiente">
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+              </button>
+            </div>
+
+            <div class="text-center mt-4">
+              <a class="eventoPoliticaInscripcionEventoBtn text-decoration-none" href="${escapeHtml(linkCalendar)}" target="_blank" rel="noopener noreferrer">Inscripción a Evento</a>
+            </div>
+
+            <div class="eventoPoliticaPieAcciones row g-4 mt-5">
+              <div class="col-12 col-lg-6">
+                <div class="eventoPoliticaPieCard eventoPoliticaPieCard--calendar">
+                  <div class="eventoPoliticaPieIcono">
+                    <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <p class="eventoPoliticaPieTitulo">Ver en evento en calendario:</p>
+                    <a href="${escapeHtml(linkCalendar)}" class="eventoPoliticaPieEnlace" target="_blank" rel="noopener noreferrer">${escapeHtml(linkCalendar)}</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-lg-6">
+                <div class="eventoPoliticaPieCard eventoPoliticaPieCard--share justify-content-lg-between">
+                  <p class="eventoPoliticaPieTitulo mb-0">PUBLICAR EVENTO:</p>
+                  <div class="eventoPoliticaRedesSociales" aria-label="Compartir evento">
+                    <a href="#" aria-label="Compartir en Facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Compartir en Twitter"><i class="fa-brands fa-twitter" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="Compartir en LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       </div>
-    </section>
+    </div>
   `;
+}
+
+function ocultarFiltrosPolitica() {
+  if (!formularioFiltros) return;
+  formularioFiltros.classList.add('d-none');
+}
+
+function mostrarFiltrosPolitica() {
+  if (!formularioFiltros) return;
+  formularioFiltros.classList.remove('d-none');
+}
+
+function activarModoDetallePantallaCompleta() {
+  if (!contenedorEventosCreados) return;
+  contenedorEventosCreados.classList.add('eventoPoliticaDetallePantallaCompleta');
+}
+
+function desactivarModoDetallePantallaCompleta() {
+  if (!contenedorEventosCreados) return;
+  contenedorEventosCreados.classList.remove('eventoPoliticaDetallePantallaCompleta');
+}
+
+function construirListaDesdeTexto(texto, maxItems = 4) {
+  const items = String(texto || '')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .split(/\r?\n+/)
+    .map((item) => item.replace(/<[^>]+>/g, '').trim())
+    .filter(Boolean)
+    .slice(0, maxItems);
+
+  if (!items.length) {
+    return '<li>No hay objetivos registrados para este evento.</li>';
+  }
+
+  return items.map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+}
+
+function construirFilasAgendaDesdeTexto(texto) {
+  const lineas = String(texto || '')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .split(/\r?\n+/)
+    .map((linea) => linea.replace(/<[^>]+>/g, '').trim())
+    .filter(Boolean);
+
+  if (!lineas.length) {
+    return `
+      <div class="eventoPoliticaAgendaFila">
+        <div class="eventoPoliticaAgendaHora">Pendiente</div>
+        <div class="eventoPoliticaAgendaDetalle">No hay agenda registrada para este evento.</div>
+      </div>
+    `;
+  }
+
+  return lineas
+    .slice(0, 8)
+    .map((linea) => {
+      const partes = linea.split(/\s*-\s*|\s*:\s*/);
+      const tieneHora = /\d{1,2}(:\d{2})?/i.test(linea);
+      const hora = tieneHora ? partes.slice(0, 2).join(' - ') : 'Actividad';
+      const detalle = tieneHora ? linea.replace(hora, '').replace(/^\s*[-:]/, '').trim() : linea;
+
+      return `
+        <div class="eventoPoliticaAgendaFila">
+          <div class="eventoPoliticaAgendaHora">${escapeHtml(hora || 'Actividad')}</div>
+          <div class="eventoPoliticaAgendaDetalle">${escapeHtml(detalle || linea)}</div>
+        </div>
+      `;
+    })
+    .join('');
+}
+
+function construirParrafosDesdeTexto(texto) {
+  const parrafos = String(texto || '')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .split(/\r?\n+/)
+    .map((parrafo) => parrafo.replace(/<[^>]+>/g, '').trim())
+    .filter(Boolean);
+
+  if (!parrafos.length) {
+    return '<p>No hay información disponible.</p>';
+  }
+
+  return parrafos.map((parrafo) => `<p>${escapeHtml(parrafo)}</p>`).join('');
+}
+
+function obtenerImagenesCarrusel(imagenesEvento, fallback) {
+  const imagenes = Array.isArray(imagenesEvento)
+    ? imagenesEvento
+      .map((imagenItem) => obtenerUrlImagenEvento([imagenItem]))
+      .filter(Boolean)
+    : [];
+
+  if (!imagenes.length) {
+    return [fallback, fallback, fallback, fallback];
+  }
+
+  const resultado = imagenes.slice(0, 4);
+  while (resultado.length < 4) {
+    resultado.push(resultado[resultado.length - 1]);
+  }
+  return resultado;
+}
+
+function configurarLecturaFacilEventoDetalle() {
+  const botonLecturaFacil = document.getElementById('btnLecturaFacilEvento');
+  const ventanaLectura = document.getElementById('lecturaFacilVentana');
+  const tituloLectura = document.getElementById('lecturaFacilTitulo');
+  const contenidoLectura = document.getElementById('lecturaFacilContenido');
+
+  if (!botonLecturaFacil || !ventanaLectura || !tituloLectura || !contenidoLectura) {
+    return;
+  }
+
+  botonLecturaFacil.addEventListener('click', () => {
+    const estaVisible = !ventanaLectura.classList.contains('d-none');
+    if (estaVisible) {
+      ventanaLectura.classList.add('d-none');
+      botonLecturaFacil.classList.remove('is-active');
+      botonLecturaFacil.setAttribute('aria-expanded', 'false');
+      return;
+    }
+
+    const resumen = generarResumenLecturaFacilDetalle();
+    tituloLectura.textContent = resumen.titulo;
+    contenidoLectura.innerHTML = resumen.parrafos
+      .map((parrafo) => `<p>${escapeHtml(parrafo)}</p>`)
+      .join('');
+
+    ventanaLectura.classList.remove('d-none');
+    botonLecturaFacil.classList.add('is-active');
+    botonLecturaFacil.setAttribute('aria-expanded', 'true');
+    ventanaLectura.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
+function generarResumenLecturaFacilDetalle() {
+  const tituloEvento = obtenerTextoDetalle('#titulo-evento-politica', 'Evento sin título');
+
+  const descripcion = Array.from(document.querySelectorAll('.eventoPoliticaBloqueContenido p'))
+    .map((elemento) => elemento.textContent.trim())
+    .filter(Boolean);
+
+  const objetivos = Array.from(document.querySelectorAll('.eventoPoliticaListaObjetivos li'))
+    .map((elemento) => elemento.textContent.trim())
+    .filter(Boolean);
+
+  const agenda = Array.from(document.querySelectorAll('.eventoPoliticaAgendaFila'))
+    .map((fila) => {
+      const hora = fila.querySelector('.eventoPoliticaAgendaHora')?.textContent.trim();
+      const detalle = fila.querySelector('.eventoPoliticaAgendaDetalle')?.textContent.trim();
+      return hora && detalle ? `${hora}: ${detalle}` : null;
+    })
+    .filter(Boolean);
+
+  const datosEvento = Array.from(document.querySelectorAll('.eventoPoliticaListaInfo li'))
+    .map((elemento) => elemento.textContent.replace(/\s+/g, ' ').trim())
+    .filter(Boolean);
+
+  const cupos = obtenerTextoDetalle('.eventoPoliticaCupos', 'Cupos no especificados');
+
+  const parrafos = [`Este evento se llama ${tituloEvento}.`];
+  if (datosEvento.length > 0) {
+    parrafos.push(`Datos clave: ${datosEvento.join('. ')}.`);
+  }
+  if (descripcion.length > 0) {
+    parrafos.push(`Resumen rápido: ${descripcion.slice(0, 2).join(' ')}`);
+  }
+  if (objetivos.length > 0) {
+    parrafos.push(`Objetivos principales: ${objetivos.slice(0, 2).join(' ')}`);
+  }
+  if (agenda.length > 0) {
+    parrafos.push(`Agenda del evento: ${agenda.slice(0, 3).join(' / ')}.`);
+  }
+  parrafos.push(`Disponibilidad: ${cupos}.`);
+
+  return {
+    titulo: tituloEvento,
+    parrafos,
+  };
+}
+
+function obtenerTextoDetalle(selector, respaldo) {
+  const elemento = document.querySelector(selector);
+  const texto = elemento?.textContent.trim();
+  return texto || respaldo;
 }
 
 function convertirLineas(texto) {

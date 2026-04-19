@@ -113,6 +113,17 @@
     gap: 1.5rem;
 }
 
+#contenedorEventosCreados.eventoPoliticaDetallePantallaCompleta {
+    grid-template-columns: 1fr !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    width: 100%;
+    max-width: none;
+    gap: 0;
+}
+
 @media (min-width: 768px) {
     #contenedorEventosCreados {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -425,4 +436,565 @@
 .eventoPoliticaLink:focus {
     background-color: #0f386d;
     text-decoration: none;
+}
+
+.eventoPoliticaDetalleWrapper {
+    margin-top: 0;
+    width: 100%;
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.eventoPoliticaDetalleVista {
+    background: #ffffff;
+    border: none;
+    box-shadow: none;
+    overflow: hidden;
+    width: 100%;
+}
+
+.eventoPoliticaContenidoInterior {
+    display: block;
+}
+
+.eventoPoliticaHeroPortada img {
+    display: block;
+    width: 100%;
+    height: 330px;
+    object-fit: cover;
+}
+
+.eventoPoliticaTituloFranja {
+    margin-top: -1px;
+    background: #f1f4f8;
+    border-top: 1px solid rgba(22, 74, 152, 0.06);
+    border-bottom: 1px solid rgba(22, 74, 152, 0.06);
+    padding: 0;
+}
+
+.eventoPoliticaFechaBadge {
+    width: 74px;
+    min-height: 62px;
+    background: #263d69;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.1rem;
+    flex: 0 0 auto;
+}
+
+.eventoPoliticaFechaDia {
+    font-size: 1.9rem;
+    line-height: 1;
+    font-weight: 700;
+}
+
+.eventoPoliticaFechaMes {
+    font-size: 0.82rem;
+    line-height: 1;
+    letter-spacing: 0.08em;
+}
+
+.eventoPoliticaTituloPrincipal {
+    padding: 0.8rem 0.6rem;
+    font-size: clamp(1.15rem, 1.8vw, 1.75rem);
+    line-height: 1.2;
+    color: #243a66;
+    font-weight: 700;
+}
+
+.eventoPoliticaContenido {
+    padding: 0 1.25rem 1.5rem;
+}
+
+@media (min-width: 992px) {
+    .eventoPoliticaHeroPortada {
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        width: 100vw;
+    }
+
+    .eventoPoliticaHeroPortada img {
+        width: 100vw;
+        max-width: none;
+    }
+
+    .eventoPoliticaContenidoInterior {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 1320px;
+    }
+}
+
+.eventoPoliticaBloqueContenido,
+.eventoPoliticaCaja,
+.eventoPoliticaEnlaceEvento {
+    background: #ffffff;
+}
+
+.eventoPoliticaSeccionTitulo {
+    margin-bottom: 0.9rem;
+    color: #3c3c3c;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.eventoPoliticaBloqueContenido p,
+.eventoPoliticaListaObjetivos {
+    color: #444f5d;
+    line-height: 1.65;
+    font-size: 0.95rem;
+}
+
+.eventoPoliticaListaObjetivos {
+    padding-left: 1.2rem;
+    margin-bottom: 0;
+}
+
+.eventoPoliticaListaObjetivos li + li {
+    margin-top: 1rem;
+}
+
+.eventoPoliticaSidebar {
+    margin-top: -0.25rem;
+}
+
+.eventoPoliticaCaja {
+    border-radius: 14px;
+    border: 1px solid rgba(22, 74, 152, 0.14);
+    padding: 1rem 1.1rem;
+}
+
+.eventoPoliticaCajaClara {
+    background: #ffffff;
+}
+
+.eventoPoliticaCajaAzul {
+    background: #435f98;
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.eventoPoliticaCajaAzul .eventoPoliticaSeccionTitulo {
+    color: #ffffff;
+}
+
+.eventoPoliticaListaInfo {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.75rem;
+}
+
+.eventoPoliticaListaInfo li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    margin-bottom: 0.7rem;
+    color: #4d5a6a;
+    font-size: 0.92rem;
+}
+
+.eventoPoliticaListaInfo i {
+    color: #4a67a2;
+    width: 1rem;
+    margin-top: 0.1rem;
+}
+
+.eventoPoliticaContacto {
+    color: #4d5a6a;
+    font-size: 0.9rem;
+    line-height: 1.45;
+}
+
+.eventoPoliticaTextoBlanco {
+    margin-bottom: 1rem;
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.6;
+    font-size: 0.92rem;
+}
+
+.eventoPoliticaCupos {
+    color: #ffffff;
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+    font-size: 0.94rem;
+}
+
+.eventoPoliticaBotonInscripcion {
+    border: 0;
+    border-radius: 4px;
+    background: #ffffff;
+    color: #4a67a2;
+    font-weight: 700;
+    padding: 0.42rem 0.9rem;
+    font-size: 0.9rem;
+}
+
+.eventoPoliticaEnlaceEvento {
+    padding: 0 0.15rem;
+}
+
+.eventoPoliticaEnlaceEvento a {
+    display: inline-block;
+    color: #4d5a6a;
+    font-size: 0.9rem;
+    word-break: break-word;
+    text-decoration: none;
+}
+
+.eventoPoliticaEnlaceEvento a:hover,
+.eventoPoliticaEnlaceEvento a:focus {
+    text-decoration: underline;
+}
+
+.eventoPoliticaInfoAdicionalSection {
+    padding-top: 2rem;
+}
+
+.eventoPoliticaInfoAdicionalCard {
+    background: #ffffff;
+    border-radius: 18px;
+    border: 1px solid rgba(22, 74, 152, 0.12);
+    box-shadow: 0 12px 28px rgba(22, 74, 152, 0.06);
+    padding: 2rem 1.5rem 1.75rem;
+}
+
+.eventoPoliticaInfoAdicionalContenido {
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+.eventoPoliticaInfoAdicionalTitulo {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #1f2d3d;
+    margin-bottom: 1.25rem;
+}
+
+.eventoPoliticaAgendaSection {
+    margin-bottom: 2.5rem;
+}
+
+.eventoPoliticaAgendaTitulo {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #1f2d3d;
+    margin-bottom: 1rem;
+}
+
+.eventoPoliticaAgendaTabla {
+    border-bottom: 1px solid #e6edf6;
+}
+
+.eventoPoliticaAgendaCabecera {
+    background: #4a67a2;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 0.75rem 1rem;
+}
+
+.eventoPoliticaAgendaFila {
+    display: grid;
+    grid-template-columns: minmax(180px, 260px) 1fr;
+    gap: 0.85rem;
+    align-items: center;
+    min-height: 76px;
+    padding: 0.6rem 1rem;
+}
+
+.eventoPoliticaAgendaFila:nth-child(even) {
+    background: #f0f5fa;
+}
+
+.eventoPoliticaAgendaHora {
+    font-weight: 700;
+    color: #353535;
+    font-size: 1rem;
+    padding-left: 0.5rem;
+}
+
+.eventoPoliticaAgendaDetalle {
+    color: #353535;
+    font-size: 0.98rem;
+    line-height: 1.45;
+}
+
+.eventoPoliticaInfoAdicionalTexto p {
+    color: #4d5a6a;
+    line-height: 1.65;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+.eventoPoliticaInfoAdicionalBtn {
+    border: 0;
+    border-radius: 4px;
+    padding: 0.7rem 1.2rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.eventoPoliticaInfoAdicionalBtn--primary {
+    background: #4a67a2;
+    color: #ffffff;
+    box-shadow: 0 3px 8px rgba(74, 103, 162, 0.28);
+}
+
+.eventoPoliticaInfoAdicionalBtn--secondary {
+    background: #d7e3ef;
+    color: #4a67a2;
+}
+
+.eventoPoliticaInfoAdicionalBtn--primary.is-active {
+    background: #0f1f45;
+}
+
+.eventoPoliticaLecturaFacilVentana {
+    margin-top: 1.75rem;
+    background: #0f1f45;
+    color: #f6f8ff;
+    border-radius: 4px;
+    padding: 1.9rem 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.eventoPoliticaLecturaFacilTitulo {
+    font-size: 2rem;
+    line-height: 1.2;
+    margin-bottom: 1.2rem;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.eventoPoliticaLecturaFacilContenido p {
+    margin-bottom: 1rem;
+    line-height: 1.65;
+    color: #f2f5ff;
+}
+
+.eventoPoliticaLecturaFacilContenido p:last-child {
+    margin-bottom: 0;
+}
+
+.eventoPoliticaCarruselWrap {
+    position: relative;
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.eventoPoliticaCarruselVista {
+    background: #d9eef7;
+    padding: 0.8rem;
+    border-radius: 2px;
+    box-shadow: inset 0 0 0 1px rgba(74, 103, 162, 0.1);
+}
+
+.eventoPoliticaCarruselImagen {
+    width: 100%;
+    height: 320px;
+    display: block;
+    object-fit: cover;
+    object-position: center center;
+}
+
+.eventoPoliticaCarruselImagen--top {
+    object-position: center top;
+}
+
+.eventoPoliticaCarruselImagen--bottom {
+    object-position: center bottom;
+}
+
+.eventoPoliticaCarruselImagen--left {
+    object-position: left center;
+}
+
+.eventoPoliticaCarruselControl {
+    opacity: 1;
+    width: auto;
+}
+
+.eventoPoliticaCarruselControl.carousel-control-prev {
+    left: -2.4rem;
+}
+
+.eventoPoliticaCarruselControl.carousel-control-next {
+    right: -2.4rem;
+}
+
+.eventoPoliticaCarruselControl i {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #4a67a2;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 8px rgba(74, 103, 162, 0.28);
+}
+
+.eventoPoliticaCarruselIndicadores {
+    position: static;
+    margin: 0.9rem 0 0;
+    gap: 0.45rem;
+}
+
+.eventoPoliticaCarruselDot {
+    margin: 0 !important;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #4a67a2;
+    border: 0;
+    opacity: 0.75;
+}
+
+.eventoPoliticaCarruselDot.active {
+    opacity: 1;
+    transform: scale(1.15);
+}
+
+.eventoPoliticaInscripcionEventoBtn {
+    border: 0;
+    border-radius: 4px;
+    background: #4a67a2;
+    color: #ffffff;
+    padding: 0.72rem 1.9rem;
+    font-weight: 700;
+    box-shadow: 0 3px 8px rgba(74, 103, 162, 0.28);
+}
+
+.eventoPoliticaPieAcciones {
+        border-top: 1px solid #e7edf5;
+        padding-top: 1.25rem;
+    }
+
+.eventoPoliticaPieCard {
+        min-height: 80px;
+        border-top: 3px solid #e7edf5;
+        border-bottom: 3px solid #e7edf5;
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        padding: 0.85rem 0;
+    }
+
+.eventoPoliticaPieCard--share {
+        justify-content: flex-start;
+    }
+
+.eventoPoliticaPieIcono {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #4a67a2;
+        color: #ffffff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+    }
+
+.eventoPoliticaPieTitulo {
+        margin-bottom: 0.1rem;
+        color: #4a67a2;
+        font-weight: 700;
+        font-size: 0.95rem;
+    }
+
+.eventoPoliticaPieEnlace {
+        color: #6a7380;
+        font-size: 0.85rem;
+        text-decoration: underline;
+    }
+
+.eventoPoliticaRedesSociales {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+    }
+
+.eventoPoliticaRedesSociales a {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #4a67a2;
+        color: #ffffff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 1rem;
+    }
+
+@media (max-width: 991.98px) {
+        .eventoPoliticaInfoAdicionalCard {
+                padding: 1.5rem 1rem;
+        }
+
+    .eventoPoliticaAgendaFila {
+        grid-template-columns: 1fr;
+        gap: 0.4rem;
+    }
+
+        .eventoPoliticaCarruselWrap {
+        max-width: 100%;
+    }
+
+    .eventoPoliticaCarruselControl.carousel-control-prev {
+        left: -0.5rem;
+    }
+
+    .eventoPoliticaCarruselControl.carousel-control-next {
+        right: -0.5rem;
+    }
+
+    .eventoPoliticaCarruselImagen {
+        height: 240px;
+        }
+
+    .eventoPoliticaLecturaFacilVentana {
+        padding: 1.35rem 1.15rem;
+    }
+
+    .eventoPoliticaLecturaFacilTitulo {
+        font-size: 1.35rem;
+    }
+
+        .eventoPoliticaPieCard {
+                justify-content: center;
+        }
+}
+
+@media (min-width: 992px) {
+    .eventoPoliticaContenido {
+        padding: 1.35rem 1.4rem 1.8rem;
+    }
+
+    .eventoPoliticaSidebar {
+        padding-left: 0.4rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .eventoPoliticaTituloFranja {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+
+    .eventoPoliticaFechaBadge {
+        width: 100%;
+        min-height: 54px;
+        flex-direction: row;
+        gap: 0.35rem;
+    }
+
+    .eventoPoliticaTituloPrincipal {
+        padding: 1rem;
+    }
 }
