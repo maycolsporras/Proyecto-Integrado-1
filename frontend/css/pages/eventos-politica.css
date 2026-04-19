@@ -97,7 +97,7 @@
 
 @media (min-width: 991.98px) {
     .offsetDerechaEventos {
-        margin-left: 50px !important;
+        margin-left: 20px !important;
     }
 }
 
@@ -110,7 +110,7 @@
 #contenedorEventosCreados {
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 1.5rem;
+    gap: 0.5rem;
 }
 
 #contenedorEventosCreados.eventoPoliticaDetallePantallaCompleta {
@@ -128,11 +128,15 @@
     #contenedorEventosCreados {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    #contenedorEventosCreados:not(.eventoPoliticaDetallePantallaCompleta) {
+        transform: translateX(-60px);
+    }
 }
 
 @media (min-width: 1200px) {
     #contenedorEventosCreados {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
@@ -148,12 +152,27 @@
     transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
+@media (min-width: 768px) {
+    .eventoPoliticaCard {
+        width: 80%;
+    }
+
+    #contenedorEventosCreados .eventoPoliticaCard:nth-child(odd) {
+        justify-self: end;
+    }
+
+    #contenedorEventosCreados .eventoPoliticaCard:nth-child(even) {
+        justify-self: start;
+    }
+}
+
 .eventoPoliticaCard:hover {
     transform: translateY(-2px);
 }
 
 .eventoPoliticaImg {
     width: 100%;
+    height: 230px;
     overflow: hidden;
 }
 
