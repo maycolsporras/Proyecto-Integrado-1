@@ -259,6 +259,33 @@
 
 
 
+    <!-- Modal lista enviado -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalListaEnviada">
+        Modal Lista Enviada
+    </button>
+
+
+    <div class="modal fade" id="modalListaEnviada" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+            <div class="modal-content modalSuscripcionEnviadaContenido">
+                <div class="modal-body modalSuscripcionEnviadaBody">
+                    <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <p class="modalSuscripcionEnviadaTitulo">Lista Enviada</p>
+                    <p class="modalSuscripcionEnviadaDescripcion">
+                        Se envió la lista con éxito al administrador. Este debe ser revisado y aprobado por el
+                        administrador, para ser publicado en la sección de Listas. Pronto recibirá una notificación
+                        para conocer si la lista fue aprobada o rechazada.
+                    </p>
+                    <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                        data-bs-dismiss="modal">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin modal lista enviada -->
+
 
 
     <!-- Modal evento incompleto -->
@@ -580,7 +607,25 @@
 
 
 
-
+<!-- modal confirmacion rechazo de lista -->
+    <div class="modal fade" id="modalConfirmacionRechazoLista" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalEliminarEventoAncho">
+            <div class="modal-content modalEliminarEventoContenido">
+                <div class="modal-body modalEliminarEventoBody">
+                    <p class="modalEliminarEventoTitulo">¿Rechazar?</p>
+                    <p class="modalEliminarEventoDescripcion">
+                        Al rechazar una lista de difusión esta no puede ser asignada a un suscriptor, ¿está seguro que desea continuar con este proceso?
+                    </p>
+                    <div class="modalEliminarEventoAcciones d-grid gap-3 d-md-flex justify-content-center my-3">
+                        <button type="button" class="btn modalEliminarEventoBtnCancelar px-4"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn modalEliminarEventoBtnEliminar px-4">Rechazar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- fin modal rechazo de suscriptor -->
 
 
 
@@ -752,6 +797,28 @@
 
     <!-- fin modal aprobado y publicar -->
 
+    <!-- Modal lista aprobada -->
+    <div class="modal fade" id="modalListaAprobada" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+            <div class="modal-content modalSuscripcionEnviadaContenido">
+                <div class="modal-body modalSuscripcionEnviadaBody">
+                    <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <p class="modalSuscripcionEnviadaTitulo">Lista Aprobada</p>
+                    <p class="modalSuscripcionEnviadaDescripcion">
+                        Se aprobó con éxito la lista seleccionada. Para modificar o eliminar esta lista puede
+                        realizarlo en la sección del menú principal en <span
+                            class="modalSuscripcionEnviadaDescripcionNegrita">Listas de Difusión.</span>
+                    </p>
+                    <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                        data-bs-dismiss="modal">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- fin modal aprobado y publicar -->
 
         <!-- modal editado -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEventoEditado">

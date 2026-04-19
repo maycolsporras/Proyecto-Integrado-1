@@ -911,12 +911,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <p class="txtCrearLista">Información de la Lista</p>
                                 </div>
                                 <div class="col-12 d-flex justify-content-center align-items-center">
-                                    <form class="w-100" style="max-width: 800px;">
+                                    <form id="formCrearListaDifusion" class="w-100" style="max-width: 800px;" novalidate>
                                         <div class="mb-4">
                                             <div class="row align-items-center">
                                                 <label for="nombreLista" class="col-12 col-lg-3 form-label ">*Nombre de la lista</label>
                                                 <div class="col-12 col-lg-9">
-                                                    <input type="text" class="form-control" id="nombreLista" placeholder="Introduzca el dato solicitado">
+                                                    <input type="text" class="form-control" id="nombreLista" placeholder="Introduzca el dato solicitado" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -924,7 +924,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                             <div class="row align-items-start">
                                                 <label for="descripcionLista" class="col-12 col-lg-3 form-label">*Descripción de la lista de difusión</label>
                                                 <div class="col-12 col-lg-9">
-                                                    <textarea class="form-control" id="descripcionLista" rows="5" placeholder="Introduzca el dato solicitado"></textarea>
+                                                    <textarea class="form-control" id="descripcionLista" rows="5" placeholder="Introduzca el dato solicitado" required></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -1633,6 +1633,102 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setActiveLink(null);
 
+    const validateListaDifusionRequiredFields = (form) => {
+        const nombreInput = form.querySelector('#nombreLista');
+        const descripcionInput = form.querySelector('#descripcionLista');
+
+        if (!nombreInput || !descripcionInput) {
+            return true;
+        }
+
+        const nombreValido = nombreInput.value.trim().length > 0;
+        const descripcionValida = descripcionInput.value.trim().length > 0;
+
+        nombreInput.classList.toggle('is-invalid', !nombreValido);
+        descripcionInput.classList.toggle('is-invalid', !descripcionValida);
+
+        return nombreValido && descripcionValida;
+    };
+
+    const mostrarModalListaEnviada = () => {
+        const modalElement = document.getElementById('modalListaEnviada');
+
+        if (!modalElement || !globalThis.bootstrap?.Modal) {
+            return false;
+        }
+
+        globalThis.bootstrap.Modal.getOrCreateInstance(modalElement).show();
+        return true;
+    };
+
+    contentPanel?.addEventListener('submit', async (event) => {
+        if (activeSidebarKey !== 'crear-lista-difusion') {
+            return;
+        }
+
+        const submittedForm = event.target;
+
+        if (!(submittedForm instanceof HTMLFormElement) || submittedForm.id !== 'formCrearListaDifusion') {
+            return;
+        }
+
+        event.preventDefault();
+
+        const formIsValid = validateListaDifusionRequiredFields(submittedForm);
+
+        if (!formIsValid) {
+            return;
+        }
+
+        const nombreInput = submittedForm.querySelector('#nombreLista');
+        const descripcionInput = submittedForm.querySelector('#descripcionLista');
+        const submitButton = submittedForm.querySelector('button[type="submit"]');
+
+        if (!(nombreInput instanceof HTMLInputElement)
+            || !(descripcionInput instanceof HTMLTextAreaElement)
+            || !(submitButton instanceof HTMLButtonElement)) {
+            return;
+        }
+
+        const payload = {
+            nombreLista: nombreInput.value.trim(),
+            descripcionLista: descripcionInput.value.trim(),
+            autorCorreo: 'editorEventos@conapdis.com',
+            estado: 'pendiente_aprobacion',
+        };
+
+        submitButton.disabled = true;
+
+        try {
+            const response = await fetch('/api/lista-difusion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok || !data?.ok) {
+                throw new Error(data?.mensaje || 'No fue posible guardar la lista de difusión.');
+            }
+
+            submittedForm.reset();
+            nombreInput.classList.remove('is-invalid');
+            descripcionInput.classList.remove('is-invalid');
+
+            const modalShown = mostrarModalListaEnviada();
+            if (!modalShown) {
+                globalThis.alert('Lista enviada con éxito.');
+            }
+        } catch (error) {
+            globalThis.alert(error.message || 'Ocurrió un error al guardar la lista de difusión.');
+        } finally {
+            submitButton.disabled = false;
+        }
+    });
+
     contentPanel?.addEventListener('input', (event) => {
         if (activeSidebarKey !== 'crear-evento') {
             return;
@@ -1650,6 +1746,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (event.target.closest('.ceCard')) {
             updateDraftState();
+        }
+    });
+
+    contentPanel?.addEventListener('input', (event) => {
+        if (activeSidebarKey !== 'crear-lista-difusion') {
+            return;
+        }
+
+        const target = event.target;
+
+        if (!(target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement)) {
+            return;
+        }
+
+        if (target.id === 'nombreLista' || target.id === 'descripcionLista') {
+            target.classList.remove('is-invalid');
         }
     });
 
