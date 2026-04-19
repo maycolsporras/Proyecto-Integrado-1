@@ -1022,49 +1022,314 @@ function initCrearEvento() {
         };
     }
 
+    function escapeHtmlPreview(texto) {
+        return String(texto || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function limpiarTextoHtml(texto) {
+        return String(texto || '')
+            .replace(/<br\s*\/?>/gi, '\n')
+            .replace(/<[^>]+>/g, '')
+            .trim();
+    }
+
+    function construirParrafosPreview(texto, fallback = 'No hay información disponible.') {
+        const parrafos = String(texto || '')
+            .replace(/<br\s*\/?>/gi, '\n')
+            .split(/\r?\n+/)
+            .map((parrafo) => limpiarTextoHtml(parrafo))
+            .filter(Boolean);
+
+        if (!parrafos.length) {
+            return `<p>${escapeHtmlPreview(fallback)}</p>`;
+        }
+
+        return parrafos.map((parrafo) => `<p>${escapeHtmlPreview(parrafo)}</p>`).join('');
+    }
+
+    function construirListaPreview(texto, maxItems = 4) {
+        const items = String(texto || '')
+            .replace(/<br\s*\/?>/gi, '\n')
+            .split(/\r?\n+/)
+            .map((item) => limpiarTextoHtml(item))
+            .filter(Boolean)
+            .slice(0, maxItems);
+
+        if (!items.length) {
+            return '<li>No hay objetivos especificados.</li>';
+        }
+
+        return items.map((item) => `<li>${escapeHtmlPreview(item)}</li>`).join('');
+    }
+
+    function construirAgendaPreview(texto) {
+        const lineas = String(texto || '')
+            .replace(/<br\s*\/?>/gi, '\n')
+            .split(/\r?\n+/)
+            .map((linea) => limpiarTextoHtml(linea))
+            .filter(Boolean);
+
+        if (!lineas.length) {
+            return `
+                <div class="eventoPoliticaAgendaFila">
+                    <div class="eventoPoliticaAgendaHora">Pendiente</div>
+                    <div class="eventoPoliticaAgendaDetalle">No hay agenda registrada para este evento.</div>
+                </div>
+            `;
+        }
+
+        return lineas.slice(0, 8).map((linea) => {
+            const matchHora = linea.match(/\b\d{1,2}(:\d{2})?\s*(am|pm)?/i);
+            const hora = matchHora ? matchHora[0] : 'Actividad';
+            const detalle = linea.replace(hora, '').replace(/^\s*[-:]/, '').trim() || linea;
+
+            return `
+                <div class="eventoPoliticaAgendaFila">
+                    <div class="eventoPoliticaAgendaHora">${escapeHtmlPreview(hora)}</div>
+                    <div class="eventoPoliticaAgendaDetalle">${escapeHtmlPreview(detalle)}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function obtenerFechaPrincipalPreview(evento) {
+        if (Array.isArray(evento?.fechasEvento) && evento.fechasEvento.length > 0) {
+            return evento.fechasEvento[0];
+        }
+        return evento?.fechaPublicacion || null;
+    }
+
+    function obtenerImagenesCarruselPreview(evento, imagenPrincipal) {
+        const imagenes = Array.isArray(evento?.imagenes)
+            ? evento.imagenes.map((item) => normalizarRutaImagenPreview(item?.ruta || item)).filter(Boolean)
+            : [];
+
+        const base = imagenes.length ? imagenes : [imagenPrincipal || './assets/img/eventos-discapacidad.webp'];
+        const resultado = base.slice(0, 4);
+        while (resultado.length < 4) {
+            resultado.push(resultado[resultado.length - 1]);
+        }
+        return resultado;
+    }
+
+    function generarResumenLecturaFacilPreview(root, tituloEvento, cuposTexto) {
+        const descripcion = Array.from(root.querySelectorAll('.eventoPoliticaBloqueContenido p'))
+            .map((elemento) => elemento.textContent.trim())
+            .filter(Boolean);
+
+        const objetivos = Array.from(root.querySelectorAll('.eventoPoliticaListaObjetivos li'))
+            .map((elemento) => elemento.textContent.trim())
+            .filter(Boolean);
+
+        const agenda = Array.from(root.querySelectorAll('.eventoPoliticaAgendaFila'))
+            .map((fila) => {
+                const hora = fila.querySelector('.eventoPoliticaAgendaHora')?.textContent.trim();
+                const detalle = fila.querySelector('.eventoPoliticaAgendaDetalle')?.textContent.trim();
+                return hora && detalle ? `${hora}: ${detalle}` : null;
+            })
+            .filter(Boolean);
+
+        const datosEvento = Array.from(root.querySelectorAll('.eventoPoliticaListaInfo li'))
+            .map((elemento) => elemento.textContent.replace(/\s+/g, ' ').trim())
+            .filter(Boolean);
+
+        const parrafos = [`Este evento se llama ${tituloEvento}.`];
+        if (datosEvento.length > 0) parrafos.push(`Datos clave: ${datosEvento.join('. ')}.`);
+        if (descripcion.length > 0) parrafos.push(`Resumen rápido: ${descripcion.slice(0, 2).join(' ')}`);
+        if (objetivos.length > 0) parrafos.push(`Objetivos principales: ${objetivos.slice(0, 2).join(' ')}`);
+        if (agenda.length > 0) parrafos.push(`Agenda del evento: ${agenda.slice(0, 3).join(' / ')}.`);
+        parrafos.push(`Disponibilidad: ${cuposTexto}.`);
+
+        return parrafos;
+    }
+
+    function conectarLecturaFacilPreview(modalElement, tituloEvento, cuposTexto) {
+        const root = modalElement.querySelector('.eventoPreviewTemplateRoot');
+        if (!root) return;
+
+        const boton = root.querySelector('#btnLecturaFacilEventoPreview');
+        const ventana = root.querySelector('#lecturaFacilVentanaPreview');
+        const titulo = root.querySelector('#lecturaFacilTituloPreview');
+        const contenido = root.querySelector('#lecturaFacilContenidoPreview');
+
+        if (!boton || !ventana || !titulo || !contenido) return;
+
+        boton.addEventListener('click', () => {
+            const visible = !ventana.classList.contains('d-none');
+            if (visible) {
+                ventana.classList.add('d-none');
+                boton.classList.remove('is-active');
+                boton.setAttribute('aria-expanded', 'false');
+                return;
+            }
+
+            const parrafos = generarResumenLecturaFacilPreview(root, tituloEvento, cuposTexto);
+            titulo.textContent = tituloEvento;
+            contenido.innerHTML = parrafos.map((parrafo) => `<p>${escapeHtmlPreview(parrafo)}</p>`).join('');
+
+            ventana.classList.remove('d-none');
+            boton.classList.add('is-active');
+            boton.setAttribute('aria-expanded', 'true');
+        });
+    }
+
+    function renderContenidoModalTemplate(modalElement, evento, imagenFuente) {
+        const modalBody = modalElement.querySelector('.modalVistaPreviaBody');
+        if (!modalBody) {
+            return;
+        }
+
+        const fecha = obtenerFechaPrincipalPreview(evento);
+        const fechaCorta = formatearFechaCorta(fecha);
+        const fechaCompleta = formatearTextoFecha(fecha) || 'Sin fecha disponible';
+        const fechaObj = fecha?.iso ? new Date(fecha.iso) : null;
+        const mesLargo = (fechaObj && !Number.isNaN(fechaObj.getTime()))
+            ? fechaObj.toLocaleString('es-CR', { month: 'long' })
+            : 'sin mes';
+        const anio = (fechaObj && !Number.isNaN(fechaObj.getTime())) ? fechaObj.getFullYear() : '';
+
+        const nombreEvento = evento?.nombreEvento || 'Sin título';
+        const descripcion = evento?.descripcionEvento || '';
+        const objetivos = evento?.objetivosEvento || '';
+        const agenda = evento?.agendaEvento || '';
+        const infoAdicional = evento?.infoAdicional || '';
+        const lugar = evento?.lugarEvento || 'No definido';
+        const horaInicio = evento?.horario?.horaInicio || 'No definido';
+        const horaFin = evento?.horario?.horaFin || 'No definido';
+        const publicoMeta = evento?.publicoMeta || 'No definido';
+        const cuposTexto = evento?.cupoEvento ? `${evento.cupoEvento} cupos disponibles` : 'No definido';
+        const linkCalendar = evento?.linkCalendar || '#';
+        const contactoNombre = evento?.contacto?.nombreCompleto || evento?.contacto?.nombre || 'No definido';
+        const contactoCorreo = evento?.contacto?.correoElectronico || evento?.contacto?.correo || 'No definido';
+        const telefono = evento?.contacto?.telefono || 'No definido';
+        const institucion = evento?.contacto?.institucion || '';
+        const imagenesCarrusel = obtenerImagenesCarruselPreview(evento, imagenFuente);
+
+        modalBody.innerHTML = `
+            <div class="eventoPreviewTemplateRoot">
+                <div id="estructuraEventosPolitica" class="eventoPoliticaDetalleWrapper">
+                    <section class="eventoPoliticaDetalleVista" aria-labelledby="previewTituloModalPlantilla">
+                        <div class="eventoPoliticaHeroPortada">
+                            <img src="${escapeHtmlPreview(imagenFuente || './assets/img/eventos-discapacidad.webp')}" alt="Imagen del evento ${escapeHtmlPreview(nombreEvento)}">
+                        </div>
+
+                        <div class="eventoPoliticaContenidoInterior px-lg-5">
+                            <div class="eventoPoliticaTituloFranja d-flex align-items-center gap-3">
+                                <div class="eventoPoliticaFechaBadge" aria-hidden="true">
+                                    <span class="eventoPoliticaFechaDia">${escapeHtmlPreview(fechaCorta.dia || '00')}</span>
+                                    <span class="eventoPoliticaFechaMes">${escapeHtmlPreview(fechaCorta.mes || '---')}</span>
+                                </div>
+                                <h1 id="previewTituloModalPlantilla" class="eventoPoliticaTituloPrincipal mb-0">${escapeHtmlPreview(nombreEvento)}</h1>
+                            </div>
+
+                            <div class="row g-4 eventoPoliticaContenido pt-4">
+                                <div class="col-12 col-lg-7">
+                                    <section class="eventoPoliticaBloqueContenido" aria-labelledby="previewDescripcionModalTitle">
+                                        <h2 id="previewDescripcionModalTitle" class="eventoPoliticaSeccionTitulo">Descripción</h2>
+                                        <div class="eventoPoliticaInfoAdicionalTexto">${construirParrafosPreview(descripcion, 'No hay descripción disponible.')}</div>
+
+                                        <h2 class="eventoPoliticaSeccionTitulo mt-4">Objetivos</h2>
+                                        <ol class="eventoPoliticaListaObjetivos">${construirListaPreview(objetivos, 3)}</ol>
+                                    </section>
+                                </div>
+
+                                <div class="col-12 col-lg-5">
+                                    <aside class="eventoPoliticaSidebar d-flex flex-column gap-3" aria-label="Información complementaria del evento">
+                                        <section class="eventoPoliticaCaja eventoPoliticaCajaClara" aria-labelledby="previewInfoModalTitle">
+                                            <h2 id="previewInfoModalTitle" class="eventoPoliticaSeccionTitulo">Información del evento</h2>
+                                            <ul class="eventoPoliticaListaInfo">
+                                                <li><i class="fa-regular fa-calendar" aria-hidden="true"></i> ${escapeHtmlPreview(fechaCompleta)}</li>
+                                                <li><i class="fa-regular fa-clock" aria-hidden="true"></i> ${escapeHtmlPreview(horaInicio)} - ${escapeHtmlPreview(horaFin)}</li>
+                                                <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${escapeHtmlPreview(lugar)}</li>
+                                            </ul>
+                                            <div class="eventoPoliticaContacto">
+                                                <p class="mb-1 fw-semibold">${escapeHtmlPreview(contactoNombre)}${institucion ? `<br>${escapeHtmlPreview(institucion)}` : ''}</p>
+                                                <p class="mb-1">Teléfono: ${escapeHtmlPreview(telefono)}</p>
+                                                <p class="mb-0">Correo electrónico: ${escapeHtmlPreview(contactoCorreo)}</p>
+                                            </div>
+                                        </section>
+
+                                        <section class="eventoPoliticaCaja eventoPoliticaCajaAzul" aria-labelledby="previewPublicoMetaModalTitle">
+                                            <h2 id="previewPublicoMetaModalTitle" class="eventoPoliticaSeccionTitulo text-white">Público Meta</h2>
+                                            <p class="eventoPoliticaTextoBlanco">${escapeHtmlPreview(publicoMeta)}</p>
+                                            <div class="eventoPoliticaAccionMeta d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3">
+                                                <strong class="eventoPoliticaCupos">${escapeHtmlPreview(cuposTexto)}</strong>
+                                                <a class="eventoPoliticaBotonInscripcion text-decoration-none" href="${escapeHtmlPreview(linkCalendar)}" target="_blank" rel="noopener noreferrer">Inscripción a Evento</a>
+                                            </div>
+                                        </section>
+
+                                        <section class="eventoPoliticaEnlaceEvento" aria-labelledby="previewEnlaceModalTitle">
+                                            <h2 id="previewEnlaceModalTitle" class="eventoPoliticaSeccionTitulo">Enlace del evento</h2>
+                                            <a href="${escapeHtmlPreview(linkCalendar)}" target="_blank" rel="noopener noreferrer">${escapeHtmlPreview(linkCalendar)}</a>
+                                        </section>
+                                    </aside>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="eventoPoliticaInfoAdicionalCard mt-5">
+                            <div class="eventoPoliticaInfoAdicionalContenido">
+                                <section class="eventoPoliticaAgendaSection" aria-labelledby="previewAgendaModalTitle">
+                                    <h2 id="previewAgendaModalTitle" class="eventoPoliticaAgendaTitulo">Programa / Agenda del evento</h2>
+
+                                    <div class="eventoPoliticaAgendaTabla mt-3">
+                                        <div class="eventoPoliticaAgendaCabecera">Día ${escapeHtmlPreview(fechaCorta.dia || '00')} de ${escapeHtmlPreview(mesLargo)} ${escapeHtmlPreview(anio)}</div>
+                                        ${construirAgendaPreview(agenda)}
+                                    </div>
+                                </section>
+
+                                <h2 class="eventoPoliticaInfoAdicionalTitulo">Información Adicional</h2>
+                                <div class="eventoPoliticaInfoAdicionalTexto">${construirParrafosPreview(infoAdicional, 'No hay información adicional.')}</div>
+
+                                <div class="eventoPoliticaInfoAdicionalAcciones d-flex flex-wrap gap-3 mt-4">
+                                    <button id="btnLecturaFacilEventoPreview" type="button" class="eventoPoliticaInfoAdicionalBtn eventoPoliticaInfoAdicionalBtn--primary" aria-controls="lecturaFacilVentanaPreview" aria-expanded="false">Lectura Fácil del Evento</button>
+                                    <button type="button" class="eventoPoliticaInfoAdicionalBtn eventoPoliticaInfoAdicionalBtn--secondary">Realizar consulta</button>
+                                </div>
+
+                                <div id="lecturaFacilVentanaPreview" class="eventoPoliticaLecturaFacilVentana d-none" role="region" aria-live="polite" aria-labelledby="lecturaFacilTituloPreview">
+                                    <h3 id="lecturaFacilTituloPreview" class="eventoPoliticaLecturaFacilTitulo"></h3>
+                                    <div id="lecturaFacilContenidoPreview" class="eventoPoliticaLecturaFacilContenido"></div>
+                                </div>
+
+                                <div id="previewEventoCarousel" class="carousel slide eventoPoliticaCarruselWrap mt-5" data-bs-ride="false" aria-label="Galería del evento">
+                                    <div class="carousel-indicators eventoPoliticaCarruselIndicadores">
+                                        ${imagenesCarrusel.map((_, indice) => `<button type="button" data-bs-target="#previewEventoCarousel" data-bs-slide-to="${indice}" class="eventoPoliticaCarruselDot ${indice === 0 ? 'active' : ''}" ${indice === 0 ? 'aria-current="true"' : ''} aria-label="Diapositiva ${indice + 1}"></button>`).join('')}
+                                    </div>
+
+                                    <div class="carousel-inner eventoPoliticaCarruselVista">
+                                        ${imagenesCarrusel.map((src, indice) => `<div class="carousel-item ${indice === 0 ? 'active' : ''}"><img src="${escapeHtmlPreview(src)}" class="d-block w-100 eventoPoliticaCarruselImagen" alt="Imagen ${indice + 1} del evento ${escapeHtmlPreview(nombreEvento)}"></div>`).join('')}
+                                    </div>
+
+                                    <button class="carousel-control-prev eventoPoliticaCarruselControl" type="button" data-bs-target="#previewEventoCarousel" data-bs-slide="prev" aria-label="Ver imagen anterior">
+                                        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                                    </button>
+                                    <button class="carousel-control-next eventoPoliticaCarruselControl" type="button" data-bs-target="#previewEventoCarousel" data-bs-slide="next" aria-label="Ver imagen siguiente">
+                                        <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+
+                                <div class="text-center mt-4">
+                                    <a class="eventoPoliticaInscripcionEventoBtn text-decoration-none" href="${escapeHtmlPreview(linkCalendar)}" target="_blank" rel="noopener noreferrer">Inscripción a Evento</a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        `;
+
+        conectarLecturaFacilPreview(modalElement, nombreEvento, cuposTexto);
+    }
+
     async function renderModalVistaPrevia(evento) {
         const modalElement = document.getElementById('modalVistaPreviaEvento');
         if (!modalElement) {
             return;
-        }
-
-        const imagenHero = modalElement.querySelector('#previewHeroImg');
-        const previewEnlaceSection = modalElement.querySelector('#previewEnlaceSection');
-        const enlaceEl = modalElement.querySelector('#previewEnlace');
-        const objetivoEl = modalElement.querySelector('#previewObjetivos');
-        const agendaEl = modalElement.querySelector('#previewAgenda');
-        const infoAdicionalEl = modalElement.querySelector('#previewInfoAdicional');
-
-        const fecha = Array.isArray(evento.fechasEvento) && evento.fechasEvento.length > 0
-            ? evento.fechasEvento[0]
-            : evento.fechaPublicacion;
-
-        const fechaCorta = formatearFechaCorta(fecha);
-
-        modalElement.querySelector('#previewDia').textContent = fechaCorta.dia || '00';
-        modalElement.querySelector('#previewMes').textContent = fechaCorta.mes || '...';
-        modalElement.querySelector('#previewTitulo').textContent = evento.nombreEvento || 'Sin título';
-        modalElement.querySelector('#previewDescripcion').textContent = evento.descripcionEvento || 'No hay descripción disponible.';
-        modalElement.querySelector('#previewFechaCompleta').textContent = formatearTextoFecha(fecha) || 'Sin fecha disponible';
-        modalElement.querySelector('#previewHorario').textContent = evento.horario?.horaInicio && evento.horario?.horaFin
-            ? `${evento.horario.horaInicio} - ${evento.horario.horaFin}`
-            : 'No definido';
-        modalElement.querySelector('#previewLugar').textContent = evento.lugarEvento || 'No definido';
-        modalElement.querySelector('#previewContactoNombre').textContent = evento.contacto?.nombreCompleto || evento.contacto?.nombre || 'No definido';
-        modalElement.querySelector('#previewContactoCorreo').textContent = evento.contacto?.correoElectronico || evento.contacto?.correo || '';
-        modalElement.querySelector('#previewContactoCorreo').href = evento.contacto?.correoElectronico || evento.contacto?.correo ? `mailto:${evento.contacto?.correoElectronico || evento.contacto?.correo}` : '#';
-        modalElement.querySelector('#previewPublicoMeta').textContent = evento.publicoMeta || 'No definido';
-        modalElement.querySelector('#previewCupos').textContent = evento.cupoEvento ? `${evento.cupoEvento} cupos disponibles` : 'No definido';
-        modalElement.querySelector('#previewInfoAdicional').innerHTML = evento.infoAdicional || '<p>No hay información adicional.</p>';
-        objetivoEl.innerHTML = evento.objetivosEvento || '<p>No hay objetivos especificados.</p>';
-        agendaEl.innerHTML = evento.agendaEvento || '<p>No hay agenda registrada.</p>';
-
-        if (evento.linkCalendar) {
-            previewEnlaceSection.style.display = 'block';
-            enlaceEl.href = evento.linkCalendar;
-            enlaceEl.textContent = evento.linkCalendar;
-        } else {
-            previewEnlaceSection.style.display = 'none';
         }
 
         let imagenFuente = '';
@@ -1076,13 +1341,7 @@ function initCrearEvento() {
             imagenFuente = await obtenerImagenPrincipalDeFormulario();
         }
 
-        if (imagenFuente) {
-            imagenHero.src = imagenFuente;
-            imagenHero.style.display = 'block';
-        } else {
-            imagenHero.src = '';
-            imagenHero.style.display = 'none';
-        }
+        renderContenidoModalTemplate(modalElement, evento, imagenFuente || './assets/img/eventos-discapacidad.webp');
 
         const modalInstance = globalThis.bootstrap?.Modal?.getOrCreateInstance(modalElement);
         if (modalInstance) {
@@ -2092,49 +2351,314 @@ function formatearFechaCorta(fecha) {
     };
 }
 
+function escapeHtmlPreviewGlobal(texto) {
+    return String(texto || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function limpiarTextoHtmlGlobal(texto) {
+    return String(texto || '')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<[^>]+>/g, '')
+        .trim();
+}
+
+function construirParrafosPreviewGlobal(texto, fallback = 'No hay información disponible.') {
+    const parrafos = String(texto || '')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .split(/\r?\n+/)
+        .map((parrafo) => limpiarTextoHtmlGlobal(parrafo))
+        .filter(Boolean);
+
+    if (!parrafos.length) {
+        return `<p>${escapeHtmlPreviewGlobal(fallback)}</p>`;
+    }
+
+    return parrafos.map((parrafo) => `<p>${escapeHtmlPreviewGlobal(parrafo)}</p>`).join('');
+}
+
+function construirListaPreviewGlobal(texto, maxItems = 4) {
+    const items = String(texto || '')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .split(/\r?\n+/)
+        .map((item) => limpiarTextoHtmlGlobal(item))
+        .filter(Boolean)
+        .slice(0, maxItems);
+
+    if (!items.length) {
+        return '<li>No hay objetivos especificados.</li>';
+    }
+
+    return items.map((item) => `<li>${escapeHtmlPreviewGlobal(item)}</li>`).join('');
+}
+
+function construirAgendaPreviewGlobal(texto) {
+    const lineas = String(texto || '')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .split(/\r?\n+/)
+        .map((linea) => limpiarTextoHtmlGlobal(linea))
+        .filter(Boolean);
+
+    if (!lineas.length) {
+        return `
+            <div class="eventoPoliticaAgendaFila">
+                <div class="eventoPoliticaAgendaHora">Pendiente</div>
+                <div class="eventoPoliticaAgendaDetalle">No hay agenda registrada para este evento.</div>
+            </div>
+        `;
+    }
+
+    return lineas.slice(0, 8).map((linea) => {
+        const matchHora = linea.match(/\b\d{1,2}(:\d{2})?\s*(am|pm)?/i);
+        const hora = matchHora ? matchHora[0] : 'Actividad';
+        const detalle = linea.replace(hora, '').replace(/^\s*[-:]/, '').trim() || linea;
+
+        return `
+            <div class="eventoPoliticaAgendaFila">
+                <div class="eventoPoliticaAgendaHora">${escapeHtmlPreviewGlobal(hora)}</div>
+                <div class="eventoPoliticaAgendaDetalle">${escapeHtmlPreviewGlobal(detalle)}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+function obtenerFechaPrincipalPreviewGlobal(evento) {
+    if (Array.isArray(evento?.fechasEvento) && evento.fechasEvento.length > 0) {
+        return evento.fechasEvento[0];
+    }
+    return evento?.fechaPublicacion || null;
+}
+
+function obtenerImagenesCarruselPreviewGlobal(evento, imagenPrincipal) {
+    const imagenes = Array.isArray(evento?.imagenes)
+        ? evento.imagenes.map((item) => normalizarRutaImagenPreview(item?.ruta || item)).filter(Boolean)
+        : [];
+
+    const base = imagenes.length ? imagenes : [imagenPrincipal || './assets/img/eventos-discapacidad.webp'];
+    const resultado = base.slice(0, 4);
+    while (resultado.length < 4) {
+        resultado.push(resultado[resultado.length - 1]);
+    }
+    return resultado;
+}
+
+function generarResumenLecturaFacilPreviewGlobal(root, tituloEvento, cuposTexto) {
+    const descripcion = Array.from(root.querySelectorAll('.eventoPoliticaBloqueContenido p'))
+        .map((elemento) => elemento.textContent.trim())
+        .filter(Boolean);
+
+    const objetivos = Array.from(root.querySelectorAll('.eventoPoliticaListaObjetivos li'))
+        .map((elemento) => elemento.textContent.trim())
+        .filter(Boolean);
+
+    const agenda = Array.from(root.querySelectorAll('.eventoPoliticaAgendaFila'))
+        .map((fila) => {
+            const hora = fila.querySelector('.eventoPoliticaAgendaHora')?.textContent.trim();
+            const detalle = fila.querySelector('.eventoPoliticaAgendaDetalle')?.textContent.trim();
+            return hora && detalle ? `${hora}: ${detalle}` : null;
+        })
+        .filter(Boolean);
+
+    const datosEvento = Array.from(root.querySelectorAll('.eventoPoliticaListaInfo li'))
+        .map((elemento) => elemento.textContent.replace(/\s+/g, ' ').trim())
+        .filter(Boolean);
+
+    const parrafos = [`Este evento se llama ${tituloEvento}.`];
+    if (datosEvento.length > 0) parrafos.push(`Datos clave: ${datosEvento.join('. ')}.`);
+    if (descripcion.length > 0) parrafos.push(`Resumen rápido: ${descripcion.slice(0, 2).join(' ')}`);
+    if (objetivos.length > 0) parrafos.push(`Objetivos principales: ${objetivos.slice(0, 2).join(' ')}`);
+    if (agenda.length > 0) parrafos.push(`Agenda del evento: ${agenda.slice(0, 3).join(' / ')}.`);
+    parrafos.push(`Disponibilidad: ${cuposTexto}.`);
+
+    return parrafos;
+}
+
+function conectarLecturaFacilPreviewGlobal(modalElement, tituloEvento, cuposTexto) {
+    const root = modalElement.querySelector('.eventoPreviewTemplateRoot');
+    if (!root) return;
+
+    const boton = root.querySelector('#btnLecturaFacilEventoPreview');
+    const ventana = root.querySelector('#lecturaFacilVentanaPreview');
+    const titulo = root.querySelector('#lecturaFacilTituloPreview');
+    const contenido = root.querySelector('#lecturaFacilContenidoPreview');
+
+    if (!boton || !ventana || !titulo || !contenido) return;
+
+    boton.addEventListener('click', () => {
+        const visible = !ventana.classList.contains('d-none');
+        if (visible) {
+            ventana.classList.add('d-none');
+            boton.classList.remove('is-active');
+            boton.setAttribute('aria-expanded', 'false');
+            return;
+        }
+
+        const parrafos = generarResumenLecturaFacilPreviewGlobal(root, tituloEvento, cuposTexto);
+        titulo.textContent = tituloEvento;
+        contenido.innerHTML = parrafos.map((parrafo) => `<p>${escapeHtmlPreviewGlobal(parrafo)}</p>`).join('');
+
+        ventana.classList.remove('d-none');
+        boton.classList.add('is-active');
+        boton.setAttribute('aria-expanded', 'true');
+    });
+}
+
+function renderContenidoModalTemplateGlobal(modalElement, evento, imagenFuente) {
+    const modalBody = modalElement.querySelector('.modalVistaPreviaBody');
+    if (!modalBody) {
+        return;
+    }
+
+    const fecha = obtenerFechaPrincipalPreviewGlobal(evento);
+    const fechaCorta = formatearFechaCorta(fecha);
+    const fechaCompleta = formatearTextoFecha(fecha) || 'Sin fecha disponible';
+    const fechaObj = fecha?.iso ? new Date(fecha.iso) : null;
+    const mesLargo = (fechaObj && !Number.isNaN(fechaObj.getTime()))
+        ? fechaObj.toLocaleString('es-CR', { month: 'long' })
+        : 'sin mes';
+    const anio = (fechaObj && !Number.isNaN(fechaObj.getTime())) ? fechaObj.getFullYear() : '';
+
+    const nombreEvento = evento?.nombreEvento || 'Sin título';
+    const descripcion = evento?.descripcionEvento || '';
+    const objetivos = evento?.objetivosEvento || '';
+    const agenda = evento?.agendaEvento || '';
+    const infoAdicional = evento?.infoAdicional || '';
+    const lugar = evento?.lugarEvento || 'No definido';
+    const horaInicio = evento?.horario?.horaInicio || 'No definido';
+    const horaFin = evento?.horario?.horaFin || 'No definido';
+    const publicoMeta = evento?.publicoMeta || 'No definido';
+    const cuposTexto = evento?.cupoEvento ? `${evento.cupoEvento} cupos disponibles` : 'No definido';
+    const linkCalendar = evento?.linkCalendar || '#';
+    const contactoNombre = evento?.contacto?.nombreCompleto || evento?.contacto?.nombre || 'No definido';
+    const contactoCorreo = evento?.contacto?.correoElectronico || evento?.contacto?.correo || 'No definido';
+    const telefono = evento?.contacto?.telefono || 'No definido';
+    const institucion = evento?.contacto?.institucion || '';
+    const imagenesCarrusel = obtenerImagenesCarruselPreviewGlobal(evento, imagenFuente);
+
+    modalBody.innerHTML = `
+        <div class="eventoPreviewTemplateRoot">
+            <div id="estructuraEventosPolitica" class="eventoPoliticaDetalleWrapper">
+                <section class="eventoPoliticaDetalleVista" aria-labelledby="previewTituloModalPlantilla">
+                    <div class="eventoPoliticaHeroPortada">
+                        <img src="${escapeHtmlPreviewGlobal(imagenFuente || './assets/img/eventos-discapacidad.webp')}" alt="Imagen del evento ${escapeHtmlPreviewGlobal(nombreEvento)}">
+                    </div>
+
+                    <div class="eventoPoliticaContenidoInterior px-lg-5">
+                        <div class="eventoPoliticaTituloFranja d-flex align-items-center gap-3">
+                            <div class="eventoPoliticaFechaBadge" aria-hidden="true">
+                                <span class="eventoPoliticaFechaDia">${escapeHtmlPreviewGlobal(fechaCorta.dia || '00')}</span>
+                                <span class="eventoPoliticaFechaMes">${escapeHtmlPreviewGlobal(fechaCorta.mes || '---')}</span>
+                            </div>
+                            <h1 id="previewTituloModalPlantilla" class="eventoPoliticaTituloPrincipal mb-0">${escapeHtmlPreviewGlobal(nombreEvento)}</h1>
+                        </div>
+
+                        <div class="row g-4 eventoPoliticaContenido pt-4">
+                            <div class="col-12 col-lg-7">
+                                <section class="eventoPoliticaBloqueContenido" aria-labelledby="previewDescripcionModalTitle">
+                                    <h2 id="previewDescripcionModalTitle" class="eventoPoliticaSeccionTitulo">Descripción</h2>
+                                    <div class="eventoPoliticaInfoAdicionalTexto">${construirParrafosPreviewGlobal(descripcion, 'No hay descripción disponible.')}</div>
+
+                                    <h2 class="eventoPoliticaSeccionTitulo mt-4">Objetivos</h2>
+                                    <ol class="eventoPoliticaListaObjetivos">${construirListaPreviewGlobal(objetivos, 3)}</ol>
+                                </section>
+                            </div>
+
+                            <div class="col-12 col-lg-5">
+                                <aside class="eventoPoliticaSidebar d-flex flex-column gap-3" aria-label="Información complementaria del evento">
+                                    <section class="eventoPoliticaCaja eventoPoliticaCajaClara" aria-labelledby="previewInfoModalTitle">
+                                        <h2 id="previewInfoModalTitle" class="eventoPoliticaSeccionTitulo">Información del evento</h2>
+                                        <ul class="eventoPoliticaListaInfo">
+                                            <li><i class="fa-regular fa-calendar" aria-hidden="true"></i> ${escapeHtmlPreviewGlobal(fechaCompleta)}</li>
+                                            <li><i class="fa-regular fa-clock" aria-hidden="true"></i> ${escapeHtmlPreviewGlobal(horaInicio)} - ${escapeHtmlPreviewGlobal(horaFin)}</li>
+                                            <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${escapeHtmlPreviewGlobal(lugar)}</li>
+                                        </ul>
+                                        <div class="eventoPoliticaContacto">
+                                            <p class="mb-1 fw-semibold">${escapeHtmlPreviewGlobal(contactoNombre)}${institucion ? `<br>${escapeHtmlPreviewGlobal(institucion)}` : ''}</p>
+                                            <p class="mb-1">Teléfono: ${escapeHtmlPreviewGlobal(telefono)}</p>
+                                            <p class="mb-0">Correo electrónico: ${escapeHtmlPreviewGlobal(contactoCorreo)}</p>
+                                        </div>
+                                    </section>
+
+                                    <section class="eventoPoliticaCaja eventoPoliticaCajaAzul" aria-labelledby="previewPublicoMetaModalTitle">
+                                        <h2 id="previewPublicoMetaModalTitle" class="eventoPoliticaSeccionTitulo text-white">Público Meta</h2>
+                                        <p class="eventoPoliticaTextoBlanco">${escapeHtmlPreviewGlobal(publicoMeta)}</p>
+                                        <div class="eventoPoliticaAccionMeta d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3">
+                                            <strong class="eventoPoliticaCupos">${escapeHtmlPreviewGlobal(cuposTexto)}</strong>
+                                            <a class="eventoPoliticaBotonInscripcion text-decoration-none" href="${escapeHtmlPreviewGlobal(linkCalendar)}" target="_blank" rel="noopener noreferrer">Inscripción a Evento</a>
+                                        </div>
+                                    </section>
+
+                                    <section class="eventoPoliticaEnlaceEvento" aria-labelledby="previewEnlaceModalTitle">
+                                        <h2 id="previewEnlaceModalTitle" class="eventoPoliticaSeccionTitulo">Enlace del evento</h2>
+                                        <a href="${escapeHtmlPreviewGlobal(linkCalendar)}" target="_blank" rel="noopener noreferrer">${escapeHtmlPreviewGlobal(linkCalendar)}</a>
+                                    </section>
+                                </aside>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="eventoPoliticaInfoAdicionalCard mt-5">
+                        <div class="eventoPoliticaInfoAdicionalContenido">
+                            <section class="eventoPoliticaAgendaSection" aria-labelledby="previewAgendaModalTitle">
+                                <h2 id="previewAgendaModalTitle" class="eventoPoliticaAgendaTitulo">Programa / Agenda del evento</h2>
+
+                                <div class="eventoPoliticaAgendaTabla mt-3">
+                                    <div class="eventoPoliticaAgendaCabecera">Día ${escapeHtmlPreviewGlobal(fechaCorta.dia || '00')} de ${escapeHtmlPreviewGlobal(mesLargo)} ${escapeHtmlPreviewGlobal(anio)}</div>
+                                    ${construirAgendaPreviewGlobal(agenda)}
+                                </div>
+                            </section>
+
+                            <h2 class="eventoPoliticaInfoAdicionalTitulo">Información Adicional</h2>
+                            <div class="eventoPoliticaInfoAdicionalTexto">${construirParrafosPreviewGlobal(infoAdicional, 'No hay información adicional.')}</div>
+
+                            <div class="eventoPoliticaInfoAdicionalAcciones d-flex flex-wrap gap-3 mt-4">
+                                <button id="btnLecturaFacilEventoPreview" type="button" class="eventoPoliticaInfoAdicionalBtn eventoPoliticaInfoAdicionalBtn--primary" aria-controls="lecturaFacilVentanaPreview" aria-expanded="false">Lectura Fácil del Evento</button>
+                                <button type="button" class="eventoPoliticaInfoAdicionalBtn eventoPoliticaInfoAdicionalBtn--secondary">Realizar consulta</button>
+                            </div>
+
+                            <div id="lecturaFacilVentanaPreview" class="eventoPoliticaLecturaFacilVentana d-none" role="region" aria-live="polite" aria-labelledby="lecturaFacilTituloPreview">
+                                <h3 id="lecturaFacilTituloPreview" class="eventoPoliticaLecturaFacilTitulo"></h3>
+                                <div id="lecturaFacilContenidoPreview" class="eventoPoliticaLecturaFacilContenido"></div>
+                            </div>
+
+                            <div id="previewEventoCarousel" class="carousel slide eventoPoliticaCarruselWrap mt-5" data-bs-ride="false" aria-label="Galería del evento">
+                                <div class="carousel-indicators eventoPoliticaCarruselIndicadores">
+                                    ${imagenesCarrusel.map((_, indice) => `<button type="button" data-bs-target="#previewEventoCarousel" data-bs-slide-to="${indice}" class="eventoPoliticaCarruselDot ${indice === 0 ? 'active' : ''}" ${indice === 0 ? 'aria-current="true"' : ''} aria-label="Diapositiva ${indice + 1}"></button>`).join('')}
+                                </div>
+
+                                <div class="carousel-inner eventoPoliticaCarruselVista">
+                                    ${imagenesCarrusel.map((src, indice) => `<div class="carousel-item ${indice === 0 ? 'active' : ''}"><img src="${escapeHtmlPreviewGlobal(src)}" class="d-block w-100 eventoPoliticaCarruselImagen" alt="Imagen ${indice + 1} del evento ${escapeHtmlPreviewGlobal(nombreEvento)}"></div>`).join('')}
+                                </div>
+
+                                <button class="carousel-control-prev eventoPoliticaCarruselControl" type="button" data-bs-target="#previewEventoCarousel" data-bs-slide="prev" aria-label="Ver imagen anterior">
+                                    <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                                </button>
+                                <button class="carousel-control-next eventoPoliticaCarruselControl" type="button" data-bs-target="#previewEventoCarousel" data-bs-slide="next" aria-label="Ver imagen siguiente">
+                                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                                </button>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <a class="eventoPoliticaInscripcionEventoBtn text-decoration-none" href="${escapeHtmlPreviewGlobal(linkCalendar)}" target="_blank" rel="noopener noreferrer">Inscripción a Evento</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    `;
+
+    conectarLecturaFacilPreviewGlobal(modalElement, nombreEvento, cuposTexto);
+}
+
 async function renderModalVistaPreviaGlobal(evento) {
     const modalElement = document.getElementById('modalVistaPreviaEvento');
     if (!modalElement) {
         return;
-    }
-
-    const imagenHero = modalElement.querySelector('#previewHeroImg');
-    const previewEnlaceSection = modalElement.querySelector('#previewEnlaceSection');
-    const enlaceEl = modalElement.querySelector('#previewEnlace');
-    const objetivoEl = modalElement.querySelector('#previewObjetivos');
-    const agendaEl = modalElement.querySelector('#previewAgenda');
-    const infoAdicionalEl = modalElement.querySelector('#previewInfoAdicional');
-
-    const fecha = Array.isArray(evento?.fechasEvento) && evento.fechasEvento.length > 0
-        ? evento.fechasEvento[0]
-        : evento?.fechaPublicacion;
-
-    const fechaCorta = formatearFechaCorta(fecha);
-
-    modalElement.querySelector('#previewDia').textContent = fechaCorta.dia || '00';
-    modalElement.querySelector('#previewMes').textContent = fechaCorta.mes || '...';
-    modalElement.querySelector('#previewTitulo').textContent = evento?.nombreEvento || 'Sin título';
-    modalElement.querySelector('#previewDescripcion').textContent = evento?.descripcionEvento || 'No hay descripción disponible.';
-    modalElement.querySelector('#previewFechaCompleta').textContent = formatearTextoFecha(fecha) || 'Sin fecha disponible';
-    modalElement.querySelector('#previewHorario').textContent = evento?.horario?.horaInicio && evento?.horario?.horaFin
-        ? `${evento.horario.horaInicio} - ${evento.horario.horaFin}`
-        : 'No definido';
-    modalElement.querySelector('#previewLugar').textContent = evento?.lugarEvento || 'No definido';
-    modalElement.querySelector('#previewContactoNombre').textContent = evento?.contacto?.nombreCompleto || evento?.contacto?.nombre || 'No definido';
-    modalElement.querySelector('#previewContactoCorreo').textContent = evento?.contacto?.correoElectronico || evento?.contacto?.correo || '';
-    modalElement.querySelector('#previewContactoCorreo').href = evento?.contacto?.correoElectronico || evento?.contacto?.correo ? `mailto:${evento?.contacto?.correoElectronico || evento?.contacto?.correo}` : '#';
-    modalElement.querySelector('#previewPublicoMeta').textContent = evento?.publicoMeta || 'No definido';
-    modalElement.querySelector('#previewCupos').textContent = evento?.cupoEvento ? `${evento.cupoEvento} cupos disponibles` : 'No definido';
-    modalElement.querySelector('#previewInfoAdicional').innerHTML = evento?.infoAdicional || '<p>No hay información adicional.</p>';
-    objetivoEl.innerHTML = evento?.objetivosEvento || '<p>No hay objetivos especificados.</p>';
-    agendaEl.innerHTML = evento?.agendaEvento || '<p>No hay agenda registrada.</p>';
-
-    if (evento?.linkCalendar) {
-        previewEnlaceSection.style.display = 'block';
-        enlaceEl.href = evento.linkCalendar;
-        enlaceEl.textContent = evento.linkCalendar;
-    } else {
-        previewEnlaceSection.style.display = 'none';
     }
 
     let imagenFuente = '';
@@ -2142,13 +2666,7 @@ async function renderModalVistaPreviaGlobal(evento) {
         imagenFuente = construirUrlImagenEvento(evento.imagenes[0].ruta);
     }
 
-    if (imagenFuente) {
-        imagenHero.src = imagenFuente;
-        imagenHero.style.display = 'block';
-    } else {
-        imagenHero.src = '';
-        imagenHero.style.display = 'none';
-    }
+    renderContenidoModalTemplateGlobal(modalElement, evento, imagenFuente || './assets/img/eventos-discapacidad.webp');
 
     const modalInstance = globalThis.bootstrap?.Modal?.getOrCreateInstance(modalElement);
     if (modalInstance) {
