@@ -217,12 +217,13 @@ function renderizarEventosPolitica(eventos) {
 function crearCardEvento(evento) {
   const fecha = obtenerFechaPrincipal(evento) || new Date();
   const dia = String(fecha.getDate()).padStart(2, '0');
-  const mes = fecha.toLocaleString('es-CR', { month: 'short' }).toUpperCase();
-  const fechaFormateada = fecha.toLocaleDateString('es-CR', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-  });
+  const mes = fecha
+    .toLocaleString('es-CR', { month: 'short' })
+    .replace('.', '')
+    .slice(0, 3)
+    .toUpperCase();
+  const mesLargo = fecha.toLocaleString('es-CR', { month: 'long' });
+  const fechaFormateada = `${dia} ${mesLargo.charAt(0).toUpperCase()}${mesLargo.slice(1)} ${fecha.getFullYear()}`;
 
   const horaInicio = evento.horario?.horaInicio || 'Pendiente';
   const horaFin = evento.horario?.horaFin || 'Pendiente';
@@ -242,16 +243,15 @@ function crearCardEvento(evento) {
             <span class="fechaMes">${mes}</span>
           </div>
           <div class="eventoPoliticaInfo">
-            <h3>${escapeHtml(nombreEvento)}</h3>
+            <p class="tituloCardEventos">${escapeHtml(nombreEvento)}</p>
             <p><i class="fa-regular fa-calendar" aria-hidden="true"></i>${fechaFormateada}</p>
             <p><i class="fa-regular fa-clock" aria-hidden="true"></i>${horaInicio} - ${horaFin}</p>
             <p><i class="fa-solid fa-location-dot" aria-hidden="true"></i>${escapeHtml(lugar)}</p>
           </div>
         </div>
-        <div class="eventoPoliticaFooter">
-          <span class="text-muted small">Publicado</span>
-          <button type="button" class="eventoPoliticaLink" data-evento-id="${evento._id}" data-evento-nombre="${escapeHtml(nombreEvento)}" aria-label="Ver detalle del evento ${escapeHtml(nombreEvento)}">›</button>
-        </div>
+        <button type="button" class="eventoPoliticaLink" data-evento-id="${evento._id}" data-evento-nombre="${escapeHtml(nombreEvento)}" aria-label="Ver detalle del evento ${escapeHtml(nombreEvento)}">
+          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+        </button>
       </div>
     </article>
   `;

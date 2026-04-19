@@ -141,21 +141,19 @@
     flex-direction: column;
     min-height: 100%;
     border-radius: 24px;
-    border: 1px solid rgba(22, 74, 152, 0.12);
+    border: none;
     overflow: hidden;
-    box-shadow: 0 10px 28px rgba(22, 74, 152, 0.08);
-    background-color: #ffffff;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    background-color: transparent;
+    transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 .eventoPoliticaCard:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 18px 40px rgba(22, 74, 152, 0.15);
+    transform: translateY(-2px);
 }
 
 .eventoPoliticaImg {
     width: 100%;
-    aspect-ratio: 16 / 10;
     overflow: hidden;
 }
 
@@ -166,26 +164,36 @@
 }
 
 .eventoPoliticaBody {
-    padding: 1.25rem;
+    position: relative;
+    padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0;
     flex-grow: 1;
+    background: #ffffff;
 }
 
 .eventoPoliticaTop {
     display: flex;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 1.1rem;
+    width: 100%;
+}
+
+.eventoPoliticaInfo {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 1.2rem 3.8rem 1.2rem 0.8rem;
+    overflow: hidden;
 }
 
 .eventoCardFecha {
-    min-width: 58px;
-    min-height: 64px;
-    padding: 0.9rem 0.75rem;
-    border-radius: 18px;
-    background-color: #164a98;
-    color: #ffffff;
+    min-width: 88px;
+    min-height: 128px;
+    padding: 0.9rem 0.6rem;
+    border-radius: 12px;
+    background-color: var(--dropdown-text-color);
+    color: var(--color-blanco);
     display: inline-flex;
     flex-direction: column;
     justify-content: center;
@@ -198,32 +206,41 @@
 }
 
 .eventoCardFecha .fechaDia {
-    font-size: 1.5rem;
+    font-size: 2.9rem;
     font-weight: 700;
 }
 
 .eventoCardFecha .fechaMes {
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
+    font-size: 2rem;
+    letter-spacing: 0;
     text-transform: uppercase;
+    line-height: 0.95;
+    font-weight: 500;
 }
 
-.eventoPoliticaInfo h3 {
-    font-size: 1rem;
-    line-height: 1.3;
-    margin-bottom: 0.55rem;
-    color: #164a98;
+.tituloCardEventos {
+    font-size: 2rem;
+    line-height: 1.15;
+    margin: 1.2rem 0 1.1rem;
+    color: #3d3d3f;
+    max-width: none;
+    font-weight: 700;
 }
 
 .eventoPoliticaInfo p {
-    margin-bottom: 0.5rem;
-    color: #5b6771;
+    margin-bottom: 0.55rem;
+    color: #31363b;
+    font-size: 1.08rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 
 .eventoPoliticaInfo p i {
-    width: 1rem;
+    width: 1.25rem;
     display: inline-block;
-    color: #164a98;
+    color: #3f5a97;
+    margin-right: 0.35rem;
 }
 
 .eventoPoliticaFooter {
@@ -235,15 +252,19 @@
 }
 
 .eventoPoliticaLink {
-    display: inline-flex;
+    position: absolute;
+    margin-right: -10px;
+    right: 0;
+    bottom: 0;
+    display: flex;
     align-items: center;
     justify-content: center;
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    background-color: #164a98;
+    width: 54px;
+    height: 44px;
+    border-radius: 12px 0 12px 0;
+    background-color: #3f5a97;
     color: #ffffff;
-    font-size: 1.35rem;
+    font-size: 1.1rem;
     text-decoration: none;
     border: none;
     cursor: pointer;
@@ -251,8 +272,31 @@
 
 .eventoPoliticaLink:hover,
 .eventoPoliticaLink:focus {
-    background-color: #0f386d;
+    background-color: #334a7b;
     text-decoration: none;
+}
+
+@media (max-width: 991.98px) {
+    .eventoCardFecha {
+        min-width: 74px;
+        min-height: 110px;
+    }
+
+    .eventoCardFecha .fechaDia {
+        font-size: 2.4rem;
+    }
+
+    .eventoCardFecha .fechaMes {
+        font-size: 1.65rem;
+    }
+
+    .eventoPoliticaInfo h3 {
+        font-size: 1.6rem;
+    }
+
+    .eventoPoliticaInfo p {
+        font-size: 0.98rem;
+    }
 }
 
 .eventoPoliticaDetalleContainer {
@@ -417,25 +461,6 @@
 .eventoDetalleInfoBox p i {
     margin-right: 0.6rem;
     color: #164a98;
-}
-
-.eventoPoliticaLink {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    background-color: #164a98;
-    color: #ffffff;
-    font-size: 1.35rem;
-    border: none;
-}
-
-.eventoPoliticaLink:hover,
-.eventoPoliticaLink:focus {
-    background-color: #0f386d;
-    text-decoration: none;
 }
 
 .eventoPoliticaDetalleWrapper {
