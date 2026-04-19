@@ -14,6 +14,23 @@ const filtrosFecha = {
   hastaMes: document.getElementById('hasta-mes'),
   hastaDia: document.getElementById('hasta-dia'),
 };
+const mesesOrdenados = [
+  { valor: '1', texto: 'Enero' },
+  { valor: '2', texto: 'Febrero' },
+  { valor: '3', texto: 'Marzo' },
+  { valor: '4', texto: 'Abril' },
+  { valor: '5', texto: 'Mayo' },
+  { valor: '6', texto: 'Junio' },
+  { valor: '7', texto: 'Julio' },
+  { valor: '8', texto: 'Agosto' },
+  { valor: '9', texto: 'Septiembre' },
+  { valor: '10', texto: 'Octubre' },
+  { valor: '11', texto: 'Noviembre' },
+  { valor: '12', texto: 'Diciembre' },
+];
+
+let eventosPoliticaDisponibles = [];
+let filtrosFechaInicializados = false;
 
 async function cargarEventosPolitica() {
   if (!contenedorEventosCreados) return;
@@ -25,6 +42,11 @@ async function cargarEventosPolitica() {
 
   try {
     const eventos = await obtenerEventosBackend();
+    eventosPoliticaDisponibles = eventos;
+    if (!filtrosFechaInicializados) {
+      inicializarFiltrosFecha(eventosPoliticaDisponibles);
+      filtrosFechaInicializados = true;
+    }
     const eventosFiltrados = filtrarEventos(eventos);
     renderizarEventosPolitica(eventosFiltrados);
   } catch (error) {
@@ -52,9 +74,168 @@ function configurarFiltrosPolitica() {
     debounceTimeout = setTimeout(cargarEventosPolitica, 350);
   });
 
-  Object.values(filtrosFecha).forEach((elemento) => {
-    elemento?.addEventListener('change', cargarEventosPolitica);
+  filtrosFecha.desdeAnio?.addEventListener('change', () => {
+    actualizarSelectDesde('anio');
+    cargarEventosPolitica();
   });
+  filtrosFecha.desdeMes?.addEventListener('change', () => {
+    actualizarSelectDesde('mes');
+    cargarEventosPolitica();
+  });
+  filtrosFecha.desdeDia?.addEventListener('change', cargarEventosPolitica);
+
+  filtrosFecha.hastaAnio?.addEventListener('change', () => {
+    actualizarSelectHasta('anio');
+    cargarEventosPolitica();
+  });
+  filtrosFecha.hastaMes?.addEventListener('change', () => {
+    actualizarSelectHasta('mes');
+    cargarEventosPolitica();
+  });
+  filtrosFecha.hastaDia?.addEventListener('change', cargarEventosPolitica);
+}
+
+function inicializarFiltrosFecha(eventos) {
+  const fechasDisponibles = obtenerFechasDisponibles(eventos);
+  configurarSelectFechaBase(filtrosFecha.desdeAnio, 'Todos los años');
+  configurarSelectFechaBase(filtrosFecha.desdeMes, 'Todos los meses');
+  configurarSelectFechaBase(filtrosFecha.desdeDia, 'Todos los días');
+  configurarSelectFechaBase(filtrosFecha.hastaAnio, 'Todos los años');
+  configurarSelectFechaBase(filtrosFecha.hastaMes, 'Todos los meses');
+  configurarSelectFechaBase(filtrosFecha.hastaDia, 'Todos los días');
+
+  poblarAniosSelect(filtrosFecha.desdeAnio, fechasDisponibles);
+  poblarAniosSelect(filtrosFecha.hastaAnio, fechasDisponibles);
+  actualizarSelectDesde('anio');
+  actualizarSelectHasta('anio');
+}
+
+function configurarSelectFechaBase(select, etiqueta) {
+  if (!select) return;
+  select.innerHTML = '';
+
+  const opcionBase = document.createElement('option');
+  opcionBase.value = '';
+  opcionBase.textContent = etiqueta;
+  opcionBase.selected = true;
+  select.appendChild(opcionBase);
+}
+
+function obtenerFechasDisponibles(eventos) {
+  const fechas = [];
+
+  eventos.forEach((evento) => {
+    const fechasEvento = Array.isArray(evento.fechasEvento) ? evento.fechasEvento : [];
+    const fechasParseadas = fechasEvento
+      .map(parsearFecha)
+      .filter((fecha) => fecha instanceof Date && !Number.isNaN(fecha.getTime()));
+
+    if (fechasParseadas.length > 0) {
+      fechas.push(...fechasParseadas);
+      return;
+    }
+
+    const fechaPrincipal = obtenerFechaPrincipal(evento);
+    if (fechaPrincipal) {
+      fechas.push(fechaPrincipal);
+    }
+  });
+
+  return fechas;
+}
+
+function poblarAniosSelect(select, fechasDisponibles) {
+  if (!select) return;
+
+  const anios = [...new Set(fechasDisponibles.map((fecha) => fecha.getFullYear()))].sort((a, b) => a - b);
+  agregarOpcionesSelect(select, anios.map((anio) => ({ valor: String(anio), texto: String(anio) })));
+}
+
+function agregarOpcionesSelect(select, opciones) {
+  if (!select) return;
+
+  const valorSeleccionado = select.value;
+  const opcionBase = select.querySelector('option[value=""]');
+
+  select.innerHTML = '';
+  if (opcionBase) {
+    select.appendChild(opcionBase);
+  }
+
+  opciones.forEach((opcion) => {
+    const option = document.createElement('option');
+    option.value = opcion.valor;
+    option.textContent = opcion.texto;
+    select.appendChild(option);
+  });
+
+  if ([...select.options].some((option) => option.value === valorSeleccionado)) {
+    select.value = valorSeleccionado;
+  }
+}
+
+function actualizarSelectDesde(campo) {
+  const anio = filtrosFecha.desdeAnio?.value;
+  const mes = filtrosFecha.desdeMes?.value;
+  const fechasDisponibles = obtenerFechasDisponibles(eventosPoliticaDisponibles);
+  const fechasFiltradasPorAnio = anio
+    ? fechasDisponibles.filter((fecha) => String(fecha.getFullYear()) === anio)
+    : fechasDisponibles;
+
+  if (campo === 'anio') {
+    agregarOpcionesSelect(filtrosFecha.desdeMes, obtenerMesesDisponibles(fechasFiltradasPorAnio));
+    agregarOpcionesSelect(filtrosFecha.desdeDia, obtenerDiasDisponibles(fechasFiltradasPorAnio, anio));
+    filtrosFecha.desdeMes.value = '';
+    filtrosFecha.desdeDia.value = '';
+    return;
+  }
+
+  if (campo === 'mes') {
+    const fechasFiltradasPorMes = anio && mes
+      ? fechasFiltradasPorAnio.filter((fecha) => String(fecha.getMonth() + 1) === mes)
+      : fechasFiltradasPorAnio;
+    agregarOpcionesSelect(filtrosFecha.desdeDia, obtenerDiasDisponibles(fechasFiltradasPorMes, anio, mes));
+    filtrosFecha.desdeDia.value = '';
+  }
+}
+
+function actualizarSelectHasta(campo) {
+  const anio = filtrosFecha.hastaAnio?.value;
+  const mes = filtrosFecha.hastaMes?.value;
+  const fechasDisponibles = obtenerFechasDisponibles(eventosPoliticaDisponibles);
+  const fechasFiltradasPorAnio = anio
+    ? fechasDisponibles.filter((fecha) => String(fecha.getFullYear()) === anio)
+    : fechasDisponibles;
+
+  if (campo === 'anio') {
+    agregarOpcionesSelect(filtrosFecha.hastaMes, obtenerMesesDisponibles(fechasFiltradasPorAnio));
+    agregarOpcionesSelect(filtrosFecha.hastaDia, obtenerDiasDisponibles(fechasFiltradasPorAnio, anio));
+    filtrosFecha.hastaMes.value = '';
+    filtrosFecha.hastaDia.value = '';
+    return;
+  }
+
+  if (campo === 'mes') {
+    const fechasFiltradasPorMes = anio && mes
+      ? fechasFiltradasPorAnio.filter((fecha) => String(fecha.getMonth() + 1) === mes)
+      : fechasFiltradasPorAnio;
+    agregarOpcionesSelect(filtrosFecha.hastaDia, obtenerDiasDisponibles(fechasFiltradasPorMes, anio, mes));
+    filtrosFecha.hastaDia.value = '';
+  }
+}
+
+function obtenerMesesDisponibles(fechas) {
+  const meses = [...new Set(fechas.map((fecha) => fecha.getMonth() + 1))].sort((a, b) => a - b);
+  return meses.map((mes) => ({ valor: String(mes), texto: mesesOrdenados[mes - 1].texto }));
+}
+
+function obtenerDiasDisponibles(fechas, anio, mes) {
+  const dias = [...new Set(fechas
+    .filter((fecha) => !anio || String(fecha.getFullYear()) === anio)
+    .filter((fecha) => !mes || String(fecha.getMonth() + 1) === mes)
+    .map((fecha) => fecha.getDate()))].sort((a, b) => a - b);
+
+  return dias.map((dia) => ({ valor: String(dia), texto: String(dia).padStart(2, '0') }));
 }
 
 function filtrarEventos(eventos) {

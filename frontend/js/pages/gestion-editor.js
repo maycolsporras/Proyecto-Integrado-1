@@ -1656,6 +1656,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'hidden' && activeSidebarKey === 'crear-evento') {
             const draftManager = getDraftManager();
+            const hasTypedData = Boolean(draftManager?.hasTypedData?.());
+
+            if (!hasDraftChanges && !hasTypedData) {
+                return;
+            }
+
             draftManager?.saveDraft?.({ background: true });
             updateDraftState();
         }

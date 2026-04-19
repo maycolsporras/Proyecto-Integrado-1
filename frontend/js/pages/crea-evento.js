@@ -253,11 +253,49 @@ function isPendingEditionContext(context) {
         && context?.estado === 'pendiente_aprobacion';
 }
 
+function aplicarColorAsteriscoRequerido(root) {
+    if (!root) {
+        return;
+    }
+
+    root.querySelectorAll('.ceLabel').forEach((label) => {
+        if (label.querySelector('.ceRequiredAsterisk')) {
+            return;
+        }
+
+        const labelText = label.textContent || '';
+        const leftSpacesMatch = labelText.match(/^\s*/);
+        const leftSpaces = leftSpacesMatch ? leftSpacesMatch[0] : '';
+        const trimmed = labelText.trimStart();
+
+        if (!trimmed.startsWith('*')) {
+            return;
+        }
+
+        const textWithoutAsterisk = trimmed.slice(1).trimStart();
+        label.textContent = '';
+
+        if (leftSpaces) {
+            label.append(document.createTextNode(leftSpaces));
+        }
+
+        const asteriskSpan = document.createElement('span');
+        asteriskSpan.className = 'ceRequiredAsterisk';
+        asteriskSpan.setAttribute('aria-hidden', 'true');
+        asteriskSpan.textContent = '*';
+
+        label.append(asteriskSpan);
+        label.append(document.createTextNode(textWithoutAsterisk));
+    });
+}
+
 function initCrearEvento() {
     const formRoot = document.querySelector('.ceCard');
     if (!formRoot) {
         return;
     }
+
+    aplicarColorAsteriscoRequerido(formRoot);
 
     if (formRoot.dataset.ceInitialized === 'true') {
         const botonesNavegacionPresentes =
@@ -2028,6 +2066,11 @@ function hasAnyTypedData(formRoot) {
 
 async function saveCrearEventoDraft(options = {}) {
     const formRoot = getCrearEventoRoot();
+
+    if (!hasAnyTypedData(formRoot)) {
+        return null;
+    }
+
     const draftSnapshot = serializeCrearEventoForm(formRoot);
 
     if (!draftSnapshot.length) {

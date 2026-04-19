@@ -101,6 +101,12 @@
   padding-right: 0.5rem;
 }
 
+.ceRequiredAsterisk {
+  color: #dc3545;
+  font-weight: 700;
+  margin-right: 0.1rem;
+}
+
 .ceFieldGroup {
   display: flex;
   align-items: center;
