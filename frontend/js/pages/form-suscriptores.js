@@ -16,6 +16,16 @@ document.addEventListener('DOMContentLoaded', () => {
 	const correoInput = form.querySelector('input[type="email"]');
 	const textoInputs = Array.from(form.querySelectorAll('input[type="text"]'));
 	const checkbox = form.querySelector('#notificaciones');
+	const [nombreCompletoInput, profesionOficioInput, entidadVinculadaInput, razonNotificacionInput] = textoInputs;
+
+	const setButtonLoading = (isLoading) => {
+		if (!submitButton) {
+			return;
+		}
+
+		submitButton.disabled = isLoading;
+		submitButton.textContent = isLoading ? 'Enviando...' : 'Inscribirme';
+	};
 
 	const ensureFeedback = (container, feedbackId, className = 'invalid-feedback') => {
 		if (!container) {
@@ -153,11 +163,44 @@ document.addEventListener('DOMContentLoaded', () => {
 		validateCheckbox(checkbox);
 	});
 
-	submitButton.addEventListener('click', (event) => {
+	submitButton.addEventListener('click', async (event) => {
 		event.preventDefault();
 
 		if (!validateForm()) {
 			return;
+		}
+
+		const payload = {
+			nombreCompleto: nombreCompletoInput?.value.trim() || '',
+			correoElectronico: correoInput?.value.trim() || '',
+			profesionOficio: profesionOficioInput?.value.trim() || '',
+			entidadVinculada: entidadVinculadaInput?.value.trim() || '',
+			razonNotificacion: razonNotificacionInput?.value.trim() || '',
+			aceptaNotificaciones: Boolean(checkbox?.checked),
+		};
+
+		setButtonLoading(true);
+
+		try {
+			const response = await fetch('/api/suscriptores', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(payload),
+			});
+
+			if (!response.ok) {
+				const body = await response.json().catch(() => ({}));
+				const mensaje = body?.mensaje || 'No se pudo registrar la suscripcion.';
+				globalThis.alert(mensaje);
+				return;
+			}
+		} catch (error) {
+			globalThis.alert('No se pudo conectar con el servidor. Intente nuevamente.');
+			return;
+		} finally {
+			setButtonLoading(false);
 		}
 
 		const modalInstance = globalThis.bootstrap?.Modal.getOrCreateInstance(modalSuscripcion);

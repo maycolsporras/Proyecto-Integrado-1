@@ -1,0 +1,22 @@
+const mongoose = require('mongoose');
+
+const suscriptoresSchema = new mongoose.Schema({
+    nombreCompleto: { type: String, required: true, trim: true },
+    correoElectronico: { type: String, required: true, trim: true, lowercase: true },
+    profesionOficio: { type: String, required: true, trim: true },
+    entidadVinculada: { type: String, required: true, trim: true },
+    razonNotificacion: { type: String, required: true, trim: true },
+    aceptaNotificaciones: { type: Boolean, required: true, default: true },
+    estado: {
+        type: String,
+        enum: ['pendiente_aprobacion', 'aprobado', 'rechazado'],
+        default: 'pendiente_aprobacion',
+    },
+    motivoRechazo: { type: String, default: '' },
+    fechaRechazo: { type: Date, default: null },
+}, {
+    versionKey: false,
+    timestamps: true,
+});
+
+module.exports = mongoose.model('Suscriptores', suscriptoresSchema);

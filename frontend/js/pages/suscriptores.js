@@ -39,82 +39,122 @@ function initSuscriptoresEditor() {
     };
 
     const suscriptoresByStatus = {
-        edicion: [
-            {
-                id: 'sus-ap-1',
-                nombre: 'María Fernanda Rojas',
-                oficio: 'Docente',
-                lista: 'Accesibilidad Cultural',
-                correo: 'maria.rojas@example.com',
-                fecha: '12/03/2026',
-            },
-            {
-                id: 'sus-ap-2',
-                nombre: 'Carlos Méndez',
-                oficio: 'Psicólogo',
-                lista: 'Apoyo Comunitario',
-                correo: 'carlos.mendez@example.com',
-                fecha: '19/03/2026',
-            },
-            {
-                id: 'sus-ap-3',
-                nombre: 'Andrea Solano',
-                oficio: 'Terapeuta ocupacional',
-                lista: 'Salud y Bienestar',
-                correo: 'andrea.solano@example.com',
-                fecha: '24/03/2026',
-            },
-        ],
-        pendiente: [
-            {
-                id: 'sus-pe-1',
-                nombre: 'José Luis Vargas',
-                oficio: 'Estudiante',
-                lista: 'Voluntariado Juvenil',
-                correo: 'jose.vargas@example.com',
-                fecha: '27/03/2026',
-            },
-            {
-                id: 'sus-pe-2',
-                nombre: 'Patricia Herrera',
-                oficio: 'Trabajadora social',
-                lista: 'Inclusión Laboral',
-                correo: 'patricia.herrera@example.com',
-                fecha: '29/03/2026',
-            },
-        ],
-        rechazado: [
-            {
-                id: 'sus-re-1',
-                nombre: 'Luis Alberto Chaves',
-                oficio: 'Empresario',
-                lista: 'Accesibilidad Cultural',
-                correo: 'luis.chaves@example.com',
-                fecha: '01/04/2026',
-                motivo: 'No completó los datos mínimos requeridos para validar la suscripción.',
-            },
-            {
-                id: 'sus-re-2',
-                nombre: 'Diana Salas',
-                oficio: 'Asistente administrativa',
-                lista: 'Apoyo Comunitario',
-                correo: 'diana.salas@example.com',
-                fecha: '03/04/2026',
-                motivo: 'La información enviada no coincide con el perfil registrado en la lista.',
-            },
-        ],
+        edicion: [],
+        pendiente: [],
+        rechazado: [],
     };
 
     const suscriptoresState = {
         filtroSeleccionado: 'Nombre del Suscriptor',
         filtroTexto: '',
         statusActual: 'edicion',
+        loading: false,
+    };
+
+    const backendStatusMap = {
+        edicion: 'aprobado',
+        pendiente: 'pendiente_aprobacion',
+        rechazado: 'rechazado',
     };
 
     const statusLabelMap = {
         edicion: 'aprobados',
         pendiente: 'pendientes de aprobación',
         rechazado: 'rechazados',
+    };
+
+    const formatearFecha = (isoDate) => {
+        if (!isoDate) {
+            return 'No disponible';
+        }
+
+        const fecha = new Date(isoDate);
+        if (Number.isNaN(fecha.getTime())) {
+            return 'No disponible';
+        }
+
+        return fecha.toLocaleDateString('es-CR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        });
+    };
+
+    const obtenerBadgePorEstado = (statusKey) => {
+        if (statusKey === 'pendiente') {
+            return 'pendiente';
+        }
+
+        if (statusKey === 'rechazado') {
+            return 'rechazado';
+        }
+
+        return 'aprobado';
+    };
+
+    const adaptarSuscriptor = (suscriptor) => ({
+        id: suscriptor?._id || '',
+        nombre: suscriptor?.nombreCompleto || 'Nombre no disponible',
+        oficio: suscriptor?.profesionOficio || 'No disponible',
+        lista: suscriptor?.entidadVinculada || 'No disponible',
+        correo: suscriptor?.correoElectronico || 'No disponible',
+        fecha: formatearFecha(suscriptor?.createdAt),
+        motivo: suscriptor?.motivoRechazo || '',
+    });
+
+    const renderEstadoDeCarga = () => {
+        const etiqueta = statusLabelMap[suscriptoresState.statusActual] || 'suscriptores';
+        cardsContainer.innerHTML = `
+            <div class="row mt-3">
+                <div class="col-12">
+                    <p class="text-muted mb-0">Cargando ${escapeHtml(etiqueta)}...</p>
+                </div>
+            </div>
+        `;
+
+        if (conteo) {
+            conteo.textContent = 'Cargando...';
+        }
+    };
+
+    const renderEstadoDeError = () => {
+        cardsContainer.innerHTML = `
+            <div class="row mt-3">
+                <div class="col-12">
+                    <p class="text-danger mb-0">No se pudieron cargar los suscriptores. Intente nuevamente.</p>
+                </div>
+            </div>
+        `;
+
+        if (conteo) {
+            conteo.textContent = '0 suscriptores';
+        }
+    };
+
+    const cargarSuscriptoresPorEstado = async () => {
+        const statusKey = suscriptoresState.statusActual;
+        const backendStatus = backendStatusMap[statusKey] || 'aprobado';
+
+        suscriptoresState.loading = true;
+        renderEstadoDeCarga();
+
+        try {
+            const response = await fetch(`/api/suscriptores?estado=${encodeURIComponent(backendStatus)}`);
+
+            if (!response.ok) {
+                throw new Error('No se pudieron obtener suscriptores');
+            }
+
+            const body = await response.json();
+            const suscriptores = Array.isArray(body?.suscriptores) ? body.suscriptores : [];
+            suscriptoresByStatus[statusKey] = suscriptores.map(adaptarSuscriptor);
+            renderSuscriptores();
+        } catch (error) {
+            suscriptoresByStatus[statusKey] = [];
+            renderEstadoDeError();
+        } finally {
+            suscriptoresState.loading = false;
+        }
     };
 
     const getSuscriptorFilterValue = (suscriptor, filtroSeleccionado) => {
@@ -181,7 +221,7 @@ function initSuscriptoresEditor() {
                             </div>
 
                             <div class="eventoCardPublicadaAcciones d-flex flex-wrap align-items-center gap-2 mt-2 mt-lg-0" aria-label="Acciones del suscriptor">
-                                <span class="badge text-bg-secondary text-uppercase">${escapeHtml(suscriptoresState.statusActual)}</span>
+                                <span class="badge text-bg-secondary text-uppercase">${escapeHtml(obtenerBadgePorEstado(suscriptoresState.statusActual))}</span>
                             </div>
                         </div>
                     </div>
@@ -241,7 +281,7 @@ function initSuscriptoresEditor() {
         button.addEventListener('click', () => {
             suscriptoresState.statusActual = button.dataset.status || 'edicion';
             setActiveButton(button);
-            renderSuscriptores();
+            cargarSuscriptoresPorEstado();
         });
 
         button.dataset.suscriptoresBound = 'true';
@@ -255,7 +295,7 @@ function initSuscriptoresEditor() {
 
     suscriptoresState.statusActual = initialButton.dataset.status || 'edicion';
     setActiveButton(initialButton);
-    renderSuscriptores();
+    cargarSuscriptoresPorEstado();
 }
 
 globalThis.initSuscriptoresEditor = initSuscriptoresEditor;
