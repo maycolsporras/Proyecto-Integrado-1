@@ -7,6 +7,8 @@ const suscriptoresSchema = new mongoose.Schema({
     entidadVinculada: { type: String, required: true, trim: true },
     razonNotificacion: { type: String, required: true, trim: true },
     aceptaNotificaciones: { type: Boolean, required: true, default: true },
+    listasDifusion: [{ type: String, trim: true }],
+    listasDifusionIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ListaDifusion' }],
     estado: {
         type: String,
         enum: ['pendiente_aprobacion', 'aprobado', 'rechazado'],

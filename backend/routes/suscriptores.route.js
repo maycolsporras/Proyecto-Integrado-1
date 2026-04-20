@@ -1,5 +1,7 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const Suscriptores = require('../models/suscriptores.model.js');
+const ListaDifusion = require('../models/lista-difusion.model.js');
 
 const router = express.Router();
 const estadosPermitidos = new Set(['pendiente_aprobacion', 'aprobado', 'rechazado']);
@@ -138,9 +140,84 @@ router.patch('/:id/estado', async (req, res) => {
     }
 });
 
+router.patch('/:id/listas-difusion', async (req, res) => {
+    try {
+        const listaIdsRecibidas = Array.isArray(req.body?.listaIds) ? req.body.listaIds : [];
+        const listaIdsNormalizadas = [...new Set(
+            listaIdsRecibidas
+                .map((id) => String(id || '').trim())
+                .filter((id) => mongoose.Types.ObjectId.isValid(id)),
+        )];
+
+        if (!listaIdsNormalizadas.length) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'Debe seleccionar al menos una lista de difusion valida.',
+            });
+        }
+
+        const suscriptor = await Suscriptores.findById(req.params.id);
+
+        if (!suscriptor) {
+            return res.status(404).json({
+                ok: false,
+                mensaje: 'No se encontro el suscriptor solicitado.',
+            });
+        }
+
+        const listasAprobadas = await ListaDifusion.find({
+            _id: { $in: listaIdsNormalizadas },
+            estado: 'aprobada',
+        }).select('_id nombreLista numeroSuscriptores');
+
+        if (listasAprobadas.length !== listaIdsNormalizadas.length) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'Una o varias listas seleccionadas no estan aprobadas o no existen.',
+            });
+        }
+
+        const idsPrevios = new Set((suscriptor.listasDifusionIds || []).map((id) => String(id)));
+        const idsNuevos = new Set(listasAprobadas.map((lista) => String(lista._id)));
+
+        const idsADecrementar = [...idsPrevios].filter((id) => !idsNuevos.has(id));
+        const idsAIncrementar = [...idsNuevos].filter((id) => !idsPrevios.has(id));
+
+        for (const listaId of idsADecrementar) {
+            const lista = await ListaDifusion.findById(listaId);
+            if (!lista) {
+                continue;
+            }
+
+            lista.numeroSuscriptores = Math.max(0, (lista.numeroSuscriptores || 0) - 1);
+            await lista.save();
+        }
+
+        for (const listaId of idsAIncrementar) {
+            await ListaDifusion.findByIdAndUpdate(listaId, { $inc: { numeroSuscriptores: 1 } });
+        }
+
+        suscriptor.listasDifusionIds = listasAprobadas.map((lista) => lista._id);
+        suscriptor.listasDifusion = listasAprobadas.map((lista) => lista.nombreLista);
+        await suscriptor.save();
+
+        return res.status(200).json({
+            ok: true,
+            mensaje: 'Listas de difusion asignadas correctamente.',
+            suscriptor,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            mensaje: 'No se pudieron asignar las listas de difusion al suscriptor.',
+            detalle: error.message,
+        });
+    }
+});
+
 router.delete('/:id', async (req, res) => {
     try {
-        const suscriptorEliminado = await Suscriptores.findByIdAndDelete(req.params.id);
+        const suscriptorEliminado = await Suscriptores.findById(req.params.id);
 
         if (!suscriptorEliminado) {
             return res.status(404).json({
@@ -148,6 +225,22 @@ router.delete('/:id', async (req, res) => {
                 mensaje: 'No se encontro el suscriptor solicitado.',
             });
         }
+
+        const listasAsignadasIds = Array.isArray(suscriptorEliminado.listasDifusionIds)
+            ? suscriptorEliminado.listasDifusionIds.map((id) => String(id))
+            : [];
+
+        for (const listaId of listasAsignadasIds) {
+            const lista = await ListaDifusion.findById(listaId);
+            if (!lista) {
+                continue;
+            }
+
+            lista.numeroSuscriptores = Math.max(0, (lista.numeroSuscriptores || 0) - 1);
+            await lista.save();
+        }
+
+        await Suscriptores.findByIdAndDelete(req.params.id);
 
         return res.status(200).json({
             ok: true,

@@ -417,6 +417,38 @@
 
     <!-- fin modal rechazo lista difusion -->
 
+
+
+ <!-- modal rechazo suscriptor -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRechazoSuscriptor">
+        Modal Rechazo suscriptor
+    </button>
+
+    <div class="modal fade" id="modalRechazoSuscriptor" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalRechazoListaDifusionAncho">
+            <div class="modal-content modalRechazoListaDifusionContenido">
+                <div class="modal-body modalRechazoListaDifusionBody">
+                    <p class="modalRechazoListaDifusionTitulo">Rechazo de Suscriptor</p>
+                    <p class="modalRechazoListaDifusionDescripcion">
+                        Para realizar el rechazo de un suscriptor, favor indicar el motivo por el cual fue rechazado en el recuadro siguiente. Este será enviado al solicitante de la suscripción.
+                    </p>
+                    <div class="modalRechazoListaDifusionCajaMotivo">
+                        Buenos días, la lista de difusión enviada no puede ser aprobada ya que se requiere verificar el
+                        dato del párrafo tres de la descripción para una mejor comprensión. Gracias!
+                    </div>
+                    <div class="modalRechazoListaDifusionAcciones d-grid gap-3 d-md-flex justify-content-center my-4">
+                        <button type="button" class="btn modalRechazoListaDifusionBtnCancelar px-4"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn modalRechazoListaDifusionBtnAceptar px-4">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- fin modal rechazo lista difusion -->
+
+
     <!-- modal rechazo lista difusion -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRechazoEventoAnotaciones">
         Modal Rechazo anotaciones
