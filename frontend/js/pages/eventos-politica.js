@@ -639,7 +639,7 @@ function crearDetalleEvento(evento) {
 
             <div class="eventoPoliticaInfoAdicionalAcciones d-flex flex-wrap gap-3 mt-4">
               <button id="btnLecturaFacilEvento" type="button" class="eventoPoliticaInfoAdicionalBtn eventoPoliticaInfoAdicionalBtn--primary" aria-controls="lecturaFacilVentana" aria-expanded="false">Lectura Fácil del Evento</button>
-              <button type="button" class="eventoPoliticaInfoAdicionalBtn eventoPoliticaInfoAdicionalBtn--secondary">Realizar consulta</button>
+              <button type="button" class="eventoPoliticaInfoAdicionalBtn eventoPoliticaInfoAdicionalBtn--secondary" data-bs-toggle="modal" data-bs-target="#modalConsultaEvento" data-evento-id="${escapeHtml(evento._id || '')}">Realizar consulta</button>
             </div>
 
             <div id="lecturaFacilVentana" class="eventoPoliticaLecturaFacilVentana d-none" role="region" aria-live="polite" aria-labelledby="lecturaFacilTitulo">
