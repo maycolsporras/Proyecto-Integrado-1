@@ -1018,7 +1018,75 @@ document.addEventListener('DOMContentLoaded', () => {
         'suscriptores': {
             title: 'Suscriptores',
             html: `
-                
+                <nav class="breadcrumbEventos" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a class="text-decoration-none"
+                                href="../modulo-admin.html">Inicio</a>
+                            </li>
+                            <li class="breadcrumb-item"><a class="text-decoration-none" href="#">Eventos</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Suscriptores
+                            </li>
+                        </ol>
+                    </nav>
+                    <div class="container-fluid">
+                            <div class="row mt-5">
+                                <div
+                                    class="col-12 d-flex justify-content-start align-items-center gap-2 gap-sm-3 mt-4 aprobacionEventosTitle">
+                                    <div class="iconoAprobacionEventos">
+                                        <i class="fa-solid fa-people-group"></i>
+                                    </div>
+                                    <p class="txtAprobacionEventos mb-0">Suscriptores</p>
+                                </div>
+                                <div class="col-12 d-flex flex-column flex-lg-row justify-content-center align-items-center gap-2 gap-sm-3 mt-4 aprobacionEventosSubtitle">
+                                    <button type="button" class="btn btnListasDifusionEdit btnlistasEnAprobado is-active" data-status="edicion">Aprobados</button>
+                                    <button type="button" class="btn btnListasDifusionEdit btnlistasEnPendiente" data-status="pendiente">Pendientes de Aprobación</button>
+                                    <button type="button" class="btn btnListasDifusionEdit btnlistasEnRechazado" data-status="rechazado">Rechazados</button>
+                                </div>
+                                <div class="col-12 buscadorEventosTitle mt-4 mb-2">
+                                    <p>Buscador de Suscriptores</p>
+                                </div>
+                                <div class="col-12 buscadorEventosSubtitle mb-2">
+                                    Filtrar por:
+                                </div>
+                                <div class="col-12 mb-4">
+                                    <div class="row g-2 align-items-center">
+                                        <div class="col-12 col-sm-4 col-md-auto">
+                                            <label class="visually-hidden" for="gestionEventosFiltro">Filtro de
+                                                eventos</label>
+                                            <select id="gestionEventosFiltro" class="form-select gestionEventosSelect"
+                                                aria-label="Tipo de filtro">
+                                                <option selected>Nombre del Suscriptor</option>
+                                                <option>Oficio</option>
+                                                <option>Lista de difusión</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-sm">
+                                            <label class="visually-hidden" for="gestionEventosBusqueda">Dato a
+                                                buscar</label>
+                                            <input id="gestionEventosBusqueda" class="form-control gestionEventosInput"
+                                                type="text" placeholder="Ingrese el dato indicado"
+                                                aria-label="Ingrese el dato indicado">
+                                        </div>
+
+                                        <div class="col-12 col-sm-auto d-grid d-sm-inline-flex">
+                                            <button class="btn gestionEventosSearchBtn" type="button" aria-label="Buscar">
+                                                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-4 fw-bold d-flex justify-content-end">
+                                    <p id="suscriptoresEditorConteo">Cargando...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cardsSuscriptoresEditor container-fluid mt-3" id="cardsSuscriptoresEditor">
+
+                        </div>  
+
+                        
             `,
         },
         'consultas': {
@@ -1582,6 +1650,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (sidebarKey === 'eventos-borrador' && typeof globalThis.initEventoBorrador === 'function') {
             globalThis.initEventoBorrador();
+        }
+
+        if (sidebarKey === 'suscriptores' && typeof initSuscriptoresEditor === 'function') {
+            initSuscriptoresEditor();
         }
 
         if (sidebarKey === 'eventos-finalizados' && typeof initEventosFinalizadosEditor === 'function') {

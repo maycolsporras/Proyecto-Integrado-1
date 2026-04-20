@@ -247,12 +247,105 @@
                     </div>
                     <div class="col-12">
                         <button type="button" class="btn text-decoration-none btnInscribirme"
+                            data-bs-toggle="modal" data-bs-target="#modalSuscripcionEventos"
                             aria-label="Inscribirme a notificaciones de eventos PONADIS"
                             aria-describedby="descripcion-inscripcion-eventos">Inscribirme</button>
                     </div>
                 </div>
             </div>
         </section>
+
+        <div class="modal fade" id="modalSuscripcionEventos" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modalSuscripcionEventosAncho">
+                <div class="modal-content modalSuscripcionEventosContenido">
+                    <div class="modal-body text-center modalSuscripcionEventosBody">
+                        <p class="py-4 mb-3 modalSuscripcionEventosTitulo">Inscripcion a Eventos</p>
+                        <p class="modalSuscripcionEventosDescripcion text-start">
+                            Complete los datos solicitados para inscribirse a recibir notificaciones de los eventos mas
+                            recientes del Sistema Costarricense de Informacion sobre Discapacidad -SICID-. Se le enviara un
+                            correo electronico a su cuenta cuando existan nuevas noticias publicadas en el sitio.
+                        </p>
+                        <form class="p-3 mx-auto">
+                            <div class="row mb-3 align-items-center justify-content-center">
+                                <label class="col-12 col-md-4 col-form-label modalSuscripcionEventosEtiqueta">
+                                    <span class="text-danger">*</span> Nombre Completo
+                                </label>
+                                <div class="col-12 col-md-8">
+                                    <input type="text" class="form-control" placeholder="Introduzca el dato solicitado">
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center justify-content-center">
+                                <label class="col-12 col-md-4 col-form-label modalSuscripcionEventosEtiqueta">
+                                    <span class="text-danger">*</span> Correo Electronico
+                                </label>
+                                <div class="col-12 col-md-8">
+                                    <input type="email" class="form-control" placeholder="Introduzca el dato solicitado">
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center justify-content-center">
+                                <label class="col-12 col-md-4 col-form-label modalSuscripcionEventosEtiqueta">
+                                    <span class="text-danger">*</span> Profesion u Oficio
+                                </label>
+                                <div class="col-12 col-md-8">
+                                    <input type="text" class="form-control" placeholder="Introduzca el dato solicitado">
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center justify-content-center">
+                                <label class="col-12 col-md-4 col-form-label modalSuscripcionEventosEtiqueta">
+                                    <span class="text-danger">*</span> Entidad para la que trabaja o esta vinculado
+                                </label>
+                                <div class="col-12 col-md-8">
+                                    <input type="text" class="form-control" placeholder="Introduzca el dato solicitado">
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center justify-content-center">
+                                <label class="col-12 col-md-4 col-form-label modalSuscripcionEventosEtiqueta">
+                                    <span class="text-danger">*</span> Razon por la que desea ser notificado
+                                </label>
+                                <div class="col-12 col-md-8">
+                                    <input type="text" class="form-control" placeholder="Introduzca el dato solicitado">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8 mx-auto">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="notificaciones">
+                                        <label class="form-check-label" for="notificaciones">
+                                            <span class="modalSuscripcionEventosTextoNotificaciones">Acepto recibir
+                                                notificaciones</span> a mi correo electronico de SICID
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="d-grid d-md-flex justify-content-center my-5">
+                            <button type="button" class="btn modalSuscripcionEventosBtnInscribirme">Inscribirme</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="suscripcionEnviada" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+                <div class="modal-content modalSuscripcionEnviadaContenido">
+                    <div class="modal-body modalSuscripcionEnviadaBody">
+                        <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <p class="modalSuscripcionEnviadaTitulo">Inscripcion Enviada</p>
+                        <p class="modalSuscripcionEnviadaDescripcion">
+                            <span class="modalSuscripcionEnviadaDescripcionNegrita">Se envio la solicitud de inscripcion con
+                                exito.</span> Los encargados de administrar EVENTOS se estaran comunicando con usted, por
+                            medio del correo electronico para notificar la aprobacion de su inscripcion al modulo.
+                        </p>
+                        <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                            data-bs-dismiss="modal">Continuar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <footer>
@@ -296,7 +389,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./js/pages/eventos-politica.js"></script>
-    <script src="./js/index.js"></script>
+    <script src="./js/pages/form-suscriptores.js"></script>
 </body>
 
 </html>
