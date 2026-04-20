@@ -52,6 +52,8 @@ const formEventoSchema = new mongoose.Schema({
     },
     fijarImportante: { type: Boolean, default: false },
     listaDifusion: { type: String, default: '' },
+    listaDifusionId: { type: String, default: '' },
+    listaDifusionNombre: { type: String, default: '' },
     fechaFinVisualizacion: { type: fechaSchema, required: true },
     redesSociales: { type: [String], default: [] },
     estado: {

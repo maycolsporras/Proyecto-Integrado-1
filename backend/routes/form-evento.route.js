@@ -1,7 +1,9 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('node:path');
+const mongoose = require('mongoose');
 const FormEvento = require('../models/form-evento.model.js');
+const ListaDifusion = require('../models/lista-difusion.model.js');
 
 const router = express.Router();
 const estadosPermitidos = new Set(['pendiente_aprobacion', 'aprobado', 'rechazado', 'borrador']);
@@ -105,6 +107,31 @@ const buildEventoResponse = (evento) => {
     };
 };
 
+const resolverListaDifusionAprobada = async ({ listaDifusionId, listaDifusionNombre }) => {
+    const idNormalizado = typeof listaDifusionId === 'string' ? listaDifusionId.trim() : '';
+    const nombreNormalizado = typeof listaDifusionNombre === 'string' ? listaDifusionNombre.trim() : '';
+
+    let lista = null;
+
+    if (idNormalizado && mongoose.Types.ObjectId.isValid(idNormalizado)) {
+        lista = await ListaDifusion.findOne({ _id: idNormalizado, estado: 'aprobada' });
+    }
+
+    if (!lista && nombreNormalizado) {
+        lista = await ListaDifusion.findOne({ nombreLista: nombreNormalizado, estado: 'aprobada' });
+    }
+
+    if (!lista) {
+        return null;
+    }
+
+    return {
+        listaDifusionId: String(lista._id),
+        listaDifusionNombre: lista.nombreLista,
+        listaDifusion: lista.nombreLista,
+    };
+};
+
 router.post('/', upload.fields([
     { name: 'imagenes', maxCount: 10 },
     { name: 'videos', maxCount: 5 },
@@ -119,6 +146,17 @@ router.post('/', upload.fields([
         const formularioInteresados = parseJsonField(req.body.formularioInteresados, {});
         const fechaFinVisualizacion = parseJsonField(req.body.fechaFinVisualizacion, {});
         const redesSociales = parseJsonField(req.body.redesSociales, []);
+        const listaDifusionSeleccionada = await resolverListaDifusionAprobada({
+            listaDifusionId: req.body.listaDifusionId,
+            listaDifusionNombre: req.body.listaDifusionNombre || req.body.listaDifusion,
+        });
+
+        if (!listaDifusionSeleccionada) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'Debe seleccionar una lista de difusion aprobada valida.',
+            });
+        }
 
         const imagenes = buildArchivoMetadata(req.files?.imagenes || []);
         const videos = buildArchivoMetadata(req.files?.videos || []);
@@ -145,7 +183,7 @@ router.post('/', upload.fields([
             palabrasClave,
             formularioInteresados,
             fijarImportante: req.body.fijarImportante === 'true',
-            listaDifusion: req.body.listaDifusion,
+            ...listaDifusionSeleccionada,
             fechaFinVisualizacion,
             redesSociales,
             estado: req.body.estado || 'pendiente_aprobacion',
@@ -252,6 +290,17 @@ router.patch('/:id', upload.fields([
         const formularioInteresados = parseJsonField(req.body.formularioInteresados, eventoExistente.formularioInteresados);
         const fechaFinVisualizacion = parseJsonField(req.body.fechaFinVisualizacion, eventoExistente.fechaFinVisualizacion);
         const redesSociales = parseJsonField(req.body.redesSociales, eventoExistente.redesSociales);
+        const listaDifusionSeleccionada = await resolverListaDifusionAprobada({
+            listaDifusionId: req.body.listaDifusionId,
+            listaDifusionNombre: req.body.listaDifusionNombre || req.body.listaDifusion,
+        });
+
+        if (!listaDifusionSeleccionada) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'Debe seleccionar una lista de difusion aprobada valida.',
+            });
+        }
 
         const estadoRecibido = req.body.estado;
         if (estadoRecibido && !estadosPermitidos.has(estadoRecibido)) {
@@ -283,7 +332,7 @@ router.patch('/:id', upload.fields([
             palabrasClave,
             formularioInteresados,
             fijarImportante: req.body.fijarImportante === 'true',
-            listaDifusion: req.body.listaDifusion,
+            ...listaDifusionSeleccionada,
             fechaFinVisualizacion,
             redesSociales,
             estado: estadoFinal,

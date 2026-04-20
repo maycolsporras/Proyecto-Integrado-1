@@ -309,6 +309,7 @@ function initCrearEvento() {
     }
 
     formRoot.dataset.ceInitialized = 'true';
+    const listaDifusionSelect = formRoot.querySelector('#listaDifusion');
     const hoy = new Date();
     const anioActual = hoy.getFullYear();
     const mesActual = String(hoy.getMonth() + 1).padStart(2, '0');
@@ -412,6 +413,44 @@ function initCrearEvento() {
         }
     }
 
+    async function cargarListasDifusionAprobadas() {
+        if (!listaDifusionSelect || listaDifusionSelect.dataset.listasDifusionCargadas === 'true') {
+            return;
+        }
+        listaDifusionSelect.disabled = true;
+
+        try {
+            const response = await fetch('/api/lista-difusion?estado=aprobada');
+
+            if (!response.ok) {
+                throw new Error('No se pudieron cargar las listas de difusion.');
+            }
+
+            const data = await response.json();
+            const listas = Array.isArray(data?.listas) ? data.listas : [];
+
+            listaDifusionSelect.innerHTML = '<option value="">seleccione la lista de difusión</option>';
+
+            listas.forEach((lista) => {
+                const option = document.createElement('option');
+                option.value = String(lista?._id || '').trim();
+                option.textContent = String(lista?.nombreLista || '').trim();
+
+                if (option.value) {
+                    listaDifusionSelect.appendChild(option);
+                }
+            });
+
+            listaDifusionSelect.dataset.listasDifusionCargadas = 'true';
+            restaurarListaDifusionPendiente(listaDifusionSelect);
+        } catch (error) {
+            console.error('Error al cargar listas de difusion aprobadas:', error);
+            listaDifusionSelect.innerHTML = '<option value="">No hay listas de difusión aprobadas disponibles</option>';
+        } finally {
+            listaDifusionSelect.disabled = false;
+        }
+    }
+
     // ── Inicializar selects del paso 1 ────────────────────────────
 
     const selectFechaPubAnio = document.getElementById('fechaPubAnio');
@@ -422,6 +461,7 @@ function initCrearEvento() {
     sincronizarSelectsFecha(selectFechaPubAnio, selectFechaPubMes, selectFechaPubDia);
     generarHoras(document.getElementById('horaInicio'), '14');
     generarHoras(document.getElementById('horaFin'), '17');
+    cargarListasDifusionAprobadas();
 
     selectFechaPubAnio.addEventListener('change', () => {
         sincronizarSelectsFecha(selectFechaPubAnio, selectFechaPubMes, selectFechaPubDia);
@@ -897,6 +937,9 @@ function initCrearEvento() {
 
     function construirPayloadFormularioEvento() {
         const tipoFormularioSeleccionado = formRoot.querySelector('#tipoFormulario')?.value || '';
+        const listaDifusionSelect = formRoot.querySelector('#listaDifusion');
+        const listaDifusionId = listaDifusionSelect?.value || '';
+        const listaDifusionNombre = listaDifusionSelect?.selectedOptions?.[0]?.textContent?.trim() || '';
 
         const palabrasClave = (formRoot.querySelector('#palabrasClave')?.value || '')
             .split(',')
@@ -932,7 +975,9 @@ function initCrearEvento() {
                 aspectosSeleccionados: obtenerAspectosFormularioSeleccionados(tipoFormularioSeleccionado),
             },
             fijarImportante: (formRoot.querySelector('input[name="fijarImportante"]:checked')?.value || '') === 'si',
-            listaDifusion: formRoot.querySelector('#listaDifusion')?.value || '',
+            listaDifusionId,
+            listaDifusionNombre,
+            listaDifusion: listaDifusionNombre,
             fechaFinVisualizacion: obtenerFechaDesdeSelects('fechaFinAnio', 'fechaFinMes', 'fechaFinDia'),
             redesSociales: Array.from(formRoot.querySelectorAll('input[name="redes"]:checked')).map((input) => input.value),
             estado: 'pendiente_aprobacion',
@@ -975,6 +1020,8 @@ function initCrearEvento() {
         formData.append('palabrasClave', JSON.stringify(payload.palabrasClave));
         formData.append('formularioInteresados', JSON.stringify(payload.formularioInteresados));
         formData.append('fijarImportante', String(payload.fijarImportante));
+        formData.append('listaDifusionId', payload.listaDifusionId);
+        formData.append('listaDifusionNombre', payload.listaDifusionNombre);
         formData.append('listaDifusion', payload.listaDifusion);
         formData.append('fechaFinVisualizacion', JSON.stringify(payload.fechaFinVisualizacion));
         formData.append('redesSociales', JSON.stringify(payload.redesSociales));
@@ -1792,6 +1839,58 @@ function setSelectIfExists(selectEl, value) {
     }
 }
 
+function setListaDifusionIfExists(selectEl, evento = {}) {
+    if (!selectEl) {
+        return;
+    }
+
+    const listaDifusionId = String(evento?.listaDifusionId || '').trim();
+    const listaDifusionNombre = String(evento?.listaDifusionNombre || evento?.listaDifusion || '').trim();
+
+    if (listaDifusionId && Array.from(selectEl.options).some((option) => option.value === listaDifusionId)) {
+        selectEl.value = listaDifusionId;
+        return;
+    }
+
+    if (listaDifusionNombre) {
+        const optionMatch = Array.from(selectEl.options).find((option) => option.textContent.trim() === listaDifusionNombre);
+
+        if (optionMatch) {
+            selectEl.value = optionMatch.value;
+            return;
+        }
+    }
+
+    if (listaDifusionId || listaDifusionNombre) {
+        selectEl.dataset.listaDifusionPendiente = listaDifusionId || listaDifusionNombre;
+    }
+}
+
+function restaurarListaDifusionPendiente(selectEl) {
+    if (!selectEl) {
+        return;
+    }
+
+    const valorPendiente = String(selectEl.dataset.listaDifusionPendiente || '').trim();
+
+    if (!valorPendiente) {
+        return;
+    }
+
+    const matchPorValor = Array.from(selectEl.options).find((option) => option.value === valorPendiente);
+    if (matchPorValor) {
+        selectEl.value = matchPorValor.value;
+        delete selectEl.dataset.listaDifusionPendiente;
+        return;
+    }
+
+    const matchPorTexto = Array.from(selectEl.options).find((option) => option.textContent.trim() === valorPendiente);
+    if (matchPorTexto) {
+        selectEl.value = matchPorTexto.value;
+        delete selectEl.dataset.listaDifusionPendiente;
+    }
+}
+
 function setInputIfExists(root, selector, value = '') {
     const element = root.querySelector(selector);
     if (!element) {
@@ -1885,7 +1984,7 @@ function applyEventoDataToCrearEventoForm(root, evento) {
     setInputIfExists(root, '#palabrasClave', Array.isArray(evento.palabrasClave) ? evento.palabrasClave.join(', ') : '');
     setSelectIfExists(root.querySelector('#tipoFormulario'), evento?.formularioInteresados?.tipo);
     root.querySelector('#tipoFormulario')?.dispatchEvent(new Event('change', { bubbles: true }));
-    setSelectIfExists(root.querySelector('#listaDifusion'), evento.listaDifusion);
+    setListaDifusionIfExists(root.querySelector('#listaDifusion'), evento);
     setFechaFromObject(root, 'fechaFin', evento.fechaFinVisualizacion);
 
     const fijarImportanteSi = root.querySelector('input[name="fijarImportante"][value="si"]');
@@ -2036,6 +2135,15 @@ function restoreCrearEventoForm(formRoot, snapshot) {
         }
 
         if (fieldSnapshot.kind === 'value' && 'value' in field) {
+            if (field.id === 'listaDifusion' && field.tagName === 'SELECT') {
+                setListaDifusionIfExists(field, {
+                    listaDifusionId: fieldSnapshot.value,
+                    listaDifusionNombre: fieldSnapshot.value,
+                    listaDifusion: fieldSnapshot.value,
+                });
+                continue;
+            }
+
             applyCrearEventoValueSnapshot(field, fieldSnapshot);
             continue;
         }
