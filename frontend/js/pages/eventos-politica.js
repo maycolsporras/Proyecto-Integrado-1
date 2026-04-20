@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  inicializarModuloFormInscripcion();
   cargarEventosPolitica();
   configurarFiltrosPolitica();
 });
@@ -31,6 +32,8 @@ const mesesOrdenados = [
 
 let eventosPoliticaDisponibles = [];
 let filtrosFechaInicializados = false;
+let eventoDetalleActual = null;
+let moduloFormInscripcion = null;
 
 async function cargarEventosPolitica() {
   if (!contenedorEventosCreados) return;
@@ -372,6 +375,28 @@ function parsearFecha(fecha) {
 
 const breadcrumbLista = document.querySelector('.breadcrumbEventos ol.breadcrumb');
 
+function inicializarModuloFormInscripcion() {
+  if (typeof window.crearModuloFormInscripcionEvento !== 'function') {
+    console.warn('No se cargó el módulo de formulario de inscripción.');
+    return;
+  }
+
+  moduloFormInscripcion = window.crearModuloFormInscripcionEvento({
+    contenedorEventosCreados,
+    breadcrumbLista,
+    escapeHtml,
+    obtenerFechaPrincipal,
+    obtenerUrlImagenEvento,
+    crearDetalleEvento,
+    actualizarBreadcrumb,
+    getEventoActual: () => eventoDetalleActual,
+    onDetalleRender: (evento) => {
+      configurarLecturaFacilEventoDetalle();
+      configurarAccionesInscripcionEvento(evento);
+    },
+  });
+}
+
 function renderizarEventosPolitica(eventos) {
   if (!contenedorEventosCreados) return;
 
@@ -480,8 +505,10 @@ async function cargarDetalleEvento(eventoId, nombreEvento = '') {
       return;
     }
 
+    eventoDetalleActual = evento;
     contenedorEventosCreados.innerHTML = crearDetalleEvento(evento);
     configurarLecturaFacilEventoDetalle();
+    configurarAccionesInscripcionEvento(evento);
     actualizarBreadcrumb(evento.nombreEvento || nombreEvento);
   } catch (error) {
     console.error('Error al cargar el detalle del evento:', error);
@@ -610,7 +637,7 @@ function crearDetalleEvento(evento) {
                   <p class="eventoPoliticaTextoBlanco">${escapeHtml(publicoMeta)}</p>
                   <div class="eventoPoliticaAccionMeta d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3">
                     <strong class="eventoPoliticaCupos">${escapeHtml(cupoEvento)}</strong>
-                    <a class="eventoPoliticaBotonInscripcion text-decoration-none" href="${escapeHtml(linkCalendar)}" target="_blank" rel="noopener noreferrer">Inscripción a Evento</a>
+                    <button type="button" class="eventoPoliticaBotonInscripcion jsAbrirFormularioInscripcion" data-evento-id="${escapeHtml(evento._id || '')}">Inscripción a Evento</button>
                   </div>
                 </section>
 
@@ -669,7 +696,7 @@ function crearDetalleEvento(evento) {
             </div>
 
             <div class="text-center mt-4">
-              <a class="eventoPoliticaInscripcionEventoBtn text-decoration-none" href="${escapeHtml(linkCalendar)}" target="_blank" rel="noopener noreferrer">Inscripción a Evento</a>
+              <button type="button" class="eventoPoliticaInscripcionEventoBtn jsAbrirFormularioInscripcion" data-evento-id="${escapeHtml(evento._id || '')}">Inscripción a Evento</button>
             </div>
 
             <div class="eventoPoliticaPieAcciones row g-4 mt-5">
@@ -701,6 +728,10 @@ function crearDetalleEvento(evento) {
       </div>
     </div>
   `;
+}
+
+function configurarAccionesInscripcionEvento(evento) {
+  moduloFormInscripcion?.configurarAccionesInscripcionEvento(evento);
 }
 
 function ocultarFiltrosPolitica() {

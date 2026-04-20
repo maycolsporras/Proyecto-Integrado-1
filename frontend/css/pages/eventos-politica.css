@@ -675,6 +675,7 @@
     font-weight: 700;
     padding: 0.42rem 0.9rem;
     font-size: 0.9rem;
+    cursor: pointer;
 }
 
 .eventoPoliticaEnlaceEvento {
@@ -911,6 +912,7 @@
     padding: 0.72rem 1.9rem;
     font-weight: 700;
     box-shadow: 0 3px 8px rgba(74, 103, 162, 0.28);
+    cursor: pointer;
 }
 
 .eventoPoliticaPieAcciones {
@@ -1040,5 +1042,244 @@
 
     .eventoPoliticaTituloPrincipal {
         padding: 1rem;
+    }
+}
+
+.epInscripcionVista {
+    background: #ffffff;
+}
+
+.epInscripcionCard {
+    max-width: 860px;
+    margin: 1.6rem auto 3rem;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: 1rem 0 1.5rem;
+}
+
+.epInscripcionTitulo {
+    color: #3d3d3d;
+    font-size: 2rem;
+    line-height: 1.2;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.2rem;
+}
+
+.epInscripcionStepper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-bottom: 3.1rem;
+}
+
+.epInscripcionStepper .ceStepCircle {
+    background-color: #ffffff;
+    border: 1px solid #4a67a2;
+    color: #4a67a2;
+}
+
+.epInscripcionStepper .ceStepActive .ceStepCircle {
+    background-color: #2a4f9b;
+    color: #ffffff;
+    border-color: #2a4f9b;
+}
+
+.epInscripcionStepper .ceStepCurrent .ceStepCircle {
+    background-color: #2a4f9b;
+    color: #ffffff;
+    border-color: #2a4f9b;
+}
+
+.epInscripcionStepper .ceStepLine {
+    width: 28px;
+    margin: 13px 2px 0;
+    background-color: #9eb0cf;
+}
+
+.epInscripcionStepper .ceStepDot {
+    margin-top: 0.45rem;
+}
+
+.epInscripcionFormulario {
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+.epInscripcionPaso {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.epInscripcionFila {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    align-items: start;
+    gap: 1rem;
+}
+
+.epInscripcionEtiqueta {
+    font-size: 0.95rem;
+    color: #4a4a4a;
+    text-align: right;
+    margin-top: 0.55rem;
+    line-height: 1.2;
+}
+
+.epInscripcionControl {
+    width: 100%;
+}
+
+.epInscripcionFilaCompuesta .epInscripcionControl {
+    border-left: 2px solid #d5d5d5;
+    padding-left: 1rem;
+}
+
+.epInscripcionInput {
+    width: 100%;
+    min-height: 40px;
+    border: 1px solid #b9b9b9;
+    border-radius: 3px;
+    padding: 0.45rem 0.7rem;
+    color: #3d3d3d;
+    background: #ffffff;
+}
+
+.epInscripcionInput:focus {
+    outline: none;
+    border-color: #4a67a2;
+    box-shadow: 0 0 0 2px rgba(74, 103, 162, 0.15);
+}
+
+.epInscripcionGrid2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+}
+
+.epInscripcionSubFila {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 0.7rem;
+    align-items: center;
+}
+
+.epInscripcionSubFila span {
+    color: #4a4a4a;
+    font-size: 0.9rem;
+}
+
+.epInscripcionSubFilaAdjuntos {
+    align-items: flex-start;
+}
+
+.epInscripcionRadio {
+    display: flex;
+    gap: 1.75rem;
+    align-items: center;
+    min-height: 40px;
+}
+
+.epInscripcionRadio label,
+.epInscripcionCheckLabel {
+    color: #4a4a4a;
+    font-size: 0.95rem;
+}
+
+.epInscripcionFilaCheckUnica {
+    grid-template-columns: 1fr;
+}
+
+.epInscripcionCheckLabel {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.epInscripcionDocumentos {
+    display: grid;
+    gap: 0.55rem;
+}
+
+.epAdjuntosWrapper {
+    display: grid;
+    gap: 0.2rem;
+}
+
+.epAdjuntosWrapper .ceFileRow {
+    margin-bottom: 0;
+}
+
+.epAdjuntosWrapper .ceCircleBtnRemove {
+    background-color: #666;
+}
+
+.epInscripcionAcciones {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.4rem;
+}
+
+.epInscripcionAcciones .ceBtn {
+    min-width: 165px;
+    justify-content: center;
+    font-size: 1.05rem;
+    padding: 0.7rem 1.65rem;
+}
+
+.epInscripcionAcciones .ceBtn i {
+    font-size: 0.95rem;
+}
+
+.epInscripcionAcciones .ceBtnSecondary {
+    background: #d6e2ef;
+    color: #2a4f9b;
+}
+
+.epInscripcionVacio {
+    text-align: center;
+    color: #666666;
+    margin: 0.6rem 0 1rem;
+}
+
+@media (max-width: 991.98px) {
+    .epInscripcionCard {
+        padding: 1.1rem 0.2rem 1rem;
+        margin: 1rem auto 2rem;
+    }
+
+    .epInscripcionTitulo {
+        font-size: 1.55rem;
+    }
+
+    .epInscripcionFila {
+        grid-template-columns: 1fr;
+        gap: 0.45rem;
+    }
+
+    .epInscripcionEtiqueta {
+        text-align: left;
+        margin-top: 0;
+    }
+
+    .epInscripcionSubFila {
+        grid-template-columns: 1fr;
+        gap: 0.35rem;
+    }
+
+    .epInscripcionFilaCompuesta .epInscripcionControl {
+        border-left: 0;
+        padding-left: 0;
+    }
+
+    .epInscripcionAcciones {
+        flex-wrap: wrap;
+    }
+
+    .epInscripcionAcciones .ceBtn {
+        min-width: 140px;
     }
 }
