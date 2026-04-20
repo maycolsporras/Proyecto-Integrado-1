@@ -6,6 +6,11 @@ function initConsultasEditor() {
     const busquedaInput = contentPanel?.querySelector('#gestionEventosBusqueda');
     const searchButton = contentPanel?.querySelector('.gestionEventosSearchBtn');
     const conteo = contentPanel?.querySelector('#consultasEditorConteo');
+    const modalRespuestaConsultaElement = document.getElementById('modalRespuestaConsulta');
+    const modalRespuestaEnviadaElement = document.getElementById('modalRespuestaEnviada');
+    const modalRespuestaTextarea = modalRespuestaConsultaElement?.querySelector('.modalRespuestaConsultaTextarea');
+    const modalRespuestaDescripcion = modalRespuestaConsultaElement?.querySelector('.modalRespuestaConsultaDescripcion');
+    const modalRespuestaBtnAceptar = modalRespuestaConsultaElement?.querySelector('.modalRespuestaConsultaBtnAceptar');
 
     if (!statusButtons?.length || !cardsContainer) {
         return;
@@ -91,6 +96,8 @@ function initConsultasEditor() {
         pendientes: [],
     };
 
+    let consultaPendienteSeleccionada = null;
+
     const statusLabelMap = {
         resueltas: 'consultas resueltas',
         pendientes: 'consultas pendientes',
@@ -134,6 +141,49 @@ function initConsultasEditor() {
         return `1-${Math.min(total, 20)} de ${total}`;
     };
 
+    const getAutorConsulta = (consulta) => {
+        const correo = String(consulta?.correoElectronico || '').trim();
+
+        if (!correo || !correo.includes('@')) {
+            return 'Usuario';
+        }
+
+        const alias = correo.split('@')[0] || '';
+        const aliasLimpio = alias.replaceAll(/[._-]+/g, ' ').trim();
+
+        if (!aliasLimpio) {
+            return correo;
+        }
+
+        return aliasLimpio
+            .split(' ')
+            .filter(Boolean)
+            .map((parte) => parte.charAt(0).toUpperCase() + parte.slice(1).toLowerCase())
+            .join(' ');
+    };
+
+    const agruparConsultasPorEvento = (consultas) => {
+        const grupos = new Map();
+
+        consultas.forEach((consulta) => {
+            const key = consulta.idEvento || `sin-evento-${consulta.id}`;
+
+            if (!grupos.has(key)) {
+                grupos.set(key, {
+                    idEvento: key,
+                    tituloEvento: consulta.tituloEvento,
+                    organizador: consulta.organizador,
+                    fechaEventoTexto: consulta.fechaEventoTexto,
+                    consultas: [],
+                });
+            }
+
+            grupos.get(key).consultas.push(consulta);
+        });
+
+        return [...grupos.values()];
+    };
+
     const aplicarFiltrosConsultas = (consultas) => {
         const filtroSeleccionado = filtroSelect?.value || consultasState.filtroSeleccionado || 'Título de Eventos';
         consultasState.filtroSeleccionado = filtroSeleccionado;
@@ -175,42 +225,72 @@ function initConsultasEditor() {
             return;
         }
 
-        cardsContainer.innerHTML = consultasFiltradas.map((consulta) => {
-            const id = escapeHtml(consulta.id);
-            const titulo = escapeHtml(consulta.tituloEvento);
-            const organizador = escapeHtml(consulta.organizador || 'Sin organizador');
-            const fechaEvento = escapeHtml(consulta.fechaEventoTexto || 'N/A');
-            const pregunta = escapeHtml(consulta.pregunta || 'Sin consulta registrada.');
-            const respuesta = escapeHtml(consulta.respuesta || 'Pendiente de respuesta.');
+        const grupos = agruparConsultasPorEvento(consultasFiltradas);
+
+        cardsContainer.innerHTML = grupos.map((grupo) => {
+            const titulo = escapeHtml(grupo.tituloEvento || 'Evento sin titulo');
+            const organizador = escapeHtml(grupo.organizador || 'Sin organizador');
+            const fechaEvento = escapeHtml(grupo.fechaEventoTexto || 'N/A');
+
+            const filasConsultas = grupo.consultas.map((consulta) => {
+                const id = escapeHtml(consulta.id);
+                const fechaConsulta = escapeHtml(consulta.fechaConsulta || 'N/A');
+                const fechaRespuesta = escapeHtml(consulta.fechaRespuesta || 'N/A');
+                const autorConsulta = escapeHtml(getAutorConsulta(consulta));
+                const pregunta = escapeHtml(consulta.pregunta || 'Sin consulta registrada.');
+                const respuesta = escapeHtml(consulta.respuesta || 'Pendiente de respuesta.');
+
+                if (consultasState.statusActual === 'resueltas') {
+                    return `
+                        <tr class="consultasEventoConsultaRow consultasEventoConsultaResueltaRow">
+                            <td colspan="2">
+                                <p class="mb-1"><strong>Fecha de la consulta:</strong> ${fechaConsulta}</p>
+                                <p class="mb-1"><strong>Autor:</strong> ${autorConsulta}</p>
+                                <p class="mb-1"><strong>Consulta:</strong></p>
+                                <p class="mb-0">${pregunta}</p>
+
+                                <div class="consultasRespuestaBloque">
+                                    <p class="mb-1"><strong>Respuesta enviada:</strong></p>
+                                    <p class="mb-1"><strong>Fecha de envío de la respuesta:</strong> ${fechaRespuesta}</p>
+                                    <p class="mb-0">${respuesta || 'Sin respuesta registrada.'}</p>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }
+
+                return `
+                    <tr class="consultasEventoConsultaRow">
+                        <td>
+                            <p class="mb-1"><strong>Fecha de la consulta:</strong> ${fechaConsulta}</p>
+                            <p class="mb-1"><strong>Autor:</strong> ${autorConsulta}</p>
+                            <p class="mb-1"><strong>Consulta:</strong></p>
+                            <p class="mb-0">${pregunta}</p>
+                        </td>
+                        <td class="consultasEventoAccionCell">
+                            <button class="btn consultasResponderBtn" type="button" data-consulta-accion="responder" data-consulta-id="${id}">
+                                <i class="fa-regular fa-paper-plane me-1" aria-hidden="true"></i>Responder
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
 
             return `
-                <div class="row border-bottom border-1 border-secondary-subtle py-3">
-                    <div class="col-12">
-                        <div class="eventoCardPublicada d-flex flex-column gap-2 p-3" aria-label="Consulta de evento">
-                            <div>
-                                <p class="eventoCardPublicadaTitulo fw-bold mb-1">${titulo}</p>
-                                <p class="eventoCardPublicadaMeta mb-1"><span>Organizador:</span> ${organizador}</p>
-                                <p class="eventoCardPublicadaMeta mb-1"><span>Fecha del evento:</span> ${fechaEvento}</p>
-                            </div>
-
-                            <div>
-                                <p class="mb-1"><strong>Consulta:</strong> ${pregunta}</p>
-                                <p class="mb-0"><strong>Respuesta:</strong> ${respuesta}</p>
-                            </div>
-
-                            <div class="d-flex flex-wrap gap-2 justify-content-end mt-2">
-                                <button class="btn btn-sm btn-outline-secondary" type="button" data-consulta-accion="ver" data-consulta-id="${id}">
-                                    Ver detalle
-                                </button>
-                                ${consulta.status === 'pendientes' ? `
-                                    <button class="btn btn-sm btn-primary" type="button" data-consulta-accion="resolver" data-consulta-id="${id}">
-                                        Marcar como resuelta
-                                    </button>
-                                ` : ''}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <section class="consultasEventoGrupo" aria-label="Consultas del evento ${titulo}">
+                    <table class="table consultasEventoTabla mb-0">
+                        <tbody>
+                            <tr class="consultasEventoInfoRow">
+                                <td colspan="2">
+                                    <p class="consultasEventoTitulo mb-1">Evento: ${titulo}</p>
+                                    <p class="consultasEventoMeta mb-1"><strong>Fecha del Evento:</strong> ${fechaEvento}</p>
+                                    <p class="consultasEventoMeta mb-0"><strong>Organizador:</strong> ${organizador}</p>
+                                </td>
+                            </tr>
+                            ${filasConsultas}
+                        </tbody>
+                    </table>
+                </section>
             `;
         }).join('');
     };
@@ -223,11 +303,13 @@ function initConsultasEditor() {
 
         return {
             id: String(consulta?._id || ''),
+            idEvento: String(evento?._id || ''),
             tituloEvento: String(evento?.nombreEvento || 'Evento sin título'),
             organizador: String(evento?.contacto?.nombreCompleto || 'Editor de eventos'),
             fechaEventoTexto: formatFecha(fechaEvento),
             pregunta: String(consulta?.consulta || ''),
             respuesta: String(consulta?.respuesta || ''),
+            fechaRespuesta: formatFecha(consulta?.fechaRespuesta),
             correoElectronico: String(consulta?.correoElectronico || ''),
             fechaConsulta: formatFecha(consulta?.createdAt),
             status: normalizarEstadoConsulta(consulta?.estado),
@@ -319,72 +401,86 @@ function initConsultasEditor() {
             return;
         }
 
-        if (action === 'ver') {
-            const consulta = [...consultasByStatus.resueltas, ...consultasByStatus.pendientes]
+        if (action === 'responder') {
+            const consulta = consultasByStatus.pendientes
                 .find((item) => String(item.id) === String(consultaId));
 
-            if (!consulta) {
+            if (!consulta || !modalRespuestaConsultaElement || !modalRespuestaTextarea) {
                 return;
             }
 
-            const detalle = [
-                `Evento: ${consulta.tituloEvento}`,
-                `Organizador: ${consulta.organizador}`,
-                `Fecha: ${consulta.fechaEventoTexto}`,
-                `Correo: ${consulta.correoElectronico || 'No disponible'}`,
-                `Fecha de consulta: ${consulta.fechaConsulta || 'N/A'}`,
-                `Consulta: ${consulta.pregunta}`,
-                `Respuesta: ${consulta.respuesta || 'Pendiente de respuesta.'}`,
-            ].join('\n');
+            consultaPendienteSeleccionada = consulta;
+            modalRespuestaTextarea.value = '';
 
-            globalThis.alert(detalle);
+            if (modalRespuestaDescripcion) {
+                modalRespuestaDescripcion.textContent = `Para resolver la consulta del usuario, favor escriba en el siguiente recuadro. Este mensaje sera enviado al autor de la consulta. Evento: ${consulta.tituloEvento}. Autor: ${getAutorConsulta(consulta)}.`;
+            }
+
+            const modalRespuestaConsulta = bootstrap.Modal.getOrCreateInstance(modalRespuestaConsultaElement);
+            modalRespuestaConsulta.show();
+        }
+    });
+
+    modalRespuestaBtnAceptar?.addEventListener('click', async () => {
+        const consulta = consultaPendienteSeleccionada;
+        const respuesta = modalRespuestaTextarea?.value?.trim() || '';
+
+        if (!consulta?.id) {
             return;
         }
 
-        if (action === 'resolver') {
-            const indexPendiente = consultasByStatus.pendientes
-                .findIndex((item) => String(item.id) === String(consultaId));
+        if (!respuesta) {
+            globalThis.alert('Debe escribir una respuesta antes de enviar.');
+            modalRespuestaTextarea?.focus();
+            return;
+        }
 
-            if (indexPendiente < 0) {
-                return;
-            }
+        modalRespuestaBtnAceptar.disabled = true;
 
-            const respuesta = globalThis.prompt('Ingrese la respuesta para esta consulta:');
-
-            if (!respuesta || !respuesta.trim()) {
-                return;
-            }
-
-            actionButton.disabled = true;
-
-            fetch(`/api/consulta-eventos/${encodeURIComponent(consultaId)}/respuesta`, {
+        try {
+            const response = await fetch(`/api/consulta-eventos/${encodeURIComponent(consulta.id)}/respuesta`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ respuesta: respuesta.trim() }),
-            })
-                .then((response) => response.json().catch(() => ({})).then((payload) => ({ response, payload })))
-                .then(({ response, payload }) => {
-                    if (!response.ok || !payload?.ok) {
-                        throw new Error(payload?.mensaje || 'No se pudo responder la consulta.');
-                    }
+                body: JSON.stringify({ respuesta }),
+            });
 
-                    return cargarConsultas();
-                })
-                .then(() => {
-                    consultasState.statusActual = 'resueltas';
-                    statusButtons.forEach((btn) => {
-                        btn.classList.toggle('is-active', btn.dataset.status === 'resueltas');
-                    });
-                })
-                .catch((error) => {
-                    globalThis.alert(error.message || 'No se pudo responder la consulta.');
-                })
-                .finally(() => {
-                    actionButton.disabled = false;
-                });
+            const payload = await response.json().catch(() => ({}));
+
+            if (!response.ok || !payload?.ok) {
+                throw new Error(payload?.mensaje || 'No se pudo responder la consulta.');
+            }
+
+            const modalRespuestaConsulta = bootstrap.Modal.getOrCreateInstance(modalRespuestaConsultaElement);
+            modalRespuestaConsulta.hide();
+
+            if (modalRespuestaEnviadaElement) {
+                const modalRespuestaEnviada = bootstrap.Modal.getOrCreateInstance(modalRespuestaEnviadaElement);
+                modalRespuestaEnviada.show();
+            }
+
+            await cargarConsultas();
+            consultasState.statusActual = 'pendientes';
+            statusButtons.forEach((btn) => {
+                btn.classList.toggle('is-active', btn.dataset.status === 'pendientes');
+            });
+            renderConsultas();
+
+            consultaPendienteSeleccionada = null;
+        } catch (error) {
+            globalThis.alert(error.message || 'No se pudo responder la consulta.');
+        } finally {
+            modalRespuestaBtnAceptar.disabled = false;
         }
+    });
+
+    modalRespuestaConsultaElement?.addEventListener('hidden.bs.modal', () => {
+        if (modalRespuestaTextarea) {
+            modalRespuestaTextarea.value = '';
+        }
+
+        consultaPendienteSeleccionada = null;
     });
 
     cargarConsultas();
