@@ -175,7 +175,7 @@ router.patch('/:id/estado', async (req, res) => {
         const inscripcionActualizada = await UsuarioInscrito.findByIdAndUpdate(
             id,
             actualizaciones,
-            { new: true }
+            { returnDocument: 'after' }
         ).populate('eventoId', 'nombreEvento');
 
         if (!inscripcionActualizada) {

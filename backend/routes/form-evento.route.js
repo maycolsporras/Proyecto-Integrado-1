@@ -360,7 +360,7 @@ router.patch('/:id', upload.fields([
         const eventoActualizado = await FormEvento.findByIdAndUpdate(
             req.params.id,
             actualizaciones,
-            { new: true, runValidators: true },
+            { returnDocument: 'after', runValidators: true },
         );
 
         return res.status(200).json({
@@ -419,7 +419,7 @@ router.patch('/:id/estado', async (req, res) => {
         const eventoActualizado = await FormEvento.findByIdAndUpdate(
             req.params.id,
             actualizaciones,
-            { new: true },
+            { returnDocument: 'after' },
         );
 
         if (!eventoActualizado) {

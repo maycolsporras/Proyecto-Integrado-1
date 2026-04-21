@@ -67,7 +67,7 @@ router.post('/', async (req, res) => {
                 estadoVigencia: normalizeEstadoVigencia(estadoVigencia),
             },
             {
-                new: true,
+                returnDocument: 'after',
                 upsert: true,
                 setDefaultsOnInsert: true,
             },
@@ -198,7 +198,7 @@ router.patch('/:draftKey/estado', async (req, res) => {
         const borradorActualizado = await FormBorrador.findOneAndUpdate(
             { draftKey: req.params.draftKey },
             actualizaciones,
-            { new: true },
+            { returnDocument: 'after' },
         );
 
         if (!borradorActualizado) {
