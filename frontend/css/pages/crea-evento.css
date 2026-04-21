@@ -1,0 +1,755 @@
+
+
+
+/* Tarjeta del formulario  */
+
+.ceCard {
+  background: #fff;
+  max-width: 820px;
+}
+
+.ceCardTitle {
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Stepper*/
+
+.ceStepper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 0.3rem;
+}
+
+.ceStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.ceStepCircle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #ccc;
+  color: #1f1f1f;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ceStepActive .ceStepCircle {
+  background-color: var(--nav-color, #3b3fa5);
+}
+
+.ceStepLine {
+  width: 40px;
+  height: 2px;
+  background-color: #ccc;
+  margin: 13px 4px 0;
+}
+
+.ceStepLabel {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+.ceStepDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #cfcfcf;
+  margin-top: 0.35rem;
+}
+
+.ceStepDotActive {
+  background-color: var(--nav-color, #3b3fa5);
+}
+
+/* Filas del formulario*/
+
+.ceFormRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.4rem;
+  gap: 1rem;
+}
+
+.ceFormRowTop {
+  align-items: flex-start;
+}
+
+.ceLabel {
+  width: 190px;
+  min-width: 190px;
+  font-size: 0.88rem;
+  color: #333;
+  text-align: right;
+  line-height: 1.3;
+  padding-right: 0.5rem;
+}
+
+.ceRequiredAsterisk {
+  color: #dc3545;
+  font-weight: 700;
+  margin-right: 0.1rem;
+}
+
+.ceFieldGroup {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.ceFieldFull {
+  width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/*Inputs y selects*/
+
+.ceInput {
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  padding: 0.38rem 0.65rem;
+  font-size: 0.88rem;
+  color: #333;
+  background-color: #fff;
+  flex: 1;
+  min-width: 0;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.ceInput:focus {
+  border-color: var(--nav-color, #3b3fa5);
+}
+
+.ceInput::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+.ceSelect {
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  padding: 0.38rem 0.5rem;
+  font-size: 0.88rem;
+  background-color: #fff;
+  color: #333;
+  outline: none;
+  cursor: pointer;
+  min-width: 90px;
+}
+
+.ceSelectSm {
+  min-width: 60px;
+}
+
+.ceSelectFull {
+  width: 100%;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  padding: 0.42rem 0.65rem;
+  font-size: 0.88rem;
+  background-color: #fff;
+  color: #555;
+  outline: none;
+  cursor: pointer;
+}
+
+.ceFieldPrefix {
+  font-size: 0.85rem;
+  color: #555;
+  white-space: nowrap;
+}
+
+/* Textarea */
+
+.ceTextarea {
+  width: 100%;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.88rem;
+  color: #333;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.ceTextarea:focus {
+  border-color: var(--nav-color, #3b3fa5);
+}
+
+.ceTextarea::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+.ceInput-error,
+.ceSelect-error,
+.ceTextarea-error,
+.ceRichEditor-error {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, 0.15);
+}
+
+.ceRichEditor-error {
+  background-color: #fff5f5;
+}
+
+.ceLinkInput-error,
+.ceFileInput-error {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, 0.15);
+}
+
+.ceLinkInput-error .ceLinkIcon,
+.ceFileInput-error .ceFileIcon {
+  color: #dc3545;
+}
+
+/* Link input (icono + campo) */
+
+.ceLinkInput {
+  display: flex;
+  align-items: center;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  padding: 0.3rem 0.6rem;
+  gap: 0.5rem;
+  width: 100%;
+  background: #fff;
+}
+
+.ceLinkIcon {
+  color: #888;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.ceLinkField {
+  border: none;
+  padding: 0;
+  flex: 1;
+}
+
+.ceLinkField:focus {
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+/* Botones circulares + / - */
+
+.ceCircleBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+
+.ceCircleBtnAdd {
+  background-color: var(--nav-color, #3b3fa5);
+  color: #fff;
+}
+
+.ceCircleBtnRemove {
+  background-color: #b00020;
+  color: #fff;
+}
+
+.ceCircleBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Rich text editor simulado */
+
+.ceRichToolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  border: 1px solid #bbb;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  padding: 4px 6px;
+  background: #f7f7f7;
+}
+
+.ceRichBtn {
+  background: transparent;
+  border: none;
+  padding: 2px 5px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  border-radius: 3px;
+  color: #333;
+  min-width: 24px;
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ceRichBtn:hover {
+  background: #e0e0e0;
+}
+
+.ceRichFont,
+.ceRichSize {
+  font-size: 0.78rem;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 1px 3px;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+}
+
+.ceRichSep {
+  width: 1px;
+  height: 18px;
+  background: #ccc;
+  margin: 0 3px;
+  display: inline-block;
+}
+
+.ceRichEditor {
+  border: 1px solid #bbb;
+  border-radius: 0 0 4px 4px;
+  min-height: 140px;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.88rem;
+  color: #333;
+  background: #fff;
+  outline: none;
+  width: 100%;
+}
+
+.ceRichEditor:focus {
+  border-color: var(--nav-color, #3b3fa5);
+}
+
+/*Información de contacto (paso 2)  */
+
+.ceContactGroup {
+  gap: 0;
+}
+
+.ceContactRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.ceContactLabel {
+  font-size: 0.85rem;
+  white-space: nowrap;
+  min-width: 130px;
+  text-align: right;
+  color: #444;
+}
+
+/* Adjuntar archivo */
+
+.ceFileRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.ceFileInput {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  padding: 0.35rem 0.65rem;
+  flex: 1;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+}
+
+.ceFileReal {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.ceFileIcon {
+  color: #888;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.ceFileName {
+  font-size: 0.88rem;
+  color: #555;
+  text-decoration: underline;
+}
+
+.ceFileNote {
+  font-size: 0.78rem;
+  color: #888;
+  margin: 0.2rem 0 0 0;
+}
+
+/* Referencias*/
+
+.ceRefRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+/* Radio / checkbox  */
+
+.ceRadioGroup {
+  gap: 1.5rem;
+}
+
+.ceRadioGroupCol {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+}
+
+.ceRadioLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* Sub-formulario*/
+
+.ceSubForm {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem 1.2rem;
+  margin-top: 0.8rem;
+  width: 100%;
+}
+
+.ceSubFormTitle {
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+}
+
+.ceSubFormDesc {
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 0.6rem;
+}
+
+.ceCheckList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ceCheckList li {
+  font-size: 0.88rem;
+  margin-bottom: 0.35rem;
+}
+
+.ceCheckList label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.ceCheckList input[type="checkbox"] {
+  margin-top: 2px;
+  flex-shrink: 0;
+  accent-color: var(--nav-color, #3b3fa5);
+}
+
+.ceSubCheckList {
+  list-style: none;
+  padding-left: 1.6rem;
+  margin: 0.2rem 0 0 0;
+}
+
+.ceSubCheckList li {
+  font-size: 0.84rem;
+  color: #555;
+}
+
+/* Botones de acción */
+
+.ceActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  width: fit-content;
+  margin: 1.5rem auto 0;
+}
+
+.ceActionsEnd {
+  align-items: center;
+}
+
+.ceActionIcons {
+  display: flex;
+  gap: 0.5rem;
+  align-self: flex-end;
+}
+
+.ceActionBtns {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: flex-end;
+  align-self: flex-end;
+}
+
+.ceIconBtn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  background: #fff;
+  color: #555;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ceIconBtn:hover {
+  background: #f0f0f0;
+}
+
+.ceBtn {
+  padding: 0.48rem 1.4rem;
+  border-radius: 5px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: opacity 0.2s;
+}
+
+.ceBtn:hover {
+  opacity: 0.88;
+}
+
+.ceBtnPrimary {
+  background-color: var(--dropdown-text-color, var(--nav-color, #3b3fa5));
+  border-color: var(--dropdown-text-color, var(--nav-color, #3b3fa5));
+  border-style: solid;
+  border-width: 1px;
+  color: #fff;
+}
+
+.ceBtnSecondary {
+  background-color: #d8d8e8;
+  color: #333;
+}
+
+/*Responsive */
+
+@media (max-width: 768px) {
+  .ceSidebar {
+    display: none;
+  }
+
+  .ceFormRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ceLabel {
+    text-align: left;
+    width: auto;
+    min-width: unset;
+  }
+
+  .ceFieldGroup {
+    width: 100%;
+  }
+
+  .ceContactRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ceContactLabel {
+    text-align: left;
+    min-width: unset;
+  }
+}
+
+.modalVistaPreviaContenido {
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.modalVistaPreviaBody {
+  padding: 0;
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+.modalVistaPreviaHeader,
+.modalVistaPreviaFooter {
+  border: none;
+  padding: 1rem 1.25rem;
+}
+
+.evento-preview-hero img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  display: block;
+}
+
+.evento-preview-encabezado {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.2rem 1.5rem 0.75rem;
+}
+
+.evento-fecha-badge.preview {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #164a98;
+  color: #fff;
+  min-width: 70px;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.evento-fecha-badge.preview .dia {
+  font-size: 1.7rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.evento-fecha-badge.preview .mes {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.evento-preview-titulo h2 {
+  font-size: 1.45rem;
+  color: #164a98;
+  margin: 0;
+}
+
+.evento-preview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 1.5rem;
+  padding: 0 1.5rem 1.5rem;
+}
+
+.evento-preview-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.preview-section h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #164a98;
+  margin-bottom: 0.75rem;
+}
+
+.preview-section p,
+.preview-section div {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.6;
+}
+
+.evento-preview-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.evento-info-card {
+  background: #f5f5f5;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.evento-info-card h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  color: #164a98;
+}
+
+.evento-info-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.evento-info-lista li {
+  font-size: 0.92rem;
+  color: #333;
+}
+
+.evento-info-lista strong {
+  display: inline-block;
+  min-width: 90px;
+  color: #164a98;
+}
+
+@media (max-width: 992px) {
+  .evento-preview-grid {
+    grid-template-columns: 1fr;
+  }
+}

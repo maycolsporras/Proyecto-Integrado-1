@@ -6,19 +6,69 @@ Este proyecto consiste en la ampliación de la plataforma web de la Política Na
 
 El objetivo principal es permitir a los usuarios descubrir, compartir y promover eventos relacionados con la temática de discapacidad, fortaleciendo la interacción comunitaria y la difusión de actividades.
 
+### Instalación y configuración
+
+#### Requisitos previos
+- Node.js instalado en el equipo.
+- MongoDB Atlas o una instancia de MongoDB disponible.
+
+#### Configuración del backend
+1. Abrir una terminal dentro de la carpeta `backend`.
+2. Instalar las dependencias.
+
+### Dependencias y cómo instalarlas
+
+Dependencias principales:
+- `express`: servidor web y rutas.
+- `mongoose`: conexión y modelado con MongoDB.
+- `cors`: habilitar acceso entre frontend y backend.
+- `dotenv`: cargar variables de entorno.
+- `body-parser`: procesar datos enviados por formularios.
+- `multer`: manejo de archivos subidos.
+
+El proyecto usa dependencias de Node.js en el backend. Para instalarlas, ejecuta esta línea en la terminal integrada de la carpeta
+del backend:
+
+```bash
+npm i -y
+```
+
+### Comandos para ejecutar el proyecto
+
+#### Ejecutar el backend
+Desde la carpeta `backend`, ejecuta:
+
+```bash
+node index.js
+```
+
+El servidor quedará disponible en `http://localhost:3000` si no cambias el puerto en el archivo `.env`.
+
+#### Abrir el frontend
+El frontend es estático y se sirve desde el backend. Una vez levantado el servidor, abre en el navegador:
+
+### Notas del proyecto
+- El backend sirve los archivos del frontend desde la carpeta `frontend`.
+- Al iniciar, el servidor crea usuarios y eventos de prueba si la base de datos está vacía.
+- Para efectos de pruebas y entrega al cliente, están registrados los siguientes usuarios con sus respectivos permisos:
+	- Editor: `editorEventos@conapdis.com` / Contraseña: `asd123`
+	- Administrador: `administradorEventos@conapdis.com` / Contraseña: `qwe123`
+
 ---
+
+## Información adicional
 
 ## Convenciones de Nomenclatura y Formato de Código
 
 ### Nomenclatura
 - Variables y funciones: camelCase  
-  Ejemplo: obtenerEventos(), fechaInicioEvento
+	Ejemplo: obtenerEventos(), fechaInicioEvento
 - Clases: camelCase   
-  Ejemplo: eventoController, eventoService
+	Ejemplo: eventoController, eventoService
 - Archivos: kebab-case  
-  Ejemplo: eventos-list.component.js
+	Ejemplo: eventos-list.component.js
 - Carpetas: minúsculas  
-  Ejemplo: components, services, requirements
+	Ejemplo: components, services, requirements
 
 ### Formato de Código
 - Indentación: 2 o 4 espacios (según estándar del lenguaje utilizado).
@@ -73,3 +123,7 @@ Implementar una sección de eventos que:
 - Permita registrar nuevos eventos.
 - Permita compartir eventos.
 - Mejore la interacción comunitaria.
+
+---
+
+

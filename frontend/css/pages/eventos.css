@@ -1,0 +1,98 @@
+.eventosHeader {
+    background-color: var(--color-azul-claro);
+}
+
+.txtEventosHeader {
+    font-size: 40px;
+    color: var(--dropdown-text-color);
+}
+
+.breadcrumb-item.active {
+    color: var(--dropdown-text-color);
+    font-weight: bold !important;
+}
+
+.breadcrumb-item a {
+    color: var(--color-gris-oscuro);
+}
+
+.cardEventos {
+    max-width: 500px;
+
+    &:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.txtTituloCardEventos {
+    font-size: 30px;
+    font-weight: bold;
+    color: var(--dropdown-text-color);
+}
+
+.cardEventos img {
+    height: 200px;
+    object-fit: cover;
+    margin-top: 1rem;
+    border-radius: 5px;
+}
+
+.cardEventosBtn {
+    width: 100%;
+    background-color: var(--dropdown-text-color);
+    margin-top: 20px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+
+
+    &:hover {
+        background-color: var(--nav-color);
+        color: var(--color-blanco);
+    }
+}
+
+.sectionInscripcionEventos {
+    background-image:
+        linear-gradient(color-mix(in srgb, var(--dropdown-text-color), transparent 15%),
+            color-mix(in srgb, var(--dropdown-text-color), transparent 15%)),
+        url("../../assets/img/eventos-discapacidad.webp");
+}
+
+.tituloInscripcionEventos {
+    font-size: 41px;
+    color: var(--color-blanco);
+}
+
+.textoInscripcionEventos {
+    font-size: 14px;
+    color: var(--color-blanco);
+}
+
+.btnBloqueInscripcion{
+    background-color: var(--color-blanco);
+    padding: 10px 15px;
+    color: var(--dropdown-text-color);
+    border: none;
+
+    &:hover {
+        background-color: var(--nav-color);
+        color: var(--color-blanco);
+    }
+}
+
+.btnInscribirme{
+    background-color: var(--color-blanco);
+    color: var(--dropdown-text-color);
+    border: none;
+    padding: 10px 40px;
+    border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+
+    &:hover {
+        background-color: var(--nav-color);
+        color: var(--color-blanco);
+    }
+}

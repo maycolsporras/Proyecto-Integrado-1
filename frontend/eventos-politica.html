@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sicid - Política Nacional de Discapacidad Eventos</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/pages/eventos-politica.css">
+</head>
+
+<body>
+    <header class="headerLandingPage py-3" aria-label="Encabezado principal">
+        <div class="container-fluid">
+            <div class="row align-items-center px-lg-5">
+                <div class="logoSicid col-12 col-md-2 col-lg-6 d-flex align-items-center gap-3">
+                    <a href="./index.html">
+                        <img src="./assets/img/logosicid.webp" alt="Logo de Sicid">
+                    </a>
+                    <p class="d-block d-md-none d-lg-block"><strong>Sistema Costarricense de<br>Información sobre
+                            Discapacidad</strong></p>
+                </div>
+
+                <div class="col-12 col-md-10 col-lg-6">
+                    <div
+                        class="row d-flex flex-column flex-md-row align-items-center justify-content-end ms-md-1 ms-lg-0 me-1 me-md-0 gap-2 gap-md-0">
+                        <div class="col-12 col-md-3 d-flex gap-2 align-items-center">
+                            <label for="idioma">Idioma:</label>
+                            <select class="form-select form-select-lg w-auto" id="idioma"
+                                aria-label="Seleccionar idioma">
+                                <option class="selected" value="es">ES</option>
+                                <option value="en">EN</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-4 d-flex align-items-center gap-2" role="group"
+                            aria-label="Controles de tamaño de fuente">
+                            <button class="btn btnHeader" aria-label="Reducir tamaño de fuente">
+                                <i class="fa-solid fa-minus p-2" aria-hidden="true"></i>
+                            </button>
+                            <button class="btn btnHeader" aria-label="Tamaño de fuente normal">
+                                <i class="fa-solid fa-a p-2" aria-hidden="true"></i>
+                            </button>
+                            <button class="btn btnHeader" aria-label="Aumentar tamaño de fuente">
+                                <i class="fa-solid fa-plus p-2" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="col-12 col-md-1 ">
+                            <button class="btn btnHeader" aria-label="Modo de alto contraste">
+                                <i class="fa-solid fa-circle-half-stroke p-2" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="col-12 col-md-4 d-flex justify-content-start justify-content-md-end">
+                            <a class="btn btnIniciarSesion btn-lg"
+                                aria-label="Iniciar sesión en el sistema" href="./inicio-sesion.html">Iniciar sesión</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="navBarTop navbar navbar-expand-lg" aria-label="Navegación principal">
+        <div class="container-fluid px-lg-5">
+            <button class="navBarTogglerTop navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navSicid" aria-controls="navSicid" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <i class="menuIcon fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navSicid">
+                <ul class="navBarNavTop navbar-nav d-flex justify-content-around align-items-center w-100">
+                    <li class="navItemTop nav-item">
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="./index.html">Inicio</a>
+                    </li>
+                    <li class="navItemTop nav-item">
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="#">SICID</a>
+                    </li>
+                    <li class="navItemTop nav-item">
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="#">Certificaciones</a>
+                    </li>
+                    <li class="navItemTop nav-item">
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="#">Formación</a>
+                    </li>
+                    <li class="navItemTop nav-item">
+                        <a class="navLinkTop nav-link text-white text-wrap-nav text-decoration-none" href="#">Productos
+                            y Servicios</a>
+                    </li>
+                    <li class="navItemTop nav-item">
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="#">Estadísticas</a>
+                    </li>
+                    <li class="navItemTop nav-item">
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="#">PONADIS</a>
+                    </li>
+                    <li class="navItemTop nav-item">
+                        <a class="navLinkTop nav-link text-white text-decoration-none" href="#">Comisiones</a>
+                    </li>
+                    <li class="navItemTop nav-item dropdown">
+                        <a class="navLinkTop nav-link dropdown-toggle text-white text-wrap-nav text-decoration-none"
+                            href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Noticias y Eventos
+                        </a>
+                        <ul class="dropdownMenuTop dropdown-menu p-0" aria-label="Submenú de Noticias y Eventos">
+                            <li><a class="dropdownItemTop dropdown-item" href="#"
+                                    aria-label="Noticias"><strong>Noticias</strong></a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider my-0">
+                            </li>
+                            <li><a class="dropdownItemTop dropdown-item" href="./eventos.html"
+                                    aria-label="Eventos"><strong>Eventos</strong></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal de eventos y detalle -->
+    <main id="mainContentEventosPolitica">
+        <div class="container-fluid">
+            <div class="row py-4 eventosHeader px-lg-5">
+                <div class="col-12 d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-2 offsetDerechaEventos">
+                    <p class="txtEventosHeader">Eventos</p>
+                    <div class="lineaSeparadora d-none d-lg-block"></div>
+                    <p class="txtEventosHeader fw-bold">Política Nacional de Discapacidad</p>
+                </div>
+            </div>
+
+            <div class="row mt-2 px-lg-5">
+                <div class="col-12 offsetDerechaEventos">
+                    <nav class="breadcrumbEventos" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a class="text-decoration-none" href="./index.html">Inicio</a>
+                            </li>
+                            <li class="breadcrumb-item"><a class="text-decoration-none"
+                                    href="./eventos.html">Eventos</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Política Nacional de Discapacidad
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <form role="search" aria-label="Filtros de búsqueda de eventos" class="offsetDerechaEventos px-lg-5">
+                <div class="row mx-0 mt-4 pb-4 barraBusquedaEventos align-items-center justify-content-start">
+                    <div class="col-12 col-lg-auto mt-3">
+                        <label class="form-label fw-bold txtFormBsuqueda" for="buscar-evento">Ingrese el nombre del
+                            evento que
+                            desea buscar</label>
+                        <div class="input-group mt-3">
+                            <span class="input-group-text lupaBusqueda rounded-end"><i
+                                    class="fa-solid fa-magnifying-glass"></i></span>
+                            <input id="buscar-evento" name="buscar-evento" type="text"
+                                class="form-control barraBusqueda" placeholder="Buscar"
+                                aria-describedby="buscar-evento-ayuda">
+                        </div>
+                        <small id="buscar-evento-ayuda" class="visually-hidden">Escriba el nombre del evento para
+                            filtrar los resultados.</small>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-auto mt-3 filtroDesde">
+                        <fieldset class="border-0 p-0 m-0" aria-label="Desde">
+                            <div id="desde-visible-label" class="form-label fw-bold txtFormBsuqueda mb-2">Desde</div>
+                            <div class="row g-2 filtrosFecha flex-nowrap flex-sm-wrap">
+                                <div class="col-4 col-sm-auto d-flex flex-column campoFecha">
+                                    <label class="form-label mb-0 txtFormBsuqueda small" for="desde-anio">Año</label>
+                                    <select id="desde-anio" name="desde-anio" class="form-select form-select-sm">
+                                        <option selected></option>
+                                    </select>
+                                </div>
+
+                                <div class="col-4 col-sm-auto d-flex flex-column campoFecha">
+                                    <label class="form-label mb-0 txtFormBsuqueda small" for="desde-mes">Mes</label>
+                                    <select id="desde-mes" name="desde-mes" class="form-select form-select-sm">
+                                        <option selected></option>
+                                    </select>
+                                </div>
+
+                                <div class="col-4 col-sm-auto d-flex flex-column campoFecha">
+                                    <label class="form-label mb-0 txtFormBsuqueda small" for="desde-dia">Día</label>
+                                    <select id="desde-dia" name="desde-dia" class="form-select form-select-sm">
+                                        <option selected></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-auto mt-3 filtroHasta">
+                        <fieldset class="border-0 p-0 m-0" aria-label="Hasta">
+                            <div id="hasta-visible-label" class="form-label fw-bold txtFormBsuqueda mb-2">Hasta</div>
+                            <div class="row g-2 filtrosFecha flex-nowrap flex-sm-wrap">
+                                <div class="col-4 col-sm-auto d-flex flex-column campoFecha">
+                                    <label class="form-label mb-0 txtFormBsuqueda small" for="hasta-anio">Año</label>
+                                    <select id="hasta-anio" name="hasta-anio" class="form-select form-select-sm">
+                                        <option selected></option>
+                                    </select>
+                                </div>
+
+                                <div class="col-4 col-sm-auto d-flex flex-column campoFecha">
+                                    <label class="form-label mb-0 txtFormBsuqueda small" for="hasta-mes">Mes</label>
+                                    <select id="hasta-mes" name="hasta-mes" class="form-select form-select-sm">
+                                        <option selected></option>
+                                    </select>
+                                </div>
+
+                                <div class="col-4 col-sm-auto d-flex flex-column campoFecha">
+                                    <label class="form-label mb-0 txtFormBsuqueda small" for="hasta-dia">Día</label>
+                                    <select id="hasta-dia" name="hasta-dia" class="form-select form-select-sm">
+                                        <option selected></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="contenedorEventosCreados" class="px-lg-5 mt-4 offsetDerechaEventos eventoPoliticaListado" role="region" aria-live="polite">
+            <p class="text-muted">Cargando eventos...</p>
+        </div>
+
+        <section class="mt-5 sectionInscripcionEventos py-5" aria-labelledby="titulo-inscripcion-eventos"
+            aria-describedby="descripcion-inscripcion-eventos">
+            <div class="container-fluid bloqueInscripcionEventos py-5">
+                <div class="row d-flex flex-column justify-content-center align-items-center text-center gap-5">
+                    <div class="col-12 ">
+                        <p id="titulo-inscripcion-eventos" class="tituloInscripcionEventos">Inscripción a Eventos PONADIS</p>
+                    </div>
+                    <div class="col-12 ">
+                        <p id="descripcion-inscripcion-eventos" class="textoInscripcionEventos">Con el fin de manterse actualizado en los últimos eventos del Sistema Costarricense de
+                            Información Sobre Discapacidad <br>- SICID - puede inscribirse a la notificacion por correo
+                            electrónico sobre los eventos más recientes de la Política Nacional de <br>Discapacidad -
+                            PONADIS -</p>
+                    </div>
+                    <div class="col-6 gap-3 d-flex justify-content-center"
+                        aria-label="Herramientas de accesibilidad de la sección de inscripción">
+                        <button type="button" class="btn text-decoration-none btnBloqueInscripcion" href="#"
+                            aria-label="Solicitar apoyo en lengua de señas">
+                            <i class="fa-solid fa-hands" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="btn text-decoration-none btnBloqueInscripcion" href="#"
+                            aria-label="Escuchar el contenido de la sección">
+                            <i class="fa-solid fa-volume-high" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="col-12">
+                        <button type="button" class="btn text-decoration-none btnInscribirme"
+                            data-bs-toggle="modal" data-bs-target="#modalSuscripcionEventos"
+                            aria-label="Inscribirme a notificaciones de eventos PONADIS"
+                            aria-describedby="descripcion-inscripcion-eventos">Inscribirme</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal para suscribirse -->
+        <div class="modal fade" id="modalSuscripcionEventos" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modalSuscripcionEventosAncho">
+                <div class="modal-content modalSuscripcionEventosContenido">
+                    <div class="modal-body text-center modalSuscripcionEventosBody">
+                        <p class="py-4 mb-3 modalSuscripcionEventosTitulo">Inscripcion a Eventos</p>
+                        <p class="modalSuscripcionEventosDescripcion text-start">
+                            Complete los datos solicitados para inscribirse a recibir notificaciones de los eventos mas
+                            recientes del Sistema Costarricense de Informacion sobre Discapacidad -SICID-. Se le enviara un
+                            correo electronico a su cuenta cuando existan nuevas noticias publicadas en el sitio.
+                        </p>
+                        <form class="p-3 mx-auto">
+                            <div class="row mb-3 align-items-center justify-content-center">
+                                <label class="col-12 col-md-4 col-form-label modalSuscripcionEventosEtiqueta">
+                                    <span class="text-danger">*</span> Nombre Completo
+                                </label>
+                                <div class="col-12 col-md-8">
+                                    <input type="text" class="form-control" placeholder="Introduzca el dato solicitado">
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center justify-content-center">
+                                <label class="col-12 col-md-4 col-form-label modalSuscripcionEventosEtiqueta">
+                                    <span class="text-danger">*</span> Correo Electronico
+                                </label>
+                                <div class="col-12 col-md-8">
+                                    <input type="email" class="form-control" placeholder="Introduzca el dato solicitado">
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center justify-content-center">
+                                <label class="col-12 col-md-4 col-form-label modalSuscripcionEventosEtiqueta">
+                                    <span class="text-danger">*</span> Profesion u Oficio
+                                </label>
+                                <div class="col-12 col-md-8">
+                                    <input type="text" class="form-control" placeholder="Introduzca el dato solicitado">
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center justify-content-center">
+                                <label class="col-12 col-md-4 col-form-label modalSuscripcionEventosEtiqueta">
+                                    <span class="text-danger">*</span> Entidad para la que trabaja o esta vinculado
+                                </label>
+                                <div class="col-12 col-md-8">
+                                    <input type="text" class="form-control" placeholder="Introduzca el dato solicitado">
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center justify-content-center">
+                                <label class="col-12 col-md-4 col-form-label modalSuscripcionEventosEtiqueta">
+                                    <span class="text-danger">*</span> Razon por la que desea ser notificado
+                                </label>
+                                <div class="col-12 col-md-8">
+                                    <input type="text" class="form-control" placeholder="Introduzca el dato solicitado">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8 mx-auto">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="notificaciones">
+                                        <label class="form-check-label" for="notificaciones">
+                                            <span class="modalSuscripcionEventosTextoNotificaciones">Acepto recibir
+                                                notificaciones</span> a mi correo electronico de SICID
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="d-grid d-md-flex justify-content-center my-5">
+                            <button type="button" class="btn modalSuscripcionEventosBtnInscribirme">Inscribirme</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de suscripcion enviada -->
+        <div class="modal fade" id="suscripcionEnviada" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+                <div class="modal-content modalSuscripcionEnviadaContenido">
+                    <div class="modal-body modalSuscripcionEnviadaBody">
+                        <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <p class="modalSuscripcionEnviadaTitulo">Inscripcion Enviada</p>
+                        <p class="modalSuscripcionEnviadaDescripcion">
+                            <span class="modalSuscripcionEnviadaDescripcionNegrita">Se envio la solicitud de inscripcion con
+                                exito.</span> Los encargados de administrar EVENTOS se estaran comunicando con usted, por
+                            medio del correo electronico para notificar la aprobacion de su inscripcion al modulo.
+                        </p>
+                        <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                            data-bs-dismiss="modal">Continuar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para enviar consultas -->
+        <div class="modal fade" id="modalConsultaEvento" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modalConsultaEventoAncho">
+                <div class="modal-content modalConsultaEventoContenido">
+                    <div class="modal-body modalConsultaEventoBody">
+                        <p class="modalConsultaEventoTitulo">Consulta de Evento</p>
+                        <p class="modalConsultaEventoDescripcion">
+                            Para solicitar más información o aclarar dudas acerca de este evento, escriba su consulta en el
+                            recuadro siguiente y un correo electrónico para contactarle.
+                        </p>
+
+                        <form id="formConsultaEvento" class="modalConsultaEventoFormulario" action="#" novalidate>
+                            <input id="consultaEventoId" type="hidden" name="eventoId">
+
+                            <div class="row mb-3 align-items-start">
+                                <label for="consultaEventoCorreo"
+                                    class="col-12 col-md-3 col-form-label modalConsultaEventoEtiqueta">
+                                    *Correo Electrónico
+                                </label>
+                                <div class="col-12 col-md-9">
+                                    <input id="consultaEventoCorreo" name="correoElectronico" type="email"
+                                        class="form-control modalConsultaEventoInput"
+                                        placeholder="introduzca el dato solicitado" required>
+                                    <div class="invalid-feedback">Ingrese un correo electrónico válido.</div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4 align-items-start">
+                                <label for="consultaEventoTexto"
+                                    class="col-12 col-md-3 col-form-label modalConsultaEventoEtiqueta">
+                                    *Consulta
+                                </label>
+                                <div class="col-12 col-md-9">
+                                    <textarea id="consultaEventoTexto" name="consulta"
+                                        class="form-control modalConsultaEventoInput modalConsultaEventoTextarea"
+                                        placeholder="introduzca el dato solicitado" required maxlength="500"></textarea>
+                                    <div class="invalid-feedback">La consulta es obligatoria.</div>
+                                </div>
+                            </div>
+
+                            <div class="modalConsultaEventoAcciones d-grid gap-3 d-md-flex justify-content-center my-5">
+                                <button type="button" class="btn modalConsultaEventoBtnCancelar px-4"
+                                    data-bs-dismiss="modal">Cancelar</button>
+                                <button id="consultaEventoEnviarBtn" type="submit" class="btn modalConsultaEventoBtnAceptar px-4">Aceptar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de inscripción a evento enviada-->
+        <!-- Modal para inscripcion al evento -->
+        <div class="modal fade" id="modalInscripcionEvento" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+                <div class="modal-content modalSuscripcionEnviadaContenido">
+                    <div class="modal-body modalSuscripcionEnviadaBody">
+                        <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <p class="modalSuscripcionEnviadaTitulo">Inscripción Enviada</p>
+                        <p class="modalSuscripcionEnviadaDescripcion">
+                            Se envió la inscripción con éxito. Los encargados del evento se estarán comunicando con usted,
+                            por medio del correo electrónico para notificar la aprobación de su inscripción.
+                        </p>
+                        <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                            data-bs-dismiss="modal">Continuar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Fin modal de inscripción a evento enviada -->
+
+        <!-- Modal de consulta enviada -->
+        <div class="modal fade" id="modalConsultaEnviada" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+                <div class="modal-content modalSuscripcionEnviadaContenido">
+                    <div class="modal-body modalSuscripcionEnviadaBody">
+                        <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <p class="modalSuscripcionEnviadaTitulo">Consulta Enviada</p>
+                        <p class="modalSuscripcionEnviadaDescripcion">
+                            Se envió la consulta con éxito. Los encargados del evento se estarán comunicando con usted, por
+                            medio del correo electrónico para responder su consulta.
+                        </p>
+                        <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                            data-bs-dismiss="modal">Continuar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container-fluid bg-light pt-0 pb-3 border-top">
+            <div class="row justify-content-center">
+                <div class="col-12 d-flex flex-wrap align-items-center justify-content-center gap-3 gap-md-5">
+                    <img src="./assets/img/logo-mideplan.webp" class="img-fluid imgFooterStandard mx-3" alt="Mideplan">
+                    <img src="./assets/img/logo-inec.webp" class="img-fluid imgFooterStandard mx-3" alt="INEC">
+                    <img src="./assets/img/logo-conapdis.webp" class="img-fluid imgFooterMain mx-3" alt="Conapdis">
+                    <img src="./assets/img/logo-imas.webp" class="img-fluid imgFooterStandard mx-3" alt="IMAS">
+                    <img src="./assets/img/logo-ministerio.webp" class="img-fluid imgFooterStandard mx-3"
+                        alt="Ministerio RREE">
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid py-3 bg-dark">
+            <ul class="nav d-flex flex-column flex-md-row justify-content-center align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-light py-0" href="#">Marco Legal</a>
+                </li>
+                <li class="text-white d-none d-md-block" aria-hidden="true">|</li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-light py-0" href="#">Términos de accesibilidad</a>
+                </li>
+                <li class="text-white d-none d-md-block" aria-hidden="true">|</li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-light py-0" href="#">Créditos</a>
+                </li>
+                <li class="text-white d-none d-md-block" aria-hidden="true">|</li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-light py-0" href="#">Directorio de ONGs</a>
+                </li>
+                <li class="text-white d-none d-md-block" aria-hidden="true">|</li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-light py-0" href="#">Contacto</a>
+                </li>
+            </ul>
+        </div>
+    </footer>
+
+    <!-- Scripts de la pagina -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/pages/form-inscripcion.js"></script>
+    <script src="./js/pages/eventos-politica.js"></script>
+    <script src="./js/pages/form-consulta.js"></script>
+    <script src="./js/pages/form-suscriptores.js"></script>
+</body>
+
+</html>

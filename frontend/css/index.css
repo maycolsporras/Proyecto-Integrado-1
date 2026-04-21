@@ -1,3 +1,10 @@
-:root{
-    --colorPrincipal: #007bff;
-}
+@import "./base/globales.css";
+@import "./pages/landing.css";
+@import "./pages/modulo-admin.css";
+@import "./pages/inicio-sesion.css";
+@import "./pages/eventos.css";
+@import "./pages/eventos-politica.css";
+@import "./components/modales.css";
+@import "./pages/gestion-admin.css";
+@import "./pages/gestion-editor.css";
+@import "./pages/crea-evento.css";

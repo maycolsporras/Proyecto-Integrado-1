@@ -1,0 +1,164 @@
+#mainContentInicioSesion {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem 3rem;
+    background-color: var(--color-blanco);
+}
+
+.inicioSesionPanel {
+    width: min(100%, 660px) !important;
+    background-color: var(--color-azul-claro);
+    border-radius: 5px;
+    padding: 2rem 0.8rem 1.7rem;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.02) inset;
+}
+
+.inicioSesionTitulo {
+    color: var(--dropdown-text-color);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.inicioSesionFormulario {
+    width: min(100%, 420px);
+    margin: 0 auto;
+}
+
+.inicioSesionGrupo {
+    margin-bottom: 1rem;
+}
+
+.inicioSesionAddon {
+    width: 46px;
+    justify-content: center;
+    background-color: var(--dropdown-text-color);
+    border: 1px solid var(--dropdown-text-color);
+    color: var(--color-blanco);
+    border-radius: 0;
+}
+
+.inicioSesionInput {
+    height: 46px;
+    border-radius: 0;
+    border: 1px solid var(--color-gris-claro);
+    color: var(--color-negro);
+    font-style: italic;
+    box-shadow: none;
+}
+
+.inicioSesionInput::placeholder {
+    color: var(--color-gris-oscuro);
+}
+
+.inicioSesionInput:focus {
+    border-color: var(--dropdown-text-color);
+    box-shadow: 0 0 0 0.15rem rgba(22, 74, 152, 0.15);
+}
+
+.inicioSesionAyuda {
+    display: block;
+    width: 100%;
+    margin-top: 0.35rem;
+    text-align: right;
+    color: var(--dropdown-text-color);
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.inicioSesionAyuda:hover,
+.inicioSesionAyuda:focus {
+    color: var(--nav-color);
+    text-decoration: underline;
+}
+
+.inicioSesionBloqueBotones {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+    margin-top: 1.8rem;
+}
+
+.inicioSesionBtn,
+.inicioSesionBtnSecundario {
+    min-width: 140px;
+    padding: 0.6rem 3.5rem;
+    border: none;
+    border-radius: 4px;
+    color: var(--color-blanco);
+    font-weight: 700;
+    background-color: var(--dropdown-text-color);
+}
+
+.inicioSesionBtn:hover,
+.inicioSesionBtn:focus,
+.inicioSesionBtn:active,
+.inicioSesionBtnSecundario:hover,
+.inicioSesionBtnSecundario:focus,
+.inicioSesionBtnSecundario:active {
+    background-color: var(--nav-color);
+    color: var(--color-blanco);
+}
+
+.inicioSesionSubtexto {
+    color: var(--color-gris-oscuro);
+    font-size: 0.95rem;
+    margin: 0.2rem 0 0;
+}
+
+/* Animación para retroalimentación de errores en el formulario */
+@keyframes sacudidaError {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-6px);
+    }
+
+    75% {
+        transform: translateX(6px);
+    }
+}
+
+.animacion-sacudida {
+    animation: sacudidaError 0.4s ease-in-out;
+}
+
+/* Estilos de validación siguiendo WCAG para contraste y claridad */
+.invalid-feedback {
+    font-size: 0.85rem;
+    color: #b02a37;
+    /* Rojo con mejor contraste para accesibilidad */
+    margin-top: 0.25rem;
+    font-weight: 500;
+}
+
+/* Resaltado de bordes en campos inválidos */
+.was-validated .form-control:invalid {
+    border-color: #b02a37 !important;
+    box-shadow: 0 0 0 0.2rem rgba(176, 42, 55, 0.15);
+}
+
+@media (min-width: 576px) {
+    .inicioSesionPanel {
+        padding: 3.5rem 2rem 3rem;
+    }
+
+    .inicioSesionBloqueBotones {
+        gap: 1rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .inicioSesionPanel {
+        width: min(100%, 920px);
+        padding: 3.7rem 2.5rem 3.25rem;
+    }
+}

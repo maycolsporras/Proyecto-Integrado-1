@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sicid - Gestión de eventos Editor </title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
+    <header class="gestionAdminHeader" aria-label="Encabezado del modulo Editor">
+        <div class="gestionAdminTopBar">
+            <a class="gestionAdminBrand" href="../modulo-editor.html" aria-label="Ir al inicio de SICID">
+                <img src="../assets/img/logoSicidBlanco.webp" alt="Logo de Sicid Intranet">
+            </a>
+
+            <p class="gestionAdminTitle"><strong>EVENTOS</strong> <span aria-hidden="true">•</span> Editor</p>
+
+            <div class="gestionAdminControls" aria-label="Controles de accesibilidad y cuenta">
+                <div class="gestionAdminFontGroup" aria-label="Controles de tamaño de fuente">
+                    <button class="gestionAdminControlBtn" type="button" aria-label="Reducir tamaño de fuente">-</button>
+                    <button class="gestionAdminControlBtn" type="button" aria-label="Tamaño de fuente normal">A</button>
+                    <button class="gestionAdminControlBtn" type="button" aria-label="Aumentar tamaño de fuente">+</button>
+                </div>
+
+                <div class="gestionAdminContrastGroup" aria-label="Control de contraste">
+                    <button class="gestionAdminControlBtn" type="button" aria-label="Cambiar contraste">
+                        <i class="fa-solid fa-circle-half-stroke p-2" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <div class="gestionAdminBellGroup" aria-label="Notificaciones">
+                    <button class="gestionAdminBell" type="button" aria-label="Notificaciones">
+                        <i class="fa-solid fa-bell" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <div class="gestionAdminProfileGroup" aria-label="Perfil de usuario">
+                    <div class="dropdown">
+                        <button class="gestionAdminProfileBtn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false" aria-label="Abrir menu de perfil">
+                            <i class="fa-regular fa-user" aria-hidden="true"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end dropdownProfileMenu">
+                            <li><a class="dropdown-item" href="../inicio-sesion.html">Cerrar sesión</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="gestionAdminBottomLine" aria-hidden="true"></div>
+    </header>
+
+    <!-- Panel principal del editor -->
+    <main class="gestionEditorMain flex-grow-1 container-fluid p-0" aria-label="Panel de gestion del Editor">
+        <section class="gestionEditorLayout row g-0 h-100">
+            <section class="col-12 d-md-none px-3 pt-3 pb-2" aria-label="Menu de gestion en moviles">
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Abrir opciones de gestion">
+                        <span id="gestionEditorMobileMenuLabel">Opciones de gestión</span>
+                    </button>
+                    <ul class="dropdown-menu w-100">
+                        <li><p class="dropdown-header sideBarTitles">Eventos</p></li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="crear-evento">Crear Evento</a></li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="eventos-publicados">Eventos Publicados</a></li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="eventos-borrador">Eventos en Borrador</a></li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="eventos-finalizados">Eventos Finalizados</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><p class="dropdown-header sideBarTitles">Usuarios</p></li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="crear-lista-difusion">Crear lista de difusión</a></li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="listas-difusion">Listas de Difusión</a></li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="suscriptores">Suscriptores</a></li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="consultas">Consultas</a></li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="aprobacion-inscripciones">Aprobación de Inscripciones</a></li>
+                        <li><a href="#" class="dropdown-item gestionEditorMenuOption" data-sidebar-key="inscritos-eventos">Inscritos a eventos</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <aside class="gestionEditorSidebar d-none d-md-flex col-md-4 col-lg-3 col-xl-2 align-items-start border-end border-1 border-secondary-subtle ps-3 pe-0 py-5" aria-label="Menu lateral de gestion">
+                <nav class="gestionEditorSidebarNav d-flex flex-column gap-5 w-100 mt-4 mt-md-5" aria-label="Opciones de administracion">
+                    <section class="gestionEditorMenuGroup d-flex flex-column gap-2" aria-label="Menu de eventos">
+                        <p class="gestionEditorMenuTitle">Eventos</p>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="crear-evento">Crear Evento</a>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="eventos-publicados">Eventos Publicados</a>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="eventos-borrador">Eventos en Borrador</a>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="eventos-finalizados">Eventos Finalizados</a>
+                    </section>
+
+                    <section class="gestionEditorMenuGroup d-flex flex-column gap-2" aria-label="Menu de usuarios">
+                        <p class="gestionEditorMenuTitle">Usuarios</p>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="crear-lista-difusion">Crear lista de difusión</a>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="listas-difusion">Listas de Difusión</a>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="suscriptores">Suscriptores</a>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="consultas">Consultas</a>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="aprobacion-inscripciones">Aprobación de Inscripciones</a>
+                        <a href="#" class="gestionEditorMenuLink gestionEditorMenuOption" data-sidebar-key="inscritos-eventos">Inscritos a eventos</a>
+                    </section>
+                </nav>
+            </aside>
+
+            <section class="gestionEditorContent col-12 col-md-8 col-lg-9 col-xl-10" aria-label="Area de contenido">
+                <div class="gestionEditorContentInner" id="gestionEditorContentPanel" aria-live="polite">
+                    
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <!-- Modal de borrador guardado -->
+    <div class="modal fade" id="modalEventoBorrador" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalEventoBorradorAncho">
+            <div class="modal-content modalEventoBorradorContenido">
+                <div class="modal-body modalEventoBorradorBody">
+                    <p class="modalEventoBorradorTitulo">Evento en Borrador</p>
+                    <p class="modalEventoBorradorDescripcion">
+                        El evento no se ha completado, por lo tanto al salir de esta pantalla, podrá encontrar este
+                        evento en la sección <span class="modalEventoBorradorNegrita">"Eventos en Borrador"</span>. En
+                        esta sección puede volver a editarlo y completarlo o bien eliminarlo.
+                    </p>
+                    <p class="modalEventoBorradorDescripcion mb-0">
+                        Presione <span
+                            class="modalEventoBorradorNegrita modalEventoBorradorNegritaAzul">Continuar</span> para
+                        enviar el evento a "Eventos en Desarrollo" o <span class="modalEventoBorradorNegrita">Eliminar
+                            Evento</span> para descartarla.
+                    </p>
+                    <div class="modalEventoBorradorAcciones d-grid gap-3 d-md-flex justify-content-center mb-3 mt-5">
+                        <button type="button" class="btn modalEventoBorradorBtnEliminar px-4">Eliminar Evento</button>
+                        <button type="button" class="btn modalEventoBorradorBtnContinuar px-4"
+                            data-bs-dismiss="modal">Continuar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de evento incompleto -->
+    <div class="modal fade" id="modalEventoIncompleto" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalEventoIncompletoAncho">
+            <div class="modal-content modalEventoIncompletoContenido">
+                <div class="modal-body modalEventoIncompletoBody">
+                    <div class="modalEventoIncompletoIcono" aria-hidden="true">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <p class="modalEventoIncompletoTitulo">Evento Incompleto</p>
+                    <p class="modalEventoIncompletoDescripcion">
+                        Hay campos obligatorios que no han sido completados, por esta razón no se puede continuar con
+                        enviar el evento para revisión. Complete los campos y proceda a enviar el evento.
+                    </p>
+                    <button type="button" class="btn modalEventoIncompletoBtnContinuar"
+                        data-bs-dismiss="modal">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de evento enviado -->
+    <div class="modal fade" id="modalEventoEnviado" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+            <div class="modal-content modalSuscripcionEnviadaContenido">
+                <div class="modal-body modalSuscripcionEnviadaBody">
+                    <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <p class="modalSuscripcionEnviadaTitulo">Evento Enviado</p>
+                    <p class="modalSuscripcionEnviadaDescripcion">
+                        Se envió el evento con éxito al administrador. Este debe ser revisado y aprobado por el
+                        administrador, para ser publicado en la sección de Eventos. Pronto recibirá una notificación
+                        para conocer si el evento fue aprobado o rechazado.
+                    </p>
+                    <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                        data-bs-dismiss="modal">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de lista enviada -->
+    <div class="modal fade" id="modalListaEnviada" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+            <div class="modal-content modalSuscripcionEnviadaContenido">
+                <div class="modal-body modalSuscripcionEnviadaBody">
+                    <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <p class="modalSuscripcionEnviadaTitulo">Lista Enviada</p>
+                    <p class="modalSuscripcionEnviadaDescripcion">
+                        Se envió la lista con éxito al administrador. Este debe ser revisado y aprobado por el
+                        administrador, para ser publicado en la sección de Listas. Pronto recibirá una notificación
+                        para conocer si la lista fue aprobada o rechazada.
+                    </p>
+                    <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                        data-bs-dismiss="modal">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para eliminar evento -->
+    <div class="modal fade" id="modalEliminarEvento" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalEliminarEventoAncho">
+            <div class="modal-content modalEliminarEventoContenido">
+                <div class="modal-body modalEliminarEventoBody">
+                    <div class="modalEliminarEventoIcono" aria-hidden="true">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <p class="modalEliminarEventoTitulo">¿Eliminar?</p>
+                    <p class="modalEliminarEventoDescripcion">
+                        Al eliminar un evento en desarrollo lo perdera para siempre, ¿esta seguro que desea continuar
+                        con este proceso?
+                    </p>
+                    <div class="modalEliminarEventoAcciones d-grid gap-3 d-md-flex justify-content-center my-3">
+                        <button type="button" class="btn modalEliminarEventoBtnCancelar px-4"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn modalEliminarEventoBtnEliminar px-4">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para confirmar cambios -->
+    <div class="modal fade" id="modalConfirmarEdicionEvento" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalEliminarEventoAncho">
+            <div class="modal-content modalEliminarEventoContenido">
+                <div class="modal-body modalEliminarEventoBody">
+                    <p class="modalEliminarEventoTitulo">¿Editar evento?</p>
+                    <p class="modalEliminarEventoDescripcion">
+                        Al editar un evento se sobrescribirán los datos, ¿está seguro que desea continuar con este
+                        proceso?
+                    </p>
+                    <div class="modalEliminarEventoAcciones d-grid gap-3 d-md-flex justify-content-center my-3">
+                        <button type="button" class="btn modalEliminarEventoBtnCancelar px-4"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn modalEliminarEventoBtnEliminar px-4">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de evento editado -->
+    <div class="modal fade" id="modalEventoEditado" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+            <div class="modal-content modalSuscripcionEnviadaContenido">
+                <div class="modal-body modalSuscripcionEnviadaBody">
+                    <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <p class="modalSuscripcionEnviadaTitulo">Evento Editado</p>
+                    <p class="modalSuscripcionEnviadaDescripcion">
+                        Se editó con éxito el evento seleccionado.
+                    </p>
+                    <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                        data-bs-dismiss="modal">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de vista previa -->
+    <div class="modal fade" id="modalVistaPreviaEvento" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content modalVistaPreviaContenido">
+                <div class="modal-header modalVistaPreviaHeader">
+                    <h5 class="modal-title">Vista previa del evento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body modalVistaPreviaBody">
+                    <div class="evento-preview-hero">
+                        <img id="previewHeroImg" src="" alt="Imagen del evento" />
+                    </div>
+                    <div class="evento-preview-encabezado">
+                        <div class="evento-fecha-badge preview">
+                            <span id="previewDia" class="dia">01</span>
+                            <span id="previewMes" class="mes">ENE</span>
+                        </div>
+                        <div class="evento-preview-titulo">
+                            <h2 id="previewTitulo">Título del evento</h2>
+                        </div>
+                    </div>
+                    <div class="evento-preview-grid">
+                        <div class="evento-preview-main">
+                            <section class="preview-section" aria-labelledby="previewDescripcionTitle">
+                                <h3 id="previewDescripcionTitle">Descripción</h3>
+                                <p id="previewDescripcion">Cargando...</p>
+                            </section>
+                            <section class="preview-section" id="previewEnlaceSection" aria-labelledby="previewEnlaceTitle">
+                                <h3 id="previewEnlaceTitle">Enlace del evento</h3>
+                                <a id="previewEnlace" href="#" target="_blank" rel="noopener">Abrir enlace</a>
+                            </section>
+                            <section class="preview-section" aria-labelledby="previewObjetivosTitle">
+                                <h3 id="previewObjetivosTitle">Objetivos</h3>
+                                <div id="previewObjetivos"></div>
+                            </section>
+                            <section class="preview-section" aria-labelledby="previewAgendaTitle">
+                                <h3 id="previewAgendaTitle">Programa / Agenda</h3>
+                                <div id="previewAgenda"></div>
+                            </section>
+                            <section class="preview-section" aria-labelledby="previewInfoAdicionalTitle">
+                                <h3 id="previewInfoAdicionalTitle">Información adicional</h3>
+                                <div id="previewInfoAdicional"></div>
+                            </section>
+                        </div>
+                        <aside class="evento-preview-sidebar" aria-label="Información del evento">
+                            <div class="evento-info-card">
+                                <h3>Detalles del evento</h3>
+                                <ul class="evento-info-lista">
+                                    <li>
+                                        <strong>Fecha:</strong>
+                                        <span id="previewFechaCompleta"></span>
+                                    </li>
+                                    <li>
+                                        <strong>Horario:</strong>
+                                        <span id="previewHorario"></span>
+                                    </li>
+                                    <li>
+                                        <strong>Lugar:</strong>
+                                        <span id="previewLugar"></span>
+                                    </li>
+                                    <li>
+                                        <strong>Contacto:</strong>
+                                        <span id="previewContactoNombre"></span><br />
+                                        <span id="previewContactoCorreo"></span>
+                                    </li>
+                                    <li>
+                                        <strong>Público meta:</strong>
+                                        <span id="previewPublicoMeta"></span>
+                                    </li>
+                                    <li>
+                                        <strong>Cupos:</strong>
+                                        <span id="previewCupos"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+                <div class="modal-footer modalVistaPreviaFooter">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de respuesta a consulta -->
+    <div class="modal fade" id="modalRespuestaConsulta" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalRespuestaConsultaAncho">
+            <div class="modal-content modalRespuestaConsultaContenido">
+                <div class="modal-body modalRespuestaConsultaBody">
+                    <p class="modalRespuestaConsultaTitulo">Respuesta de Consulta</p>
+                    <p class="modalRespuestaConsultaDescripcion">
+                        Para resolver la consulta del usuario, favor escriba en el siguiente recuadro. Este mensaje
+                        sera enviado al autor de la consulta.
+                    </p>
+
+                    <form class="modalRespuestaConsultaFormulario" action="#" onsubmit="return false;">
+                        <textarea class="form-control modalRespuestaConsultaTextarea"
+                            placeholder="introduzca el dato solicitado"></textarea>
+
+                        <div class="modalRespuestaConsultaAcciones d-grid gap-3 d-md-flex justify-content-center my-4">
+                            <button type="button" class="btn modalRespuestaConsultaBtnCancelar px-4"
+                                data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn modalRespuestaConsultaBtnAceptar px-4">Aceptar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de respuesta enviada -->
+    <div class="modal fade" id="modalRespuestaEnviada" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+            <div class="modal-content modalSuscripcionEnviadaContenido">
+                <div class="modal-body modalSuscripcionEnviadaBody">
+                    <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <p class="modalSuscripcionEnviadaTitulo">Respuesta Enviada</p>
+                    <p class="modalSuscripcionEnviadaDescripcion">
+                        Se envio con exito la respuesta a la consulta. Para ver la consulta y la respuesta enviada,
+                        puede revisarlo en la seccion de <span
+                            class="modalSuscripcionEnviadaDescripcionNegrita">Consultas/ Consultas Resueltas.</span>
+                    </p>
+                    <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar"
+                        data-bs-dismiss="modal">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts del panel -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/pages/crea-evento.js"></script>
+    <script src="../js/pages/evento-borrador.js"></script>
+    <script src="../js/components/eventos-publicados-editor.js"></script>
+    <script src="../js/pages/listas-difusion-edit.js"></script>
+    <script src="../js/pages/suscriptores.js"></script>
+    <script src="../js/pages/consultas.js"></script>
+    <script src="../js/pages/gestion-editor.js"></script>
+</body>
+
+</html>
