@@ -1071,7 +1071,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    margin-bottom: 3.1rem;
+    margin-bottom: 2.8rem !important;
 }
 
 .epInscripcionStepper .ceStepCircle {
@@ -1087,9 +1087,9 @@
 }
 
 .epInscripcionStepper .ceStepCurrent .ceStepCircle {
-    background-color: #2a4f9b;
-    color: #ffffff;
-    border-color: #2a4f9b;
+    background-color: #2a4f9b !important;
+    color: #ffffff !important;
+    border-color: #2a4f9b !important;
 }
 
 .epInscripcionStepper .ceStepLine {
@@ -1283,3 +1283,36 @@
         min-width: 140px;
     }
 }
+
+    /* Estilos de validación del formulario de inscripción */
+    .epInscripcionInput.is-invalid {
+        border-color: #dc3545;
+        background-color: #fff5f5;
+    }
+
+    .epInscripcionInput.is-invalid:focus {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.15);
+    }
+
+    .epInscripcionFila .invalid-feedback {
+        display: block;
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .epInscripcionRadio .invalid-feedback {
+        display: block;
+        color: #dc3545;
+        font-size: 0.875rem;
+        width: 100%;
+        margin-top: 0.25rem;
+    }
+
+    .epInscripcionCheckLabel .invalid-feedback {
+        display: block;
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }

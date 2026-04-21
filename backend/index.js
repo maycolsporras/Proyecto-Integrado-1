@@ -14,6 +14,7 @@ const formBorradorRoutes = require('./routes/form-borrador.route.js');
 const listaDifusionRoutes = require('./routes/lista-difusion.route.js');
 const suscriptoresRoutes = require('./routes/suscriptores.route.js');
 const consultaEventosRoutes = require('./routes/consulta-eventos.route.js');
+const usuarioInscritoRoutes = require('./routes/usuario-inscrito.route.js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -196,6 +197,7 @@ app.use('/api/form-borrador', formBorradorRoutes);
 app.use('/api/lista-difusion', listaDifusionRoutes);
 app.use('/api/suscriptores', suscriptoresRoutes);
 app.use('/api/consulta-eventos', consultaEventosRoutes);
+app.use('/api/usuario-inscrito', usuarioInscritoRoutes);
 
 app.get('/', (req, res) => {
     res.send('Servidor en funcionamiento');

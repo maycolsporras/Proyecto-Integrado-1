@@ -97,11 +97,11 @@
     }
 
     if (tieneAspecto(aspectosSet, /profesion u oficio/)) {
-      filas.push(construirCampoFila('Profesión', '<input type="text" class="epInscripcionInput" placeholder="introduzca el dato solicitado" name="profesion">', escapeHtml));
+      filas.push(construirCampoFila('Profesión', '<input type="text" class="epInscripcionInput" placeholder="introduzca el dato solicitado" name="profesion" required>', escapeHtml));
     }
 
     if (tieneAspecto(aspectosSet, /entidad para la que trabaja/)) {
-      filas.push(construirCampoFila('Entidad para la que trabaja', '<input type="text" class="epInscripcionInput" placeholder="introduzca el dato solicitado" name="entidadTrabajo">', escapeHtml));
+      filas.push(construirCampoFila('Entidad para la que trabaja', '<input type="text" class="epInscripcionInput" placeholder="introduzca el dato solicitado" name="entidadTrabajo" required>', escapeHtml));
     }
 
     if (tieneAspecto(aspectosSet, /condicion medica|tipo deficiencia/)) {
@@ -113,7 +113,7 @@
         <div class="epInscripcionFila">
           <label class="epInscripcionEtiqueta">*Requiere transporte al evento</label>
           <div class="epInscripcionControl epInscripcionRadio">
-            <label><input type="radio" name="requiereTransporte" value="si"> Sí</label>
+            <label><input type="radio" name="requiereTransporte" value="si" required> Sí</label>
             <label><input type="radio" name="requiereTransporte" value="no"> No</label>
           </div>
         </div>
@@ -404,6 +404,7 @@
 
     function cambiarPasoInscripcion(pasoActivo) {
       const form = document.getElementById('formInscripcionEvento');
+      const stepper = document.querySelector('.epInscripcionStepper');
       if (!form) return;
 
       form.querySelectorAll('.epInscripcionPaso').forEach((paso) => {
@@ -411,13 +412,14 @@
         paso.classList.toggle('d-none', pasoActual !== pasoActivo);
       });
 
-      form.querySelectorAll('.ceStep').forEach((stepNode) => {
+      stepper?.querySelectorAll('.ceStep').forEach((stepNode) => {
         const step = Number.parseInt(stepNode.dataset.step || '1', 10);
         const estaActivo = step <= pasoActivo;
         const esPasoActual = step === pasoActivo;
 
         stepNode.classList.toggle('ceStepActive', estaActivo);
         stepNode.classList.toggle('ceStepCurrent', esPasoActual);
+        stepNode.setAttribute('aria-current', esPasoActual ? 'step' : 'false');
         const dot = stepNode.querySelector('.ceStepDot');
         dot?.classList.toggle('ceStepDotActive', esPasoActual);
       });
@@ -441,7 +443,67 @@
 
       let pasoActivo = 1;
 
+      function validarPasoFormulario(numeroPaso) {
+        const paso = form.querySelector(`.epInscripcionPaso[data-step="${numeroPaso}"]`);
+        if (!paso) return true;
+
+        const controles = paso.querySelectorAll('input, select, textarea');
+        let esValido = true;
+
+        controles.forEach((control) => {
+          if (control.type === 'file') return;
+
+          limpiarErrorCampo(control);
+
+          if (control.type === 'radio') {
+            const grupoRadio = paso.querySelectorAll(`input[type="radio"][name="${control.name}"]`);
+            const seleccionado = paso.querySelector(`input[type="radio"][name="${control.name}"]:checked`);
+
+            if (grupoRadio.length > 0 && !seleccionado) {
+              esValido = false;
+              mostrarErrorCampo(grupoRadio[0], 'Debe seleccionar una opción');
+            }
+
+            return;
+          }
+
+          if (!control.value.trim()) {
+            if (control.hasAttribute('required') || control.name === 'nombreCompleto' || control.name === 'correoElectronico') {
+              esValido = false;
+              mostrarErrorCampo(control, 'Este campo es obligatorio');
+            }
+            return;
+          }
+
+          if (control.type === 'email' && !esEmailValido(control.value.trim())) {
+            esValido = false;
+            mostrarErrorCampo(control, 'Por favor ingrese un correo electrónico válido');
+            return;
+          }
+
+          if (control.name === 'telefono') {
+            const telefonoNormalizado = control.value.replace(/[\s\-()]/g, '');
+            if (!/^\d{8,}$/.test(telefonoNormalizado)) {
+              esValido = false;
+              mostrarErrorCampo(control, 'Por favor ingrese un número de teléfono válido');
+            }
+          }
+
+          if (!control.checkValidity()) {
+            esValido = false;
+            mostrarErrorCampo(control, 'Este campo es obligatorio');
+            esValido = false;
+          }
+        });
+
+        return esValido;
+      }
+
       btnSiguiente?.addEventListener('click', () => {
+        if (!validarPasoFormulario(1)) {
+          return;
+        }
+
         pasoActivo = 2;
         cambiarPasoInscripcion(pasoActivo);
       });
@@ -454,6 +516,11 @@
       stepper?.querySelectorAll('.ceStep[data-step]').forEach((botonPaso) => {
         botonPaso.addEventListener('click', () => {
           const step = Number.parseInt(botonPaso.dataset.step || '1', 10);
+
+          if (step > 1 && !validarPasoFormulario(1)) {
+            return;
+          }
+
           pasoActivo = Number.isNaN(step) ? 1 : step;
           cambiarPasoInscripcion(pasoActivo);
         });
@@ -461,18 +528,155 @@
 
       inicializarAdjuntosInscripcion(form);
 
-      form.addEventListener('submit', (submitEvent) => {
-        submitEvent.preventDefault();
+      // Función para validar email
+      function esEmailValido(email) {
+        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regexEmail.test(email);
+      }
 
-        const payload = Object.fromEntries(new FormData(form).entries());
-        console.info('Inscripción enviada (cliente):', {
-          eventoId: evento._id,
-          eventoNombre: evento.nombreEvento,
-          datos: payload,
+      // Función para mostrar error en un campo
+      function mostrarErrorCampo(input, mensaje) {
+        input.classList.add('is-invalid');
+        let errorDiv = input.parentElement.querySelector('.invalid-feedback');
+        if (!errorDiv) {
+          errorDiv = document.createElement('div');
+          errorDiv.className = 'invalid-feedback d-block';
+          input.parentElement.appendChild(errorDiv);
+        }
+        errorDiv.textContent = mensaje;
+      }
+
+      // Función para limpiar errores de un campo
+      function limpiarErrorCampo(input) {
+        input.classList.remove('is-invalid');
+        const errorDiv = input.parentElement.querySelector('.invalid-feedback');
+        if (errorDiv) {
+          errorDiv.remove();
+        }
+      }
+
+      // Función para validar el formulario completo
+      function validarFormulario() {
+        let esValido = true;
+        const inputs = form.querySelectorAll('input, select, textarea');
+        const errores = [];
+
+        // Limpiar errores previos
+        inputs.forEach(input => {
+          if (input.type !== 'file') {
+            limpiarErrorCampo(input);
+          }
         });
 
-        alert('La inscripción fue enviada correctamente.');
-        restaurarDetalleDesdeActual();
+        // Validar campos requeridos (los que tienen atributo required)
+        inputs.forEach(input => {
+          if (input.type === 'file') return;
+
+          const valor = input.value.trim();
+          const esRequerido = input.hasAttribute('required') || input.name === 'nombreCompleto' || input.name === 'correoElectronico';
+
+          if (esRequerido && !valor) {
+            esValido = false;
+            const labelText = form.querySelector(`label[for="${input.id}"]`)?.textContent || input.name;
+            mostrarErrorCampo(input, `${labelText.replace('*', '').trim()} es obligatorio`);
+            errores.push(`${input.name} es obligatorio`);
+          }
+
+          // Validar formato de email
+          if (input.type === 'email' && valor && !esEmailValido(valor)) {
+            esValido = false;
+            mostrarErrorCampo(input, 'Por favor ingrese un correo electrónico válido');
+            errores.push(`${input.name} tiene formato inválido`);
+          }
+
+          // Validar teléfono si está presente
+          if (input.name === 'telefono' && valor) {
+            if (!/^\d{8,}$/.test(valor.replace(/[\s\-()]/g, ''))) {
+              esValido = false;
+              mostrarErrorCampo(input, 'Por favor ingrese un número de teléfono válido');
+              errores.push(`${input.name} tiene formato inválido`);
+            }
+          }
+        });
+
+        // Validar checkboxes y radio buttons si existen
+        const checkboxAutoriza = form.querySelector('input[name="autorizaNotificaciones"]');
+        if (checkboxAutoriza && !checkboxAutoriza.checked) {
+          esValido = false;
+          errores.push('Debe autorizar las notificaciones');
+        }
+
+        // Mostrar resumen de errores si los hay
+        if (!esValido && errores.length > 0) {
+          console.warn('Errores de validación:', errores);
+        }
+
+        return esValido;
+      }
+
+      form.addEventListener('submit', async (submitEvent) => {
+        submitEvent.preventDefault();
+
+        // Validar formulario antes de enviar
+        if (!validarFormulario()) {
+          console.warn('El formulario tiene errores de validación');
+          return;
+        }
+
+        const formData = new FormData(form);
+        const payload = Object.fromEntries(formData.entries());
+        
+        // Agregar el ID del evento
+        payload.eventoId = evento._id;
+
+        try {
+          const response = await fetch('/api/usuario-inscrito', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+          });
+
+          const resultado = await response.json();
+
+          if (resultado.ok) {
+            console.info('Inscripción guardada correctamente:', resultado);
+            
+            // Mostrar el modal de inscripción exitosa
+            const modalElement = document.getElementById('modalInscripcionEvento');
+            if (modalElement) {
+              const modal = new window.bootstrap.Modal(modalElement);
+              modal.show();
+
+              // Restaurar el detalle después de que se cierre el modal
+              modalElement.addEventListener('hidden.bs.modal', () => {
+                restaurarDetalleDesdeActual();
+              }, { once: true });
+            }
+          } else {
+            alert(`Error: ${resultado.mensaje}`);
+            console.error('Error al guardar inscripción:', resultado);
+          }
+        } catch (error) {
+          console.error('Error en la solicitud:', error);
+          alert('Ocurrió un error al enviar la inscripción. Por favor, intente nuevamente.');
+        }
+      });
+
+      // Limpiar errores cuando el usuario comienza a escribir
+      form.addEventListener('input', (event) => {
+        const input = event.target;
+        if (input.classList.contains('is-invalid')) {
+          limpiarErrorCampo(input);
+        }
+      });
+
+      form.addEventListener('change', (event) => {
+        const input = event.target;
+        if (input.classList.contains('is-invalid')) {
+          limpiarErrorCampo(input);
+        }
       });
     }
 
