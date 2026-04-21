@@ -154,7 +154,7 @@ const crearEventoFinalizadoInicial = async () => {
             const eventoSincronizado = await FormEvento.findOneAndUpdate(
                 { nombreEvento: semilla.nombreEvento },
                 { $set: payloadEvento },
-                { upsert: true, new: true },
+                { upsert: true, returnDocument: 'after' },
             );
 
             // Fuerza una fecha de creacion historica para que se muestre coherente con la fecha final.

@@ -358,6 +358,17 @@ function initEventoBorrador() {
 			return;
 		}
 
+		if (field.type === 'file') {
+			if (fieldSnapshot.kind === 'file') {
+				const fileNameEl = field.closest('.ceFileInput')?.querySelector('.ceFileName');
+				if (fileNameEl) {
+					fileNameEl.textContent = fieldSnapshot.fileName || 'Adjuntar Documento';
+				}
+			}
+
+			return;
+		}
+
 		if (fieldSnapshot.kind === 'contenteditable' && field.getAttribute('contenteditable') === 'true') {
 			field.innerHTML = fieldSnapshot.html || '';
 			return;
@@ -365,14 +376,6 @@ function initEventoBorrador() {
 
 		if (fieldSnapshot.kind === 'checkable' && (field.type === 'checkbox' || field.type === 'radio')) {
 			field.checked = Boolean(fieldSnapshot.checked);
-			return;
-		}
-
-		if (fieldSnapshot.kind === 'file' && field.type === 'file') {
-			const fileNameEl = field.closest('.ceFileInput')?.querySelector('.ceFileName');
-			if (fileNameEl) {
-				fileNameEl.textContent = fieldSnapshot.fileName || 'Adjuntar Documento';
-			}
 			return;
 		}
 
@@ -647,7 +650,7 @@ function initEventoBorrador() {
 			await openEditModal(id, source);
 		} catch (error) {
 			console.error(error);
-			globalThis.alert('No se pudo preparar el evento para edición.');
+			globalThis.alert(error?.message || 'No se pudo preparar el evento para edición.');
 		}
 	};
 

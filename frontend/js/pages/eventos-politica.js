@@ -831,15 +831,11 @@ function obtenerImagenesCarrusel(imagenesEvento, fallback) {
       .filter(Boolean)
     : [];
 
-  if (!imagenes.length) {
-    return [fallback, fallback, fallback, fallback];
+  if (imagenes.length) {
+    return imagenes;
   }
 
-  const resultado = imagenes.slice(0, 4);
-  while (resultado.length < 4) {
-    resultado.push(resultado[resultado.length - 1]);
-  }
-  return resultado;
+  return [fallback];
 }
 
 function configurarLecturaFacilEventoDetalle() {

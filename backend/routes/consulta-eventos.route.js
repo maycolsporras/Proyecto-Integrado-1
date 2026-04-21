@@ -136,7 +136,7 @@ router.patch('/:id/respuesta', async (req, res) => {
                 estado: 'consulta_respondida',
                 fechaRespuesta: new Date(),
             },
-            { new: true, runValidators: true },
+                { returnDocument: 'after', runValidators: true },
         ).populate('eventoId', 'nombreEvento contacto fechasEvento fechaPublicacion');
 
         if (!consultaActualizada) {

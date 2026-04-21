@@ -117,7 +117,7 @@ router.patch('/:id', async (req, res) => {
                 nombreLista,
                 descripcionLista,
             },
-            { new: true, runValidators: true },
+            { returnDocument: 'after', runValidators: true },
         );
 
         if (!listaActualizada) {
@@ -174,7 +174,7 @@ router.patch('/:id/estado', async (req, res) => {
         const listaActualizada = await ListaDifusion.findByIdAndUpdate(
             req.params.id,
             actualizaciones,
-            { new: true, runValidators: true },
+            { returnDocument: 'after', runValidators: true },
         );
 
         if (!listaActualizada) {

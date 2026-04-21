@@ -120,7 +120,7 @@ router.patch('/:id/estado', async (req, res) => {
         const suscriptorActualizado = await Suscriptores.findByIdAndUpdate(
             req.params.id,
             actualizaciones,
-            { new: true, runValidators: true },
+            { returnDocument: 'after', runValidators: true },
         );
 
         if (!suscriptorActualizado) {

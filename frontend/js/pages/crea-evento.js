@@ -83,6 +83,19 @@ function esUrlValida(valor) {
     }
 }
 
+function convertirArchivoADataUrl(archivo) {
+    if (!archivo) {
+        return Promise.resolve('');
+    }
+
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result || '');
+        reader.onerror = () => resolve('');
+        reader.readAsDataURL(archivo);
+    });
+}
+
 function construirUrlImagenEvento(ruta) {
     if (!ruta || typeof ruta !== 'string') {
         return '';
@@ -94,6 +107,10 @@ function construirUrlImagenEvento(ruta) {
     }
 
     if (/^https?:\/\//i.test(pathNormalizado)) {
+        return pathNormalizado;
+    }
+
+    if (/^(data|blob):/i.test(pathNormalizado)) {
         return pathNormalizado;
     }
 
@@ -429,6 +446,7 @@ function initCrearEvento() {
 
             const data = await response.json();
             const listas = Array.isArray(data?.listas) ? data.listas : [];
+            listaDifusionSelect.dataset.hasApprovedLists = listas.length > 0 ? 'true' : 'false';
 
             listaDifusionSelect.innerHTML = '<option value="">seleccione la lista de difusión</option>';
 
@@ -446,6 +464,7 @@ function initCrearEvento() {
             restaurarListaDifusionPendiente(listaDifusionSelect);
         } catch (error) {
             console.error('Error al cargar listas de difusion aprobadas:', error);
+            listaDifusionSelect.dataset.hasApprovedLists = 'false';
             listaDifusionSelect.innerHTML = '<option value="">No hay listas de difusión aprobadas disponibles</option>';
         } finally {
             listaDifusionSelect.disabled = false;
@@ -837,6 +856,7 @@ function initCrearEvento() {
             '#descImagen',
             '#publicoMeta',
             '#tipoFormulario',
+            '#listaDifusion',
             '#cupoEvento',
             '#fechaFinAnio',
             '#fechaFinMes',
@@ -845,6 +865,17 @@ function initCrearEvento() {
         ]);
 
         if (!esValido) {
+            return false;
+        }
+
+        const listasAprobadasDisponibles = listaDifusionSelect?.dataset.hasApprovedLists === 'true';
+        if (!listasAprobadasDisponibles) {
+            if (listaDifusionSelect) {
+                marcarValidacionCampo(listaDifusionSelect);
+                enfocarPrimerError(listaDifusionSelect);
+            }
+
+            alert('No hay listas de difusión aprobadas disponibles. Debes aprobar al menos una lista para enviar el evento.');
             return false;
         }
 
@@ -1037,16 +1068,19 @@ function initCrearEvento() {
         const primerInput = formRoot.querySelector('#imagenesWrapper input[type="file"]');
         const archivo = primerInput?.files?.[0];
 
-        if (!archivo) {
-            return '';
+        return convertirArchivoADataUrl(archivo);
+    }
+
+    async function obtenerImagenesDeFormularioParaPreview() {
+        const archivos = Array.from(formRoot.querySelectorAll('#imagenesWrapper input[type="file"]'))
+            .map((input) => input.files?.[0])
+            .filter(Boolean);
+
+        if (!archivos.length) {
+            return [];
         }
 
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result || '');
-            reader.onerror = () => resolve('');
-            reader.readAsDataURL(archivo);
-        });
+        return Promise.all(archivos.map((archivo) => convertirArchivoADataUrl(archivo)));
     }
 
     async function fetchEventoDesdeBackend(eventoId) {
@@ -1067,11 +1101,13 @@ function initCrearEvento() {
         }
     }
 
-    function construirPreviewDesdeFormulario() {
+    async function construirPreviewDesdeFormulario() {
         const payload = construirPayloadFormularioEvento();
+        const imagenesPreview = await obtenerImagenesDeFormularioParaPreview();
+
         return {
             ...payload,
-            imagenes: [],
+            imagenes: imagenesPreview,
         };
     }
 
@@ -1198,12 +1234,11 @@ function initCrearEvento() {
             ? evento.imagenes.map((item) => normalizarRutaImagenPreview(item?.ruta || item)).filter(Boolean)
             : [];
 
-        const base = imagenes.length ? imagenes : [imagenPrincipal || './assets/img/eventos-discapacidad.webp'];
-        const resultado = base.slice(0, 4);
-        while (resultado.length < 4) {
-            resultado.push(resultado[resultado.length - 1]);
+        if (imagenes.length) {
+            return imagenes;
         }
-        return resultado;
+
+        return [imagenPrincipal || './assets/img/eventos-discapacidad.webp'];
     }
 
     function generarResumenLecturaFacilPreview(root, tituloEvento, cuposTexto) {
@@ -1423,7 +1458,7 @@ function initCrearEvento() {
 
         let imagenFuente = '';
         if (evento.imagenes && Array.isArray(evento.imagenes) && evento.imagenes.length > 0) {
-            imagenFuente = construirUrlImagenEvento(evento.imagenes[0].ruta);
+            imagenFuente = normalizarRutaImagenPreview(evento.imagenes[0]?.ruta || evento.imagenes[0]);
         }
 
         if (!imagenFuente) {
@@ -1447,7 +1482,7 @@ function initCrearEvento() {
         }
 
         if (!eventoPreview) {
-            eventoPreview = construirPreviewDesdeFormulario();
+            eventoPreview = await construirPreviewDesdeFormulario();
         }
 
         await renderModalVistaPrevia(eventoPreview);
@@ -2596,12 +2631,11 @@ function obtenerImagenesCarruselPreviewGlobal(evento, imagenPrincipal) {
         ? evento.imagenes.map((item) => normalizarRutaImagenPreview(item?.ruta || item)).filter(Boolean)
         : [];
 
-    const base = imagenes.length ? imagenes : [imagenPrincipal || './assets/img/eventos-discapacidad.webp'];
-    const resultado = base.slice(0, 4);
-    while (resultado.length < 4) {
-        resultado.push(resultado[resultado.length - 1]);
+    if (imagenes.length) {
+        return imagenes;
     }
-    return resultado;
+
+    return [imagenPrincipal || './assets/img/eventos-discapacidad.webp'];
 }
 
 function generarResumenLecturaFacilPreviewGlobal(root, tituloEvento, cuposTexto) {
@@ -2821,7 +2855,7 @@ async function renderModalVistaPreviaGlobal(evento) {
 
     let imagenFuente = '';
     if (evento?.imagenes && Array.isArray(evento.imagenes) && evento.imagenes.length > 0) {
-        imagenFuente = construirUrlImagenEvento(evento.imagenes[0].ruta);
+        imagenFuente = normalizarRutaImagenPreview(evento.imagenes[0]?.ruta || evento.imagenes[0]);
     }
 
     renderContenidoModalTemplateGlobal(modalElement, evento, imagenFuente || './assets/img/eventos-discapacidad.webp');
