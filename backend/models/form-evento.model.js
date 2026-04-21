@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Esquema principal del evento publicado o en borrador
 const fechaSchema = new mongoose.Schema({
     anio: { type: String, default: '' },
     mes: { type: String, default: '' },

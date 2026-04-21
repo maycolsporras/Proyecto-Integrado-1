@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Usuario base del sistema
 const usuarioSchema = new mongoose.Schema({
     nombreUsuario: { type: String, 
         required: true, 

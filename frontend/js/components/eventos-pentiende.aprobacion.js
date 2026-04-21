@@ -1,3 +1,4 @@
+// Tarjetas de eventos pendientes para admin
 (function initEventosPendientesAprobacionModule() {
     let pendingDeleteEventId = null;
     let pendingRejectEventId = null;

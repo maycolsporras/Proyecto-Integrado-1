@@ -1,3 +1,4 @@
+// Administra las listas de difusión del editor
 function initListaDifusionEdit() {
 	const statusButtons = document.querySelectorAll('.btnListasDifusionEdit[data-status]');
 	const cardsContainer = document.getElementById('cardsEventosBorrador');

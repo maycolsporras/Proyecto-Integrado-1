@@ -1,3 +1,4 @@
+// Panel del editor para responder consultas
 function initConsultasEditor() {
     const contentPanel = document.getElementById('gestionEditorContentPanel');
     const statusButtons = contentPanel?.querySelectorAll('.consultasTabs .btnListasDifusionEdit[data-status]');

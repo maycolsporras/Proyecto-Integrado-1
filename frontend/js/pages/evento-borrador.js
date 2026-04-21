@@ -1,3 +1,4 @@
+// Administra los eventos guardados como borrador
 function initEventoBorrador() {
 	const statusButtons = document.querySelectorAll('.btnEventosBorrador[data-status]');
 	const cardsContainer = document.getElementById('cardsEventosBorradorEditor');

@@ -6,6 +6,7 @@ const FormEvento = require('../models/form-evento.model.js');
 const router = express.Router();
 const estadosPermitidos = new Set(['pendiente_respuesta', 'consulta_respondida']);
 
+// Convierte el estado de la consulta al valor interno
 const mapearEstadoConsulta = (estado) => {
     const valor = normalizarTexto(estado).toLowerCase().replaceAll(' ', '_');
 
@@ -24,6 +25,7 @@ const mapearEstadoConsulta = (estado) => {
     return valor;
 };
 
+// Limpia textos simples del formulario
 const normalizarTexto = (valor) => {
     if (typeof valor !== 'string') {
         return '';
@@ -32,6 +34,7 @@ const normalizarTexto = (valor) => {
     return valor.trim();
 };
 
+// Guarda una consulta solo si el evento está aprobado
 router.post('/', async (req, res) => {
     try {
         const eventoId = normalizarTexto(req.body?.eventoId);
@@ -82,6 +85,7 @@ router.post('/', async (req, res) => {
     }
 });
 
+// Lista consultas filtradas por estado o evento
 router.get('/', async (req, res) => {
     try {
         const filtros = {};
@@ -113,6 +117,7 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Registra la respuesta de una consulta
 router.patch('/:id/respuesta', async (req, res) => {
     try {
         const respuesta = normalizarTexto(req.body?.respuesta);

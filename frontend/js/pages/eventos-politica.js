@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Carga y filtra los eventos públicos
   inicializarModuloFormInscripcion();
   cargarEventosPolitica();
   configurarFiltrosPolitica();
@@ -36,6 +37,7 @@ let eventoDetalleActual = null;
 let moduloFormInscripcion = null;
 
 async function cargarEventosPolitica() {
+  // Pide los eventos aprobados al backend
   if (!contenedorEventosCreados) return;
 
   mostrarFiltrosPolitica();
@@ -69,6 +71,7 @@ async function obtenerEventosBackend() {
 }
 
 function configurarFiltrosPolitica() {
+  // Conecta los filtros de búsqueda
   if (!filtroNombre) return;
 
   let debounceTimeout;
@@ -99,6 +102,7 @@ function configurarFiltrosPolitica() {
 }
 
 function inicializarFiltrosFecha(eventos) {
+  // Prepara los selects de fecha
   const fechasDisponibles = obtenerFechasDisponibles(eventos);
   configurarSelectFechaBase(filtrosFecha.desdeAnio, 'Todos los años');
   configurarSelectFechaBase(filtrosFecha.desdeMes, 'Todos los meses');
@@ -125,6 +129,7 @@ function configurarSelectFechaBase(select, etiqueta) {
 }
 
 function obtenerFechasDisponibles(eventos) {
+  // Reúne las fechas reales del listado
   const fechas = [];
 
   eventos.forEach((evento) => {

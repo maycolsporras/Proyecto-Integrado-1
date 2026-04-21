@@ -1,8 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
+	// Activa la lectura facil del evento
 	configurarLecturaFacilEvento();
 });
 
 function configurarLecturaFacilEvento() {
+	// Muestra u oculta el resumen del evento
 	const botonLecturaFacil = document.getElementById('btnLecturaFacilEvento');
 	const ventanaLectura = document.getElementById('lecturaFacilVentana');
 	const tituloLectura = document.getElementById('lecturaFacilTitulo');
@@ -35,6 +37,7 @@ function configurarLecturaFacilEvento() {
 }
 
 function generarResumenLecturaFacil() {
+	// Arma el texto corto para lectura facil
 	const tituloEvento = obtenerTexto('#titulo-evento-politica', 'Publicacion de Politica Nacional de Discapacidad 2020 - 2030');
 
 	const descripcion = Array.from(document.querySelectorAll('.eventoPoliticaBloqueContenido p'))

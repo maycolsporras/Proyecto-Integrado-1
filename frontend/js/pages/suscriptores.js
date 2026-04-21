@@ -1,3 +1,4 @@
+// Lista y filtra los suscriptores del editor
 function initSuscriptoresEditor() {
     const contentPanel = document.getElementById('gestionEditorContentPanel');
     const statusButtons = contentPanel?.querySelectorAll('.btnListasDifusionEdit[data-status]');

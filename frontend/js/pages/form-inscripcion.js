@@ -1,3 +1,4 @@
+// Formulario dinamico de inscripcion al evento
 (function initFormInscripcionModule(global) {
   const opcionesIdentificacion = [
     'Cédula nacional',

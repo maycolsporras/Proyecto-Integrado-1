@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Lista de difusión con estado de aprobación
 const listaDifusionSchema = new mongoose.Schema({
     nombreLista: { type: String, required: true, trim: true },
     descripcionLista: { type: String, required: true, trim: true },

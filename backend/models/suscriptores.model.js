@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Persona suscrita a las listas de difusión
 const suscriptoresSchema = new mongoose.Schema({
     nombreCompleto: { type: String, required: true, trim: true },
     correoElectronico: { type: String, required: true, trim: true, lowercase: true },

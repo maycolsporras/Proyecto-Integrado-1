@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Valida el acceso y redirige por rol
     const formularioLogin = document.querySelector('.needs-validation');
     const contenedorMensaje = document.getElementById('mensaje-error');
 
@@ -13,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Preparacion de datos para enviar
+            // Prepara los datos para enviar
             const datos = new URLSearchParams(new FormData(formularioLogin));
 
             try {
@@ -38,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// Marca el formulario cuando falla el acceso
 function ejecutarEfectoError(elemento) {
     elemento.classList.add('animacion-sacudida');
     setTimeout(() => elemento.classList.remove('animacion-sacudida'), 500);

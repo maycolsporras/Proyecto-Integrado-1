@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Registro de inscripción a un evento
 const usuarioInscritoSchema = new mongoose.Schema({
     eventoId: { type: mongoose.Schema.Types.ObjectId, ref: 'FormEvento', required: true },
     nombreCompleto: { type: String, required: true, trim: true },

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Borrador delformulario de evento
 const formBorradorSchema = new mongoose.Schema({
     draftKey: { type: String, required: true, unique: true, index: true },
     snapshot: { type: mongoose.Schema.Types.Mixed, required: true },

@@ -1,3 +1,4 @@
+// Formulario para enviar consultas sobre eventos
 document.addEventListener('DOMContentLoaded', () => {
     const modalConsultaEl = document.getElementById('modalConsultaEvento');
     const modalExitoEl = document.getElementById('modalConsultaEnviada');

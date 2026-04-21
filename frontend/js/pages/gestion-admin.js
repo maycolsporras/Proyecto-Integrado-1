@@ -1,3 +1,4 @@
+// Panel del administrador para listas e informes
 document.addEventListener('DOMContentLoaded', () => {
     const sidebarLinks = document.querySelectorAll('.gestionAdminMenuOption');
     const mobileMenuLabel = document.getElementById('gestionAdminMobileMenuLabel');

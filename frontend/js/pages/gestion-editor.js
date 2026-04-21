@@ -1,3 +1,4 @@
+// Panel principal del editor
 document.addEventListener('DOMContentLoaded', () => {
     const sidebarLinks = document.querySelectorAll('.gestionEditorMenuOption');
     const mobileMenuLabel = document.getElementById('gestionEditorMobileMenuLabel');

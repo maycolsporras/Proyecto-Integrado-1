@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+	// Maneja el modal de suscripcion
 	const modalSuscripcion = document.getElementById('modalSuscripcionEventos');
 
 	if (!modalSuscripcion) {
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const checkbox = form.querySelector('#notificaciones');
 	const [nombreCompletoInput, profesionOficioInput, entidadVinculadaInput, razonNotificacionInput] = textoInputs;
 
+	// Cambia el texto mientras se envia el formulario
 	const setButtonLoading = (isLoading) => {
 		if (!submitButton) {
 			return;
@@ -27,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		submitButton.textContent = isLoading ? 'Enviando...' : 'Inscribirme';
 	};
 
+	// Evita mensajes repetidos de error
 	const ensureFeedback = (container, feedbackId, className = 'invalid-feedback') => {
 		if (!container) {
 			return null;
@@ -163,6 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		validateCheckbox(checkbox);
 	});
 
+	// Envía la suscripcion al backend
 	submitButton.addEventListener('click', async (event) => {
 		event.preventDefault();
 
@@ -221,6 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		modalInstance.hide();
 	});
 
+	// Limpia el modal al cerrarlo
 	modalSuscripcion.addEventListener('hidden.bs.modal', () => {
 		form.reset();
 		textoInputs.forEach((input) => clearInputError(input));

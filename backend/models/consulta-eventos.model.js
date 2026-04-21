@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Mensaje enviado desde la sección de consultas
 const consultaEventoSchema = new mongoose.Schema({
     eventoId: {
         type: mongoose.Schema.Types.ObjectId,

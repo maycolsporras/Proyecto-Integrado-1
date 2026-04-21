@@ -132,6 +132,7 @@ const resolverListaDifusionAprobada = async ({ listaDifusionId, listaDifusionNom
     };
 };
 
+// Guarda un evento con archivos y lista aprobada
 router.post('/', upload.fields([
     { name: 'imagenes', maxCount: 10 },
     { name: 'videos', maxCount: 5 },
@@ -214,6 +215,7 @@ router.post('/', upload.fields([
     }
 });
 
+// Lista eventos con su vigencia
 router.get('/', async (req, res) => {
     try {
         const filtros = {};
@@ -243,6 +245,7 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Trae un evento por id
 router.get('/:id', async (req, res) => {
     try {
         const evento = await FormEvento.findById(req.params.id);
@@ -267,6 +270,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// Actualiza un evento con archivos nuevos
 router.patch('/:id', upload.fields([
     { name: 'imagenes', maxCount: 10 },
     { name: 'videos', maxCount: 5 },
@@ -380,6 +384,7 @@ router.patch('/:id', upload.fields([
     }
 });
 
+// Cambia solo el estado del evento
 router.patch('/:id/estado', async (req, res) => {
     try {
         const estado = req.body?.estado;
@@ -438,6 +443,7 @@ router.patch('/:id/estado', async (req, res) => {
     }
 });
 
+// Borra el evento seleccionado
 router.delete('/:id', async (req, res) => {
     try {
         const eventoEliminado = await FormEvento.findByIdAndDelete(req.params.id);
@@ -462,6 +468,7 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+// Manejo de errores de subida y validación
 router.use((err, req, res, next) => {
     if (err instanceof multer.MulterError) {
         console.error('MulterError en /api/form-evento:', err);

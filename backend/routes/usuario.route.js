@@ -14,7 +14,7 @@ router.post('/login', async (req, res) => {
         });
 
         if (usuarioEncontrado && usuarioEncontrado.contrasena === password) {
-            //URL de destino según el rol
+            // Define la ruta según el rol
             let urlDestino = '/index.html';
             if (usuarioEncontrado.rol === 'admin') urlDestino = '/modulo-admin.html';
             if (usuarioEncontrado.rol === 'editor') urlDestino = '/modulo-editor.html';
@@ -24,7 +24,8 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ éxito: false, mensaje: 'Credenciales incorrectas' });
         }
     } catch (error) {
-        res.status(500).json({ éxito: false, mensaje: 'Error interno del servidor' });
+        console.error('Error en login:', error);
+        return res.status(500).json({ éxito: false, mensaje: 'Error interno del servidor' });
     }
 });
 

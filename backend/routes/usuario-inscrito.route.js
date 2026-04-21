@@ -5,6 +5,7 @@ const UsuarioInscrito = require('../models/usuario-inscrito.model.js');
 const router = express.Router();
 const estadosPermitidos = new Set(['pendiente_aprobacion', 'aprobado', 'rechazado']);
 
+// Limpia los campos de texto recibidos
 const normalizarTexto = (valor) => {
     if (typeof valor !== 'string') {
         return '';
@@ -13,6 +14,7 @@ const normalizarTexto = (valor) => {
     return valor.trim();
 };
 
+// Guarda la inscripción de un evento
 router.post('/', async (req, res) => {
     try {
         const eventoId = normalizarTexto(req.body?.eventoId);
@@ -26,7 +28,7 @@ router.post('/', async (req, res) => {
             });
         }
 
-        // Validar que el ID del evento sea un ObjectId válido
+        // Verifica que el evento exista en Mongo
         if (!mongoose.Types.ObjectId.isValid(eventoId)) {
             return res.status(400).json({
                 ok: false,
@@ -78,6 +80,7 @@ router.post('/', async (req, res) => {
     }
 });
 
+// Lista inscripciones por evento o estado
 router.get('/', async (req, res) => {
     try {
         const filtros = {};
@@ -107,6 +110,7 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Trae una inscripción por id
 router.get('/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -140,6 +144,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// Cambia el estado de la inscripción
 router.patch('/:id/estado', async (req, res) => {
     try {
         const { id } = req.params;
@@ -194,6 +199,7 @@ router.patch('/:id/estado', async (req, res) => {
     }
 });
 
+// Elimina una inscripción
 router.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params;

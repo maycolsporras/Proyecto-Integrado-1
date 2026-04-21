@@ -1,3 +1,4 @@
+// Tarjetas de eventos publicados para editor
 (function initEventosPublicadosEditorModule() {
     let pendingEditEventId = null;
     let pendingEditEventData = null;

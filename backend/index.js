@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const path = require('node:path');
 require('dotenv').config();
 
-// Importaciones de modelos y rutas
+// Carga de modelos y rutas
 const Usuario = require('./models/usuario.model.js');
 const FormEvento = require('./models/form-evento.model.js');
 const usuarioRoutes = require('./routes/usuario.route.js');
@@ -30,7 +30,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 require("node:dns/promises").setServers(["1.1.1.1", "8.8.8.8"]);
 
-// Función para crear usuarios iniciales
+// Crea usuarios de prueba
 const crearUsuariosIniciales = async () => {
     try {
         const conteo = await Usuario.countDocuments();
@@ -181,7 +181,7 @@ const crearEventoFinalizadoInicial = async () => {
 };
 
 
-// Conexión a MongoDB
+// Conecta a Mongo y levanta las semillas
 mongoose.connect(process.env.MONGODB_URI)
     .then(async () => {
         console.log('MongoDB Atlas conectado');
@@ -190,7 +190,7 @@ mongoose.connect(process.env.MONGODB_URI)
     })
     .catch(error => console.log('Ocurrió un error al conectarse con MongoDB: ', error));
 
-// Rutas
+// Montaje de rutas del backend
 app.use('/api/auth', usuarioRoutes);
 app.use('/api/form-evento', formEventoRoutes);
 app.use('/api/form-borrador', formBorradorRoutes);

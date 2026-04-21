@@ -4,6 +4,7 @@ const ListaDifusion = require('../models/lista-difusion.model.js');
 const router = express.Router();
 const estadosPermitidos = new Set(['pendiente_aprobacion', 'aprobada', 'rechazada']);
 
+// Limpia textos del formulario de lista
 const normalizarTexto = (valor) => {
     if (typeof valor !== 'string') {
         return '';
@@ -12,6 +13,7 @@ const normalizarTexto = (valor) => {
     return valor.trim();
 };
 
+// Guarda una nueva lista de difusión
 router.post('/', async (req, res) => {
     try {
         const nombreLista = normalizarTexto(req.body?.nombreLista);
@@ -47,6 +49,7 @@ router.post('/', async (req, res) => {
     }
 });
 
+// Lista las listas según su estado
 router.get('/', async (req, res) => {
     try {
         const filtros = {};
@@ -70,6 +73,7 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Trae una lista por id
 router.get('/:id', async (req, res) => {
     try {
         const lista = await ListaDifusion.findById(req.params.id);
@@ -94,6 +98,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// Actualiza los datos de la lista
 router.patch('/:id', async (req, res) => {
     try {
         const nombreLista = normalizarTexto(req.body?.nombreLista);
@@ -136,6 +141,7 @@ router.patch('/:id', async (req, res) => {
     }
 });
 
+// Cambia el estado y el motivo de rechazo
 router.patch('/:id/estado', async (req, res) => {
     try {
         const estado = normalizarTexto(req.body?.estado);
@@ -192,6 +198,7 @@ router.patch('/:id/estado', async (req, res) => {
     }
 });
 
+// Elimina la lista seleccionada
 router.delete('/:id', async (req, res) => {
     try {
         const listaEliminada = await ListaDifusion.findByIdAndDelete(req.params.id);

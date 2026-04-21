@@ -6,6 +6,7 @@ const ListaDifusion = require('../models/lista-difusion.model.js');
 const router = express.Router();
 const estadosPermitidos = new Set(['pendiente_aprobacion', 'aprobado', 'rechazado']);
 
+// Limpia los datos que llegan del formulario
 const normalizarTexto = (valor) => {
     if (typeof valor !== 'string') {
         return '';
@@ -14,6 +15,7 @@ const normalizarTexto = (valor) => {
     return valor.trim();
 };
 
+// Registra un suscriptor nuevo
 router.post('/', async (req, res) => {
     try {
         const nombreCompleto = normalizarTexto(req.body?.nombreCompleto);
@@ -61,6 +63,7 @@ router.post('/', async (req, res) => {
     }
 });
 
+// Lista suscriptores por estado
 router.get('/', async (req, res) => {
     try {
         const filtros = {};
@@ -84,6 +87,7 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Cambia el estado del suscriptor
 router.patch('/:id/estado', async (req, res) => {
     try {
         const estado = normalizarTexto(req.body?.estado);
@@ -140,6 +144,7 @@ router.patch('/:id/estado', async (req, res) => {
     }
 });
 
+// Asigna listas de difusión aprobadas
 router.patch('/:id/listas-difusion', async (req, res) => {
     try {
         const listaIdsRecibidas = Array.isArray(req.body?.listaIds) ? req.body.listaIds : [];
@@ -177,7 +182,7 @@ router.patch('/:id/listas-difusion', async (req, res) => {
             });
         }
 
-        const idsPrevios = new Set((suscriptor.listasDifusionIds || []).map((id) => String(id)));
+        const idsPrevios = new Set((suscriptor.listasDifusionIds || []).map(String));
         const idsNuevos = new Set(listasAprobadas.map((lista) => String(lista._id)));
 
         const idsADecrementar = [...idsPrevios].filter((id) => !idsNuevos.has(id));
@@ -215,6 +220,7 @@ router.patch('/:id/listas-difusion', async (req, res) => {
     }
 });
 
+// Elimina el suscriptor y ajusta contadores
 router.delete('/:id', async (req, res) => {
     try {
         const suscriptorEliminado = await Suscriptores.findById(req.params.id);
@@ -227,7 +233,7 @@ router.delete('/:id', async (req, res) => {
         }
 
         const listasAsignadasIds = Array.isArray(suscriptorEliminado.listasDifusionIds)
-            ? suscriptorEliminado.listasDifusionIds.map((id) => String(id))
+            ? suscriptorEliminado.listasDifusionIds.map(String)
             : [];
 
         for (const listaId of listasAsignadasIds) {

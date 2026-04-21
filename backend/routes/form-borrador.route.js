@@ -5,6 +5,7 @@ const router = express.Router();
 const estadosPermitidos = new Set(['pendiente_aprobacion', 'aprobado', 'rechazado', 'borrador']);
 const estadosVigenciaPermitidos = new Set(['activo', 'eliminado']);
 
+// Convierte el snapshot del borrador a objeto real
 const parseSnapshot = (snapshot) => {
     if (!snapshot) {
         return null;
@@ -21,6 +22,7 @@ const parseSnapshot = (snapshot) => {
     return snapshot;
 };
 
+// Normaliza el estado del borrador
 const normalizeEstado = (estado) => {
     if (!estado || !estadosPermitidos.has(estado)) {
         return 'borrador';
@@ -29,6 +31,7 @@ const normalizeEstado = (estado) => {
     return estado;
 };
 
+// Normaliza la vigencia del borrador
 const normalizeEstadoVigencia = (estadoVigencia) => {
     if (!estadoVigencia || !estadosVigenciaPermitidos.has(estadoVigencia)) {
         return 'activo';
@@ -37,6 +40,7 @@ const normalizeEstadoVigencia = (estadoVigencia) => {
     return estadoVigencia;
 };
 
+// Guarda o actualiza un borrador del evento
 router.post('/', async (req, res) => {
     try {
         const {
@@ -83,6 +87,7 @@ router.post('/', async (req, res) => {
     }
 });
 
+// Lista los borradores guardados
 router.get('/', async (req, res) => {
     try {
         const filtros = {};
@@ -110,6 +115,7 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Trae un borrador por su clave
 router.get('/:draftKey', async (req, res) => {
     try {
         const borrador = await FormBorrador.findOne({ draftKey: req.params.draftKey });
@@ -134,6 +140,7 @@ router.get('/:draftKey', async (req, res) => {
     }
 });
 
+// Elimina el borrador seleccionado
 router.delete('/:draftKey', async (req, res) => {
     try {
         await FormBorrador.deleteOne({ draftKey: req.params.draftKey });
@@ -151,6 +158,7 @@ router.delete('/:draftKey', async (req, res) => {
     }
 });
 
+// Cambia el estado o la vigencia del borrador
 router.patch('/:draftKey/estado', async (req, res) => {
     try {
         const estado = req.body?.estado;

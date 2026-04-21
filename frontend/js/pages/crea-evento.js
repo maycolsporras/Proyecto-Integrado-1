@@ -1,3 +1,4 @@
+// Formulario grande para crear y editar eventos
 const maxFileSizeBytes = 10 * 1024 * 1024;
 
 const validationErrorClasses = [
