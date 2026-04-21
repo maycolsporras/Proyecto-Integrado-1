@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const FormBorrador = require('../models/form-borrador.model.js');
 
 const router = express.Router();
@@ -38,6 +39,22 @@ const normalizeEstadoVigencia = (estadoVigencia) => {
     }
 
     return estadoVigencia;
+};
+
+const buildBorradorLookupQuery = (draftParam) => {
+    const idNormalizado = String(draftParam || '').trim();
+
+    if (!idNormalizado) {
+        return null;
+    }
+
+    const filtros = [{ draftKey: idNormalizado }];
+
+    if (mongoose.Types.ObjectId.isValid(idNormalizado)) {
+        filtros.push({ _id: idNormalizado });
+    }
+
+    return { $or: filtros };
 };
 
 // Guarda o actualiza un borrador del evento
@@ -118,7 +135,8 @@ router.get('/', async (req, res) => {
 // Trae un borrador por su clave
 router.get('/:draftKey', async (req, res) => {
     try {
-        const borrador = await FormBorrador.findOne({ draftKey: req.params.draftKey });
+        const query = buildBorradorLookupQuery(req.params.draftKey);
+        const borrador = query ? await FormBorrador.findOne(query) : null;
 
         if (!borrador) {
             return res.status(404).json({
@@ -143,7 +161,16 @@ router.get('/:draftKey', async (req, res) => {
 // Elimina el borrador seleccionado
 router.delete('/:draftKey', async (req, res) => {
     try {
-        await FormBorrador.deleteOne({ draftKey: req.params.draftKey });
+        const query = buildBorradorLookupQuery(req.params.draftKey);
+
+        if (!query) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'La clave del borrador es obligatoria.',
+            });
+        }
+
+        await FormBorrador.deleteOne(query);
 
         return res.status(200).json({
             ok: true,
@@ -195,8 +222,17 @@ router.patch('/:draftKey/estado', async (req, res) => {
             actualizaciones.estadoVigencia = estadoVigencia;
         }
 
+        const query = buildBorradorLookupQuery(req.params.draftKey);
+
+        if (!query) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'La clave del borrador es obligatoria.',
+            });
+        }
+
         const borradorActualizado = await FormBorrador.findOneAndUpdate(
-            { draftKey: req.params.draftKey },
+            query,
             actualizaciones,
             { returnDocument: 'after' },
         );

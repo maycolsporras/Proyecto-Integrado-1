@@ -64,10 +64,11 @@ function initSuscriptoresEditor() {
         rechazado: 'rechazados',
     };
 
-    const rechazoState = {
+    const rechazoState = globalThis.__suscriptoresRechazoState || {
         suscriptorId: '',
         motivo: '',
     };
+    globalThis.__suscriptoresRechazoState = rechazoState;
 
     const asignacionState = {
         suscriptorId: '',
@@ -179,7 +180,10 @@ function initSuscriptoresEditor() {
         });
 
         confirmarBtn.addEventListener('click', async () => {
-            if (!rechazoState.suscriptorId || !rechazoState.motivo) {
+            const motivoActual = String(rechazoState.motivo || motivoInput.value || '').trim();
+            rechazoState.motivo = motivoActual;
+
+            if (!rechazoState.suscriptorId || !motivoActual) {
                 globalThis.alert('No se encontró la información de rechazo del suscriptor.');
                 return;
             }
@@ -187,7 +191,7 @@ function initSuscriptoresEditor() {
             confirmarBtn.disabled = true;
 
             try {
-                await actualizarEstadoSuscriptor(rechazoState.suscriptorId, 'rechazado', rechazoState.motivo);
+                await actualizarEstadoSuscriptor(rechazoState.suscriptorId, 'rechazado', motivoActual);
                 modalConfirmacionInstance?.hide();
                 rechazoState.suscriptorId = '';
                 rechazoState.motivo = '';
