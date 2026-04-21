@@ -1165,13 +1165,181 @@ document.addEventListener('DOMContentLoaded', () => {
         'aprobacion-inscripciones': {
             title: 'Aprobación de Inscripciones',
             html: `
-            
+            <nav class="breadcrumbEventos" aria-label="breadcrumb">
+                        <ol class="breadcrumb" id="breadcrumbAprobacionInscripciones">
+                            <li class="breadcrumb-item"><a class="text-decoration-none"
+                                href="../modulo-editor.html">Inicio</a>
+                            </li>
+                            <li class="breadcrumb-item"><a class="text-decoration-none" href="#">Usuarios</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Aprobación de Inscripciones
+                            </li>
+                        </ol>
+                    </nav>
+                    <div class="container-fluid">
+                            <div class="row mt-5">
+                                <div
+                                    class="col-12 d-flex justify-content-start align-items-center gap-2 gap-sm-3 mt-4 aprobacionEventosTitle">
+                                    <div class="iconoAprobacionEventos" id="aprobacionInscripcionesIconoWrap">
+                                         <i class="fa-regular fa-circle"></i>
+                                    </div>
+                                    <p class="txtAprobacionEventos mb-0" id="aprobacionInscripcionesTitulo">Seleccionar Evento</p>
+                                </div>
+                                <div class="col-12 buscadorEventosTitle mt-4 mb-2" id="aprobacionInscripcionesBuscadorWrap">
+                                    <p id="aprobacionInscripcionesBuscadorTitulo">Buscador de Eventos</p>
+                                </div>
+                                <div class="col-12 buscadorEventosSubtitle mb-2" id="aprobacionInscripcionesFiltroLabelWrap">
+                                    Filtrar por:
+                                </div>
+                                <div class="col-12 mb-4" id="aprobacionInscripcionesFiltroWrap">
+                                    <div class="row g-2 align-items-center">
+                                        <div class="col-12 col-sm-4 col-md-auto">
+                                            <label class="visually-hidden" for="gestionInscripcionesFiltro">Filtro de
+                                                usuarios</label>
+                                            <select id="gestionInscripcionesFiltro" class="form-select gestionEventosSelect"
+                                                aria-label="Tipo de filtro">
+                                                <option selected>Nombre de Usuario</option>
+                                                <option>Profesión</option>
+                                                <option>Tipo de deficiencia</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-sm">
+                                            <label class="visually-hidden" for="gestionInscripcionesBusqueda">Dato a
+                                                buscar</label>
+                                            <input id="gestionInscripcionesBusqueda" class="form-control gestionEventosInput"
+                                                type="text" placeholder="Ingrese el dato indicado"
+                                                aria-label="Ingrese el dato indicado">
+                                        </div>
+
+                                        <div class="col-12 col-sm-auto d-grid d-sm-inline-flex">
+                                            <button class="btn gestionEventosSearchBtn" type="button" aria-label="Buscar" id="gestionInscripcionesBuscarBtn">
+                                                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-4 fw-bold d-flex justify-content-end" id="aprobacionInscripcionesConteoWrap">
+                                    <p id="inscripcionesPendientesConteo">0 inscripciones pendientes</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cardsInscripcionesPendientesEditor container-fluid mt-3" id="cardsInscripcionesPendientesEditor"></div>
+
+                        <div class="modal fade" id="modalRechazoInscripcion" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modalRechazoListaDifusionAncho">
+                                <div class="modal-content modalRechazoListaDifusionContenido">
+                                    <div class="modal-body modalRechazoListaDifusionBody">
+                                        <p class="modalRechazoListaDifusionTitulo">Rechazo de Inscripción</p>
+                                        <p class="modalRechazoListaDifusionDescripcion" id="modalRechazoInscripcionDescripcion">
+                                            Para realizar el rechazo de una inscripción, favor indicar el motivo por el cual fue rechazada en el recuadro siguiente. Este será enviado a la persona inscrita.
+                                        </p>
+                                        <textarea id="modalRechazoInscripcionMotivo" class="form-control modalRechazoSuscriptorTextarea" maxlength="300" placeholder="Introduzca el motivo del rechazo"></textarea>
+                                        <div class="modalRechazoListaDifusionAcciones d-grid gap-3 d-md-flex justify-content-center my-4">
+                                            <button type="button" class="btn modalRechazoListaDifusionBtnCancelar px-4" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn modalRechazoListaDifusionBtnAceptar px-4" id="modalRechazoInscripcionAceptarBtn">Aceptar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="modalConfirmacionRechazoInscripcion" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modalEliminarEventoAncho">
+                                <div class="modal-content modalEliminarEventoContenido">
+                                    <div class="modal-body modalEliminarEventoBody">
+                                        <p class="modalEliminarEventoTitulo">¿Rechazar?</p>
+                                        <p class="modalEliminarEventoDescripcion">
+                                            Al rechazar una inscripción, esta no podrá ser aprobada para el evento, ¿está seguro que desea continuar con este proceso?
+                                        </p>
+                                        <div class="modalEliminarEventoAcciones d-grid gap-3 d-md-flex justify-content-center my-3">
+                                            <button type="button" class="btn modalEliminarEventoBtnCancelar px-4" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn modalEliminarEventoBtnEliminar px-4" id="modalConfirmacionRechazoInscripcionBtn">Rechazar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="modalInscripcionAprobada" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modalSuscripcionEnviadaAncho">
+                                <div class="modal-content modalSuscripcionEnviadaContenido">
+                                    <div class="modal-body modalSuscripcionEnviadaBody">
+                                        <div class="modalSuscripcionEnviadaIcono" aria-hidden="true">
+                                            <i class="fa-solid fa-check"></i>
+                                        </div>
+                                        <p class="modalSuscripcionEnviadaTitulo">Inscripción Aprobada</p>
+                                        <p class="modalSuscripcionEnviadaDescripcion">
+                                            Se aprobó con éxito la inscripción seleccionada. La persona inscrita será notificada del estado de su solicitud.
+                                        </p>
+                                        <button type="button" class="btn modalSuscripcionEnviadaBtnContinuar" data-bs-dismiss="modal">Continuar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
             `,
         },
         'inscritos-eventos': {
             title: 'Inscritos a eventos',
             html: `
-            
+            <nav class="breadcrumbEventos" aria-label="breadcrumb">
+                        <ol class="breadcrumb" id="breadcrumbInscritosEventos">
+                            <li class="breadcrumb-item"><a class="text-decoration-none"
+                                href="../modulo-editor.html">Inicio</a>
+                            </li>
+                            <li class="breadcrumb-item"><a class="text-decoration-none" href="#">Usuarios</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Inscritos a Eventos
+                            </li>
+                        </ol>
+                    </nav>
+                    <div class="container-fluid">
+                            <div class="row mt-5">
+                                <div
+                                    class="col-12 d-flex justify-content-start align-items-center gap-2 gap-sm-3 mt-4 aprobacionEventosTitle">
+                                    <div class="iconoAprobacionEventos" id="inscritosEventosIconoWrap">
+                                         <i class="fa-regular fa-circle"></i>
+                                    </div>
+                                    <p class="txtAprobacionEventos mb-0" id="inscritosEventosTitulo">Seleccionar Evento</p>
+                                </div>
+                                <div class="col-12 buscadorEventosTitle mt-4 mb-2" id="inscritosEventosBuscadorWrap">
+                                    <p id="inscritosEventosBuscadorTitulo">Buscador de Eventos</p>
+                                </div>
+                                <div class="col-12 buscadorEventosSubtitle mb-2" id="inscritosEventosFiltroLabelWrap">
+                                    Filtrar por:
+                                </div>
+                                <div class="col-12 mb-4" id="inscritosEventosFiltroWrap">
+                                    <div class="row g-2 align-items-center">
+                                        <div class="col-12 col-sm-4 col-md-auto">
+                                            <label class="visually-hidden" for="gestionInscritosEventosFiltro">Filtro de
+                                                usuarios</label>
+                                            <select id="gestionInscritosEventosFiltro" class="form-select gestionEventosSelect"
+                                                aria-label="Tipo de filtro">
+                                                <option selected>Nombre de Usuario</option>
+                                                <option>Profesión</option>
+                                                <option>Tipo de deficiencia</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-sm">
+                                            <label class="visually-hidden" for="gestionInscritosEventosBusqueda">Dato a
+                                                buscar</label>
+                                            <input id="gestionInscritosEventosBusqueda" class="form-control gestionEventosInput"
+                                                type="text" placeholder="Ingrese el dato indicado"
+                                                aria-label="Ingrese el dato indicado">
+                                        </div>
+
+                                        <div class="col-12 col-sm-auto d-grid d-sm-inline-flex">
+                                            <button class="btn gestionEventosSearchBtn" type="button" aria-label="Buscar" id="gestionInscritosEventosBuscarBtn">
+                                                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-4 fw-bold d-flex justify-content-end" id="inscritosEventosConteoWrap">
+                                    <p id="inscritosEventosConteo">0 usuarios inscritos</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cardsInscripcionesPendientesEditor container-fluid mt-3" id="cardsInscritosEventosEditor"></div>
             `,
         },
     };
@@ -1187,6 +1355,27 @@ document.addEventListener('DOMContentLoaded', () => {
         eventos: [],
         filtroTexto: '',
         filtroSeleccionado: 'Título del Evento',
+    };
+
+    const inscripcionesPendientesState = {
+        inscripciones: [],
+        eventosAprobados: [],
+        eventosById: new Map(),
+        eventoSeleccionadoId: '',
+        inscripcionSeleccionadaId: '',
+        inscripcionRechazoPendienteId: '',
+        filtroTexto: '',
+        filtroSeleccionado: 'Nombre de Usuario',
+    };
+
+    const inscritosEventosState = {
+        inscripcionesAprobadas: [],
+        eventosAprobados: [],
+        eventosById: new Map(),
+        eventoSeleccionadoId: '',
+        inscripcionSeleccionadaId: '',
+        filtroTexto: '',
+        filtroSeleccionado: 'Nombre de Usuario',
     };
 
     const escapeHtml = (text) => {
@@ -1534,6 +1723,1294 @@ document.addEventListener('DOMContentLoaded', () => {
         await cargarEventosFinalizados();
     };
 
+    const extraerEventoIdInscripcion = (inscripcion) => {
+        const eventoRef = inscripcion?.eventoId;
+
+        if (!eventoRef) {
+            return '';
+        }
+
+        if (typeof eventoRef === 'string') {
+            return eventoRef;
+        }
+
+        return eventoRef?._id || eventoRef?.id || '';
+    };
+
+    const obtenerNombreEventoInscripcion = (inscripcion, eventoDetalle) => {
+        if (eventoDetalle?.nombreEvento) {
+            return eventoDetalle.nombreEvento;
+        }
+
+        const eventoRef = inscripcion?.eventoId;
+        if (typeof eventoRef === 'object' && eventoRef?.nombreEvento) {
+            return eventoRef.nombreEvento;
+        }
+
+        return 'Evento sin título';
+    };
+
+    const obtenerFechaEventoInscripcion = (eventoDetalle) => {
+        const fechasEvento = Array.isArray(eventoDetalle?.fechasEvento) ? eventoDetalle.fechasEvento : [];
+        const fechasValidas = fechasEvento
+            .map((fecha) => parseFinalizadosFecha(fecha))
+            .filter(Boolean)
+            .sort((a, b) => a - b);
+
+        if (fechasValidas.length > 0) {
+            return fechasValidas[0];
+        }
+
+        return parseFinalizadosFecha(eventoDetalle?.fechaPublicacion) || null;
+    };
+
+    const formatearFechaEventoInscripcion = (eventoDetalle) => {
+        const fecha = obtenerFechaEventoInscripcion(eventoDetalle);
+
+        if (!fecha) {
+            return 'No disponible';
+        }
+
+        return fecha.toLocaleDateString('es-CR', {
+            day: 'numeric',
+            month: 'long',
+        });
+    };
+
+    const obtenerOrganizadorEventoInscripcion = (eventoDetalle) => {
+        return eventoDetalle?.contacto?.nombreCompleto
+            || eventoDetalle?.organizador
+            || 'No disponible';
+    };
+
+    const getInscripcionFilterValue = (inscripcion, filtroSeleccionado) => {
+        if (filtroSeleccionado === 'Profesión') {
+            return inscripcion?.profesion || '';
+        }
+
+        if (filtroSeleccionado === 'Tipo de deficiencia') {
+            return inscripcion?.tipoDeficiencia || '';
+        }
+
+        return inscripcion?.nombreCompleto || '';
+    };
+
+    const getEventoAprobadoFilterValue = (evento, filtroSeleccionado) => {
+        if (filtroSeleccionado === 'Organizador') {
+            return evento?.contacto?.nombreCompleto || '';
+        }
+
+        if (filtroSeleccionado === 'Fecha del Evento') {
+            return formatearFechaEventoInscripcion(evento);
+        }
+
+        return evento?.nombreEvento || '';
+    };
+
+    const configurarUIAprobacionInscripciones = () => {
+        const titulo = document.getElementById('aprobacionInscripcionesTitulo');
+        const buscadorTitulo = document.getElementById('aprobacionInscripcionesBuscadorTitulo');
+        const filtroSelect = document.getElementById('gestionInscripcionesFiltro');
+        const breadcrumb = document.getElementById('breadcrumbAprobacionInscripciones');
+        const iconoWrap = document.getElementById('aprobacionInscripcionesIconoWrap');
+        const buscadorWrap = document.getElementById('aprobacionInscripcionesBuscadorWrap');
+        const filtroLabelWrap = document.getElementById('aprobacionInscripcionesFiltroLabelWrap');
+        const filtroWrap = document.getElementById('aprobacionInscripcionesFiltroWrap');
+        const conteoWrap = document.getElementById('aprobacionInscripcionesConteoWrap');
+
+        const modoEvento = !inscripcionesPendientesState.eventoSeleccionadoId;
+        const modoDetalle = Boolean(inscripcionesPendientesState.inscripcionSeleccionadaId);
+        const inscripcionSeleccionada = inscripcionesPendientesState.inscripciones
+            .find((inscripcion) => String(inscripcion?._id) === String(inscripcionesPendientesState.inscripcionSeleccionadaId));
+
+        if (titulo) {
+            if (modoEvento) {
+                titulo.textContent = 'Seleccionar Evento';
+            } else if (modoDetalle) {
+                titulo.textContent = inscripcionSeleccionada?.nombreCompleto || 'Detalle de Inscripción';
+            } else {
+                titulo.textContent = 'Inscripciones Pendientes';
+            }
+        }
+
+        if (buscadorTitulo) {
+            buscadorTitulo.textContent = modoEvento ? 'Buscador de Eventos' : 'Buscador de Usuarios';
+        }
+
+        const mostrarBuscador = !modoDetalle;
+        if (buscadorWrap) buscadorWrap.classList.toggle('d-none', !mostrarBuscador);
+        if (filtroLabelWrap) filtroLabelWrap.classList.toggle('d-none', !mostrarBuscador);
+        if (filtroWrap) filtroWrap.classList.toggle('d-none', !mostrarBuscador);
+        if (conteoWrap) conteoWrap.classList.toggle('d-none', !mostrarBuscador);
+
+        if (breadcrumb) {
+            breadcrumb.innerHTML = modoEvento
+                ? `
+                    <li class="breadcrumb-item"><a class="text-decoration-none" href="../modulo-editor.html">Inicio</a></li>
+                    <li class="breadcrumb-item"><a class="text-decoration-none" href="#" data-inscripcion-nav="usuarios">Usuarios</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Aprobación de Inscripciones</li>
+                `
+                : modoDetalle
+                    ? `
+                        <li class="breadcrumb-item"><a class="text-decoration-none" href="../modulo-editor.html">Inicio</a></li>
+                        <li class="breadcrumb-item"><a class="text-decoration-none" href="#" data-inscripcion-nav="usuarios">Usuarios</a></li>
+                        <li class="breadcrumb-item"><a class="text-decoration-none" href="#" data-inscripcion-nav="aprobacion">Aprobación de Inscripciones</a></li>
+                        <li class="breadcrumb-item"><a class="text-decoration-none" href="#" data-inscripcion-nav="inscripciones">Inscripciones Pendientes</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Detalle</li>
+                    `
+                    : `
+                        <li class="breadcrumb-item"><a class="text-decoration-none" href="../modulo-editor.html">Inicio</a></li>
+                        <li class="breadcrumb-item"><a class="text-decoration-none" href="#" data-inscripcion-nav="usuarios">Usuarios</a></li>
+                        <li class="breadcrumb-item"><a class="text-decoration-none" href="#" data-inscripcion-nav="aprobacion">Aprobación de Inscripciones</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Inscripciones Pendientes</li>
+                    `;
+        }
+
+        if (iconoWrap) {
+            iconoWrap.innerHTML = modoEvento
+                ? '<i class="fa-regular fa-circle"></i>'
+                : '<i class="fa-regular fa-user"></i>';
+        }
+
+        if (!filtroSelect || modoDetalle) {
+            return;
+        }
+
+        const opciones = modoEvento
+            ? ['Título del Evento', 'Organizador', 'Fecha del Evento']
+            : ['Nombre de Usuario', 'Profesión', 'Tipo de deficiencia'];
+
+        const opcionValida = opciones.includes(inscripcionesPendientesState.filtroSeleccionado)
+            ? inscripcionesPendientesState.filtroSeleccionado
+            : opciones[0];
+
+        filtroSelect.innerHTML = opciones
+            .map((opcion) => `<option value="${escapeHtml(opcion)}">${escapeHtml(opcion)}</option>`)
+            .join('');
+
+        filtroSelect.value = opcionValida;
+        inscripcionesPendientesState.filtroSeleccionado = opcionValida;
+    };
+
+    const renderSeleccionEventosInscripciones = () => {
+        const container = document.getElementById('cardsInscripcionesPendientesEditor');
+        const conteo = document.getElementById('inscripcionesPendientesConteo');
+
+        if (!container) {
+            return;
+        }
+
+        const listaBase = Array.isArray(inscripcionesPendientesState.eventosAprobados)
+            ? [...inscripcionesPendientesState.eventosAprobados]
+            : [];
+        const terminoBusqueda = normalizarTexto(inscripcionesPendientesState.filtroTexto);
+        const filtroSeleccionado = inscripcionesPendientesState.filtroSeleccionado || 'Título del Evento';
+
+        const eventosFiltrados = !terminoBusqueda
+            ? listaBase
+            : listaBase.filter((evento) => {
+                const valorFiltro = normalizarTexto(getEventoAprobadoFilterValue(evento, filtroSeleccionado));
+                return valorFiltro.includes(terminoBusqueda);
+            });
+
+        if (conteo) {
+            if (terminoBusqueda) {
+                conteo.textContent = `${eventosFiltrados.length} coincidencia(s) de ${listaBase.length} eventos aprobados`;
+            } else {
+                conteo.textContent = `${eventosFiltrados.length} eventos aprobados`;
+            }
+        }
+
+        if (!eventosFiltrados.length) {
+            container.innerHTML = '<p class="text-muted">No hay eventos aprobados para mostrar.</p>';
+            return;
+        }
+
+        container.innerHTML = `
+            <div class="row g-4">
+                ${eventosFiltrados.map((evento) => {
+                    const eventoId = escapeHtml(evento?._id || '');
+                    const nombreEvento = escapeHtml(evento?.nombreEvento || 'Evento sin título');
+                    const fechaEvento = escapeHtml(formatearFechaEventoInscripcion(evento));
+                    const organizador = escapeHtml(obtenerOrganizadorEventoInscripcion(evento));
+
+                    return `
+                        <div class="col-12 col-md-6">
+                            <article class="selectorEventoCard" aria-label="Evento aprobado">
+                                <div class="selectorEventoCardBody">
+                                    <p class="selectorEventoCardTitulo">${nombreEvento}</p>
+                                    <p class="selectorEventoCardMeta"><strong>Fecha del Evento:</strong> ${fechaEvento}</p>
+                                    <p class="selectorEventoCardMeta"><strong>Organizador:</strong> ${organizador}</p>
+                                </div>
+                                <button class="btn selectorEventoCardArrow" type="button" aria-label="Ver inscripciones del evento" data-inscripcion-accion="seleccionar-evento" data-evento-id="${eventoId}">
+                                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                                </button>
+                            </article>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+    };
+
+    const construirDetalleInscripcionTexto = (inscripcion, eventoDetalle) => {
+        const lineas = [
+            `Evento: ${obtenerNombreEventoInscripcion(inscripcion, eventoDetalle)}`,
+            `Nombre: ${inscripcion?.nombreCompleto || 'No disponible'}`,
+            `Correo electrónico: ${inscripcion?.correoElectronico || 'No disponible'}`,
+            `Teléfono: ${inscripcion?.telefono || 'No disponible'}`,
+            `Profesión: ${inscripcion?.profesion || 'No disponible'}`,
+            `Entidad: ${inscripcion?.entidadTrabajo || 'No disponible'}`,
+            `Tipo de deficiencia: ${inscripcion?.tipoDeficiencia || 'No disponible'}`,
+            `Estado: ${inscripcion?.estado || 'pendiente_aprobacion'}`,
+        ];
+
+        return lineas.join('\n');
+    };
+
+    const formatearBooleanoInscripcion = (valor) => {
+        if (valor === 'si' || valor === true) {
+            return 'Sí';
+        }
+
+        if (valor === 'no' || valor === false) {
+            return 'No';
+        }
+
+        return 'No disponible';
+    };
+
+    const renderDetalleInscripcionSeleccionada = () => {
+        const container = document.getElementById('cardsInscripcionesPendientesEditor');
+
+        if (!container) {
+            return;
+        }
+
+        const inscripcion = inscripcionesPendientesState.inscripciones
+            .find((item) => String(item?._id) === String(inscripcionesPendientesState.inscripcionSeleccionadaId));
+
+        if (!inscripcion) {
+            inscripcionesPendientesState.inscripcionSeleccionadaId = '';
+            renderInscripcionesPendientes();
+            return;
+        }
+
+        const rows = [
+            ['Correo Electrónico', inscripcion?.correoElectronico || 'No disponible'],
+            ['Profesión u Oficio', inscripcion?.profesion || 'No disponible'],
+            ['Entidad para la que trabaja o está vinculado', inscripcion?.entidadTrabajo || 'No disponible'],
+            ['Tipo de Deficiencia', inscripcion?.tipoDeficiencia || 'No disponible'],
+            ['Requiere Intérprete LESCO', formatearBooleanoInscripcion(inscripcion?.requiereInterprete)],
+            ['Alimentación', inscripcion?.requerimientosAlimentacion || 'No disponible'],
+        ];
+
+        container.innerHTML = `
+            <article class="inscripcionDetalleVista" aria-label="Detalle de inscripción">
+                <div class="inscripcionDetalleTablaWrap">
+                    <table class="inscripcionDetalleTabla" aria-label="Información del usuario inscrito">
+                        <tbody>
+                            ${rows.map(([label, value]) => `
+                                <tr>
+                                    <th scope="row">${escapeHtml(label)}:</th>
+                                    <td>${escapeHtml(value)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="inscripcionDetalleAcciones" aria-label="Acciones de la inscripción">
+                    <button class="btn inscripcionDetalleBtn inscripcionDetalleBtnSecundario" type="button" data-inscripcion-accion="rechazar" data-inscripcion-id="${escapeHtml(inscripcion?._id || '')}">
+                        <i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>
+                        Rechazar
+                    </button>
+                    <button class="btn inscripcionDetalleBtn inscripcionDetalleBtnPrimario" type="button" data-inscripcion-accion="aprobar" data-inscripcion-id="${escapeHtml(inscripcion?._id || '')}">
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        Aprobar
+                    </button>
+                </div>
+            </article>
+        `;
+    };
+
+    const agruparInscripcionesPorEvento = (inscripciones) => {
+        const grupos = new Map();
+
+        inscripciones.forEach((inscripcion) => {
+            const eventoId = extraerEventoIdInscripcion(inscripcion) || '__sin_evento__';
+            const eventoDetalle = inscripcionesPendientesState.eventosById.get(eventoId) || null;
+
+            if (!grupos.has(eventoId)) {
+                grupos.set(eventoId, {
+                    eventoId,
+                    eventoDetalle,
+                    inscripciones: [],
+                });
+            }
+
+            grupos.get(eventoId).inscripciones.push(inscripcion);
+        });
+
+        return Array.from(grupos.values());
+    };
+
+    const renderInscripcionesPendientes = () => {
+        const container = document.getElementById('cardsInscripcionesPendientesEditor');
+        const conteo = document.getElementById('inscripcionesPendientesConteo');
+
+        if (!container) {
+            return;
+        }
+
+        if (inscripcionesPendientesState.inscripcionSeleccionadaId) {
+            renderDetalleInscripcionSeleccionada();
+            return;
+        }
+
+        if (!inscripcionesPendientesState.eventoSeleccionadoId) {
+            renderSeleccionEventosInscripciones();
+            return;
+        }
+
+        const listaBase = Array.isArray(inscripcionesPendientesState.inscripciones)
+            ? [...inscripcionesPendientesState.inscripciones]
+            : [];
+        const terminoBusqueda = normalizarTexto(inscripcionesPendientesState.filtroTexto);
+        const filtroSeleccionado = inscripcionesPendientesState.filtroSeleccionado || 'Nombre de Usuario';
+
+        const listaEvento = listaBase.filter((inscripcion) => {
+            return String(extraerEventoIdInscripcion(inscripcion)) === String(inscripcionesPendientesState.eventoSeleccionadoId);
+        });
+
+        const filtradas = !terminoBusqueda
+            ? listaEvento
+            : listaEvento.filter((inscripcion) => {
+                const valorFiltro = normalizarTexto(getInscripcionFilterValue(inscripcion, filtroSeleccionado));
+                return valorFiltro.includes(terminoBusqueda);
+            });
+
+        if (conteo) {
+            if (terminoBusqueda) {
+                conteo.textContent = `${filtradas.length} coincidencia(s) de ${listaBase.length} inscripciones pendientes`;
+            } else {
+                conteo.textContent = `${filtradas.length} inscripciones pendientes`;
+            }
+        }
+
+        if (!filtradas.length) {
+            container.innerHTML = '<p class="text-muted">No hay inscripciones pendientes para mostrar.</p>';
+            return;
+        }
+
+        const grupos = agruparInscripcionesPorEvento(filtradas);
+
+        container.innerHTML = grupos.map((grupo) => {
+            const primeraInscripcion = grupo.inscripciones[0] || {};
+            const nombreEvento = escapeHtml(obtenerNombreEventoInscripcion(primeraInscripcion, grupo.eventoDetalle));
+            const fechaEvento = escapeHtml(formatearFechaEventoInscripcion(grupo.eventoDetalle));
+            const organizador = escapeHtml(obtenerOrganizadorEventoInscripcion(grupo.eventoDetalle));
+
+            const filasUsuarios = grupo.inscripciones.map((inscripcion) => {
+                const inscripcionId = escapeHtml(inscripcion?._id || '');
+
+                return `
+                    <div class="inscripcionUsuarioRow" role="row">
+                        <div class="inscripcionUsuarioInfo" role="cell">
+                            <p class="inscripcionUsuarioNombre">${escapeHtml(inscripcion?.nombreCompleto || 'Nombre de Usuario')}</p>
+                            <p class="inscripcionUsuarioMeta"><strong>Profesión u Oficio:</strong> ${escapeHtml(inscripcion?.profesion || 'No disponible')}</p>
+                            <p class="inscripcionUsuarioMeta"><strong>Entidad a la que pertenece:</strong> ${escapeHtml(inscripcion?.entidadTrabajo || 'No disponible')}</p>
+                            <p class="inscripcionUsuarioMeta"><strong>Tipo de deficiencia:</strong> ${escapeHtml(inscripcion?.tipoDeficiencia || 'No disponible')}</p>
+                        </div>
+                        <div class="inscripcionUsuarioAcciones" role="cell" aria-label="Acciones de inscripción">
+                            <button class="btn inscripcionBtnDetalles" type="button" data-inscripcion-accion="ver" data-inscripcion-id="${inscripcionId}" data-evento-id="${escapeHtml(grupo.eventoId)}">Ver detalles</button>
+                            <button class="btn inscripcionBtnDecision" type="button" aria-label="Rechazar inscripción" data-inscripcion-accion="rechazar-inscripcion" data-inscripcion-id="${inscripcionId}">
+                                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                            </button>
+                            <button class="btn inscripcionBtnDecision" type="button" aria-label="Aceptar inscripción" data-inscripcion-accion="aprobar" data-inscripcion-id="${inscripcionId}">
+                                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            return `
+                <article class="inscripcionesEventoGrupo" aria-label="Inscripciones por evento">
+                    <div class="inscripcionesEventoHeaderRow" role="row">
+                        <p class="inscripcionesEventoTitulo"><strong>Evento:</strong> ${nombreEvento}.</p>
+                        <p class="inscripcionesEventoMeta"><strong>Fecha del Evento:</strong> ${fechaEvento}</p>
+                        <p class="inscripcionesEventoMeta"><strong>Organizador:</strong> ${organizador}</p>
+                    </div>
+                    ${filasUsuarios}
+                </article>
+            `;
+        }).join('');
+    };
+
+    const cargarDetallesEventosInscripciones = async (inscripciones) => {
+        const eventoIds = Array.from(new Set(
+            inscripciones
+                .map((inscripcion) => extraerEventoIdInscripcion(inscripcion))
+                .filter(Boolean)
+        ));
+
+        const detalles = await Promise.all(eventoIds.map(async (eventoId) => {
+            try {
+                const response = await fetch(`/api/form-evento/${encodeURIComponent(eventoId)}`);
+
+                if (!response.ok) {
+                    return [eventoId, null];
+                }
+
+                const data = await response.json();
+                return [eventoId, data?.evento || null];
+            } catch (error) {
+                console.error('No se pudo cargar el detalle del evento de inscripción:', error);
+                return [eventoId, null];
+            }
+        }));
+
+        inscripcionesPendientesState.eventosById = new Map(detalles);
+    };
+
+    const cargarEventosAprobacionInscripciones = async () => {
+        const response = await fetch('/api/form-evento?estado=aprobado');
+
+        if (!response.ok) {
+            throw new Error('No se pudieron cargar los eventos aprobados.');
+        }
+
+        const data = await response.json();
+        const eventos = Array.isArray(data?.eventos) ? data.eventos : [];
+        inscripcionesPendientesState.eventosAprobados = eventos;
+
+        eventos.forEach((evento) => {
+            if (evento?._id) {
+                inscripcionesPendientesState.eventosById.set(String(evento._id), evento);
+            }
+        });
+    };
+
+    const cargarInscripcionesPendientes = async () => {
+        const container = document.getElementById('cardsInscripcionesPendientesEditor');
+
+        if (!container) {
+            return;
+        }
+
+        container.innerHTML = '<p class="text-muted">Cargando datos de inscripciones...</p>';
+
+        try {
+            const [eventosResponse, inscripcionesResponse] = await Promise.all([
+                fetch('/api/form-evento?estado=aprobado'),
+                fetch('/api/usuario-inscrito?estado=pendiente_aprobacion'),
+            ]);
+
+            if (!eventosResponse.ok || !inscripcionesResponse.ok) {
+                throw new Error('No se pudieron cargar los datos de la sección.');
+            }
+
+            const eventosData = await eventosResponse.json();
+            const inscripcionesData = await inscripcionesResponse.json();
+            const eventos = Array.isArray(eventosData?.eventos) ? eventosData.eventos : [];
+            const inscripciones = Array.isArray(inscripcionesData?.inscripciones) ? inscripcionesData.inscripciones : [];
+
+            inscripcionesPendientesState.eventosAprobados = eventos;
+            inscripcionesPendientesState.inscripciones = inscripciones;
+
+            inscripcionesPendientesState.eventosById = new Map(
+                eventos
+                    .filter((evento) => evento?._id)
+                    .map((evento) => [String(evento._id), evento])
+            );
+
+            await cargarDetallesEventosInscripciones(inscripciones);
+            configurarUIAprobacionInscripciones();
+            renderInscripcionesPendientes();
+        } catch (error) {
+            console.error('Error al cargar inscripciones pendientes:', error);
+            container.innerHTML = '<div class="alert alert-warning mb-0">No se pudieron cargar las inscripciones pendientes.</div>';
+        }
+    };
+
+    const actualizarEstadoInscripcionPendiente = async (inscripcionId, estado, motivoRechazo = '') => {
+        const response = await fetch(`/api/usuario-inscrito/${encodeURIComponent(inscripcionId)}/estado`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ estado, motivoRechazo }),
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok || !data?.ok) {
+            throw new Error(data?.mensaje || 'No se pudo actualizar la inscripción.');
+        }
+
+        inscripcionesPendientesState.inscripciones = inscripcionesPendientesState.inscripciones
+            .filter((inscripcion) => String(inscripcion?._id) !== String(inscripcionId));
+
+        if (String(inscripcionesPendientesState.inscripcionSeleccionadaId) === String(inscripcionId)) {
+            inscripcionesPendientesState.inscripcionSeleccionadaId = '';
+        }
+
+        configurarUIAprobacionInscripciones();
+
+        renderInscripcionesPendientes();
+    };
+
+    const initAprobacionInscripcionesEditor = async () => {
+        const filtroSelect = document.getElementById('gestionInscripcionesFiltro');
+        const busquedaInput = document.getElementById('gestionInscripcionesBusqueda');
+        const searchButton = document.getElementById('gestionInscripcionesBuscarBtn');
+        const cardsContainer = document.getElementById('cardsInscripcionesPendientesEditor');
+        const breadcrumb = document.getElementById('breadcrumbAprobacionInscripciones');
+        const rechazoModalElement = document.getElementById('modalRechazoInscripcion');
+        const rechazoDescripcion = document.getElementById('modalRechazoInscripcionDescripcion');
+        const rechazoMotivoInput = document.getElementById('modalRechazoInscripcionMotivo');
+        const rechazoAceptarBtn = document.getElementById('modalRechazoInscripcionAceptarBtn');
+        const confirmacionRechazoModalElement = document.getElementById('modalConfirmacionRechazoInscripcion');
+        const confirmacionRechazoBtn = document.getElementById('modalConfirmacionRechazoInscripcionBtn');
+        const aprobacionExitosaModalElement = document.getElementById('modalInscripcionAprobada');
+
+        const rechazoModalInstance = rechazoModalElement && globalThis.bootstrap?.Modal
+            ? globalThis.bootstrap.Modal.getOrCreateInstance(rechazoModalElement)
+            : null;
+        const confirmacionRechazoModalInstance = confirmacionRechazoModalElement && globalThis.bootstrap?.Modal
+            ? globalThis.bootstrap.Modal.getOrCreateInstance(confirmacionRechazoModalElement)
+            : null;
+        const aprobacionExitosaModalInstance = aprobacionExitosaModalElement && globalThis.bootstrap?.Modal
+            ? globalThis.bootstrap.Modal.getOrCreateInstance(aprobacionExitosaModalElement)
+            : null;
+        let abrirConfirmacionRechazo = false;
+
+        if (!cardsContainer) {
+            return;
+        }
+
+        if (rechazoAceptarBtn && rechazoAceptarBtn.dataset.inscripcionBound !== 'true') {
+            rechazoAceptarBtn.addEventListener('click', () => {
+                if (!inscripcionesPendientesState.inscripcionRechazoPendienteId) {
+                    return;
+                }
+
+                if (!confirmacionRechazoModalInstance) {
+                    const confirmar = globalThis.confirm('¿Rechazar esta inscripción?');
+
+                    if (!confirmar) {
+                        return;
+                    }
+
+                    const inscripcionId = inscripcionesPendientesState.inscripcionRechazoPendienteId;
+
+                    if (!inscripcionId) {
+                        return;
+                    }
+
+                    (async () => {
+                        try {
+                            await actualizarEstadoInscripcionPendiente(
+                                inscripcionId,
+                                'rechazado',
+                                String(rechazoMotivoInput?.value || '').trim()
+                            );
+                        } catch (error) {
+                            globalThis.alert(error.message || 'No se pudo rechazar la inscripción.');
+                        }
+                    })();
+
+                    return;
+                }
+
+                abrirConfirmacionRechazo = true;
+                rechazoModalInstance?.hide();
+            });
+
+            rechazoAceptarBtn.dataset.inscripcionBound = 'true';
+        }
+
+        if (rechazoModalElement && rechazoModalElement.dataset.inscripcionBound !== 'true') {
+            rechazoModalElement.addEventListener('hidden.bs.modal', () => {
+                if (abrirConfirmacionRechazo) {
+                    abrirConfirmacionRechazo = false;
+                    confirmacionRechazoModalInstance?.show();
+                    return;
+                }
+
+                inscripcionesPendientesState.inscripcionRechazoPendienteId = '';
+
+                if (rechazoMotivoInput) {
+                    rechazoMotivoInput.value = '';
+                }
+            });
+
+            rechazoModalElement.dataset.inscripcionBound = 'true';
+        }
+
+        if (confirmacionRechazoBtn && confirmacionRechazoBtn.dataset.inscripcionBound !== 'true') {
+            confirmacionRechazoBtn.addEventListener('click', async () => {
+                const inscripcionId = inscripcionesPendientesState.inscripcionRechazoPendienteId;
+
+                if (!inscripcionId) {
+                    return;
+                }
+
+                confirmacionRechazoBtn.disabled = true;
+
+                try {
+                    await actualizarEstadoInscripcionPendiente(
+                        inscripcionId,
+                        'rechazado',
+                        String(rechazoMotivoInput?.value || '').trim()
+                    );
+
+                    inscripcionesPendientesState.inscripcionRechazoPendienteId = '';
+                    if (rechazoMotivoInput) {
+                        rechazoMotivoInput.value = '';
+                    }
+
+                    confirmacionRechazoModalInstance?.hide();
+                } catch (error) {
+                    globalThis.alert(error.message || 'No se pudo rechazar la inscripción.');
+                } finally {
+                    confirmacionRechazoBtn.disabled = false;
+                }
+            });
+
+            confirmacionRechazoBtn.dataset.inscripcionBound = 'true';
+        }
+
+        if (confirmacionRechazoModalElement && confirmacionRechazoModalElement.dataset.inscripcionBound !== 'true') {
+            confirmacionRechazoModalElement.addEventListener('hidden.bs.modal', () => {
+                inscripcionesPendientesState.inscripcionRechazoPendienteId = '';
+            });
+
+            confirmacionRechazoModalElement.dataset.inscripcionBound = 'true';
+        }
+
+        if (filtroSelect) {
+            filtroSelect.value = inscripcionesPendientesState.filtroSeleccionado;
+
+            if (filtroSelect.dataset.inscripcionesBound !== 'true') {
+                filtroSelect.addEventListener('change', () => {
+                    inscripcionesPendientesState.filtroSeleccionado = filtroSelect.value || 'Nombre de Usuario';
+                    renderInscripcionesPendientes();
+                });
+
+                filtroSelect.dataset.inscripcionesBound = 'true';
+            }
+        }
+
+        if (busquedaInput) {
+            busquedaInput.value = inscripcionesPendientesState.filtroTexto;
+
+            if (busquedaInput.dataset.inscripcionesBound !== 'true') {
+                busquedaInput.addEventListener('input', () => {
+                    inscripcionesPendientesState.filtroTexto = busquedaInput.value || '';
+                    renderInscripcionesPendientes();
+                });
+
+                busquedaInput.dataset.inscripcionesBound = 'true';
+            }
+        }
+
+        if (searchButton && searchButton.dataset.inscripcionesBound !== 'true') {
+            searchButton.addEventListener('click', () => {
+                inscripcionesPendientesState.filtroTexto = busquedaInput?.value || '';
+                renderInscripcionesPendientes();
+            });
+
+            searchButton.dataset.inscripcionesBound = 'true';
+        }
+
+        if (breadcrumb && breadcrumb.dataset.inscripcionesBound !== 'true') {
+            breadcrumb.addEventListener('click', (event) => {
+                const target = event.target.closest('[data-inscripcion-nav]');
+
+                if (!target) {
+                    return;
+                }
+
+                event.preventDefault();
+                const destino = target.dataset.inscripcionNav;
+
+                if (destino === 'inscripciones') {
+                    inscripcionesPendientesState.inscripcionSeleccionadaId = '';
+                    inscripcionesPendientesState.filtroTexto = '';
+                    inscripcionesPendientesState.filtroSeleccionado = 'Nombre de Usuario';
+                } else {
+                    inscripcionesPendientesState.eventoSeleccionadoId = '';
+                    inscripcionesPendientesState.inscripcionSeleccionadaId = '';
+                    inscripcionesPendientesState.filtroTexto = '';
+                    inscripcionesPendientesState.filtroSeleccionado = 'Título del Evento';
+                }
+
+                if (busquedaInput) {
+                    busquedaInput.value = '';
+                }
+
+                configurarUIAprobacionInscripciones();
+                renderInscripcionesPendientes();
+            });
+
+            breadcrumb.dataset.inscripcionesBound = 'true';
+        }
+
+        if (cardsContainer.dataset.inscripcionesActionsBound !== 'true') {
+            cardsContainer.addEventListener('click', async (event) => {
+                const actionButton = event.target.closest('[data-inscripcion-accion]');
+
+                if (!actionButton) {
+                    return;
+                }
+
+                const action = actionButton.dataset.inscripcionAccion;
+                const inscripcionId = actionButton.dataset.inscripcionId;
+                const eventoId = actionButton.dataset.eventoId;
+                const inscripcionSeleccionada = inscripcionesPendientesState.inscripciones
+                    .find((inscripcion) => String(inscripcion?._id) === String(inscripcionId));
+
+                if (action === 'seleccionar-evento' && eventoId) {
+                    inscripcionesPendientesState.eventoSeleccionadoId = eventoId;
+                    inscripcionesPendientesState.inscripcionSeleccionadaId = '';
+                    inscripcionesPendientesState.filtroTexto = '';
+                    configurarUIAprobacionInscripciones();
+
+                    const busqueda = document.getElementById('gestionInscripcionesBusqueda');
+                    if (busqueda) {
+                        busqueda.value = '';
+                    }
+
+                    renderInscripcionesPendientes();
+                    return;
+                }
+
+                if (!inscripcionId || !inscripcionSeleccionada) {
+                    return;
+                }
+
+                if (action === 'ver') {
+                    inscripcionesPendientesState.inscripcionSeleccionadaId = inscripcionId;
+                    configurarUIAprobacionInscripciones();
+                    renderInscripcionesPendientes();
+                    return;
+                }
+
+                if (action === 'aprobar') {
+                    try {
+                        await actualizarEstadoInscripcionPendiente(inscripcionId, 'aprobado');
+                        if (aprobacionExitosaModalInstance) {
+                            aprobacionExitosaModalInstance.show();
+                        }
+                    } catch (error) {
+                        globalThis.alert(error.message || 'No se pudo aprobar la inscripción.');
+                    }
+
+                    return;
+                }
+
+                if (action === 'rechazar' || action === 'rechazar-inscripcion') {
+                    inscripcionesPendientesState.inscripcionRechazoPendienteId = inscripcionId;
+
+                    if (rechazoDescripcion) {
+                        const nombre = inscripcionSeleccionada?.nombreCompleto || 'la persona inscrita';
+                        rechazoDescripcion.textContent = `Para realizar el rechazo de la inscripción de ${nombre}, favor indicar el motivo por el cual fue rechazada en el recuadro siguiente. Este será enviado a la persona inscrita.`;
+                    }
+
+                    if (rechazoMotivoInput) {
+                        rechazoMotivoInput.value = '';
+                    }
+
+                    if (rechazoModalInstance) {
+                        rechazoModalInstance.show();
+                        return;
+                    }
+
+                    const motivoFallback = globalThis.prompt('Indique el motivo del rechazo (opcional):', '');
+
+                    if (motivoFallback === null) {
+                        inscripcionesPendientesState.inscripcionRechazoPendienteId = '';
+                        return;
+                    }
+
+                    try {
+                        await actualizarEstadoInscripcionPendiente(inscripcionId, 'rechazado', String(motivoFallback || '').trim());
+                        inscripcionesPendientesState.inscripcionRechazoPendienteId = '';
+                    } catch (error) {
+                        globalThis.alert(error.message || 'No se pudo rechazar la inscripción.');
+                    }
+
+                    return;
+                }
+            });
+
+            cardsContainer.dataset.inscripcionesActionsBound = 'true';
+        }
+
+        inscripcionesPendientesState.eventoSeleccionadoId = '';
+        inscripcionesPendientesState.inscripcionSeleccionadaId = '';
+        inscripcionesPendientesState.filtroTexto = '';
+        inscripcionesPendientesState.filtroSeleccionado = 'Título del Evento';
+        configurarUIAprobacionInscripciones();
+
+        await cargarInscripcionesPendientes();
+    };
+
+    const configurarUIInscritosEventos = () => {
+        const titulo = document.getElementById('inscritosEventosTitulo');
+        const buscadorTitulo = document.getElementById('inscritosEventosBuscadorTitulo');
+        const filtroSelect = document.getElementById('gestionInscritosEventosFiltro');
+        const breadcrumb = document.getElementById('breadcrumbInscritosEventos');
+        const iconoWrap = document.getElementById('inscritosEventosIconoWrap');
+        const buscadorWrap = document.getElementById('inscritosEventosBuscadorWrap');
+        const filtroLabelWrap = document.getElementById('inscritosEventosFiltroLabelWrap');
+        const filtroWrap = document.getElementById('inscritosEventosFiltroWrap');
+        const conteoWrap = document.getElementById('inscritosEventosConteoWrap');
+
+        const modoEvento = !inscritosEventosState.eventoSeleccionadoId;
+        const modoDetalle = Boolean(inscritosEventosState.inscripcionSeleccionadaId);
+        const inscripcionSeleccionada = inscritosEventosState.inscripcionesAprobadas
+            .find((inscripcion) => String(inscripcion?._id) === String(inscritosEventosState.inscripcionSeleccionadaId));
+
+        if (titulo) {
+            if (modoEvento) {
+                titulo.textContent = 'Seleccionar Evento';
+            } else if (modoDetalle) {
+                titulo.textContent = inscripcionSeleccionada?.nombreCompleto || 'Detalle de Inscrito';
+            } else {
+                titulo.textContent = 'Usuarios Inscritos';
+            }
+        }
+
+        if (buscadorTitulo) {
+            buscadorTitulo.textContent = modoEvento ? 'Buscador de Eventos' : 'Buscador de Usuarios';
+        }
+
+        const mostrarBuscador = !modoDetalle;
+        if (buscadorWrap) buscadorWrap.classList.toggle('d-none', !mostrarBuscador);
+        if (filtroLabelWrap) filtroLabelWrap.classList.toggle('d-none', !mostrarBuscador);
+        if (filtroWrap) filtroWrap.classList.toggle('d-none', !mostrarBuscador);
+        if (conteoWrap) conteoWrap.classList.toggle('d-none', !mostrarBuscador);
+
+        if (breadcrumb) {
+            breadcrumb.innerHTML = modoEvento
+                ? `
+                    <li class="breadcrumb-item"><a class="text-decoration-none" href="../modulo-editor.html">Inicio</a></li>
+                    <li class="breadcrumb-item"><a class="text-decoration-none" href="#" data-inscritos-nav="usuarios">Usuarios</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Inscritos a Eventos</li>
+                `
+                : modoDetalle
+                    ? `
+                        <li class="breadcrumb-item"><a class="text-decoration-none" href="../modulo-editor.html">Inicio</a></li>
+                        <li class="breadcrumb-item"><a class="text-decoration-none" href="#" data-inscritos-nav="usuarios">Usuarios</a></li>
+                        <li class="breadcrumb-item"><a class="text-decoration-none" href="#" data-inscritos-nav="inscritos">Inscritos a Eventos</a></li>
+                        <li class="breadcrumb-item"><a class="text-decoration-none" href="#" data-inscritos-nav="usuarios-inscritos">Usuarios Inscritos</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Detalle</li>
+                    `
+                    : `
+                        <li class="breadcrumb-item"><a class="text-decoration-none" href="../modulo-editor.html">Inicio</a></li>
+                        <li class="breadcrumb-item"><a class="text-decoration-none" href="#" data-inscritos-nav="usuarios">Usuarios</a></li>
+                        <li class="breadcrumb-item"><a class="text-decoration-none" href="#" data-inscritos-nav="inscritos">Inscritos a Eventos</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Usuarios Inscritos</li>
+                    `;
+        }
+
+        if (iconoWrap) {
+            iconoWrap.innerHTML = modoEvento
+                ? '<i class="fa-regular fa-circle"></i>'
+                : '<i class="fa-regular fa-user"></i>';
+        }
+
+        if (!filtroSelect || modoDetalle) {
+            return;
+        }
+
+        const opciones = modoEvento
+            ? ['Título del Evento', 'Organizador', 'Fecha del Evento']
+            : ['Nombre de Usuario', 'Profesión', 'Tipo de deficiencia'];
+
+        const opcionValida = opciones.includes(inscritosEventosState.filtroSeleccionado)
+            ? inscritosEventosState.filtroSeleccionado
+            : opciones[0];
+
+        filtroSelect.innerHTML = opciones
+            .map((opcion) => `<option value="${escapeHtml(opcion)}">${escapeHtml(opcion)}</option>`)
+            .join('');
+
+        filtroSelect.value = opcionValida;
+        inscritosEventosState.filtroSeleccionado = opcionValida;
+    };
+
+    const renderSeleccionEventosInscritos = () => {
+        const container = document.getElementById('cardsInscritosEventosEditor');
+        const conteo = document.getElementById('inscritosEventosConteo');
+
+        if (!container) {
+            return;
+        }
+
+        const idsConInscritos = new Set(
+            inscritosEventosState.inscripcionesAprobadas
+                .map((inscripcion) => String(extraerEventoIdInscripcion(inscripcion) || ''))
+                .filter(Boolean)
+        );
+
+        const listaBase = (Array.isArray(inscritosEventosState.eventosAprobados) ? inscritosEventosState.eventosAprobados : [])
+            .filter((evento) => idsConInscritos.has(String(evento?._id || '')));
+
+        const terminoBusqueda = normalizarTexto(inscritosEventosState.filtroTexto);
+        const filtroSeleccionado = inscritosEventosState.filtroSeleccionado || 'Título del Evento';
+
+        const eventosFiltrados = !terminoBusqueda
+            ? listaBase
+            : listaBase.filter((evento) => {
+                const valorFiltro = normalizarTexto(getEventoAprobadoFilterValue(evento, filtroSeleccionado));
+                return valorFiltro.includes(terminoBusqueda);
+            });
+
+        if (conteo) {
+            if (terminoBusqueda) {
+                conteo.textContent = `${eventosFiltrados.length} coincidencia(s) de ${listaBase.length} eventos con usuarios inscritos`;
+            } else {
+                conteo.textContent = `${eventosFiltrados.length} eventos con usuarios inscritos`;
+            }
+        }
+
+        if (!eventosFiltrados.length) {
+            container.innerHTML = '<p class="text-muted">No hay eventos con usuarios inscritos aprobados.</p>';
+            return;
+        }
+
+        container.innerHTML = `
+            <div class="row g-4">
+                ${eventosFiltrados.map((evento) => {
+                    const eventoId = escapeHtml(evento?._id || '');
+                    const nombreEvento = escapeHtml(evento?.nombreEvento || 'Evento sin título');
+                    const fechaEvento = escapeHtml(formatearFechaEventoInscripcion(evento));
+                    const organizador = escapeHtml(obtenerOrganizadorEventoInscripcion(evento));
+
+                    return `
+                        <div class="col-12 col-md-6">
+                            <article class="selectorEventoCard" aria-label="Evento con inscritos aprobados">
+                                <div class="selectorEventoCardBody">
+                                    <p class="selectorEventoCardTitulo">${nombreEvento}</p>
+                                    <p class="selectorEventoCardMeta"><strong>Fecha del Evento:</strong> ${fechaEvento}</p>
+                                    <p class="selectorEventoCardMeta"><strong>Organizador:</strong> ${organizador}</p>
+                                </div>
+                                <button class="btn selectorEventoCardArrow" type="button" aria-label="Ver inscritos del evento" data-inscritos-accion="seleccionar-evento" data-evento-id="${eventoId}">
+                                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                                </button>
+                            </article>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+    };
+
+    const renderDetalleInscritoSeleccionado = () => {
+        const container = document.getElementById('cardsInscritosEventosEditor');
+
+        if (!container) {
+            return;
+        }
+
+        const inscripcion = inscritosEventosState.inscripcionesAprobadas
+            .find((item) => String(item?._id) === String(inscritosEventosState.inscripcionSeleccionadaId));
+
+        if (!inscripcion) {
+            inscritosEventosState.inscripcionSeleccionadaId = '';
+            renderInscritosEventos();
+            return;
+        }
+
+        const rows = [
+            ['Correo Electrónico', inscripcion?.correoElectronico || 'No disponible'],
+            ['Profesión u Oficio', inscripcion?.profesion || 'No disponible'],
+            ['Entidad para la que trabaja o está vinculado', inscripcion?.entidadTrabajo || 'No disponible'],
+            ['Tipo de Deficiencia', inscripcion?.tipoDeficiencia || 'No disponible'],
+            ['Requiere Intérprete LESCO', formatearBooleanoInscripcion(inscripcion?.requiereInterprete)],
+            ['Alimentación', inscripcion?.requerimientosAlimentacion || 'No disponible'],
+        ];
+
+        container.innerHTML = `
+            <article class="inscripcionDetalleVista" aria-label="Detalle de usuario inscrito">
+                <div class="inscripcionDetalleTablaWrap">
+                    <table class="inscripcionDetalleTabla" aria-label="Información del usuario inscrito aprobado">
+                        <tbody>
+                            ${rows.map(([label, value]) => `
+                                <tr>
+                                    <th scope="row">${escapeHtml(label)}:</th>
+                                    <td>${escapeHtml(value)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+        `;
+    };
+
+    const renderInscritosEventos = () => {
+        const container = document.getElementById('cardsInscritosEventosEditor');
+        const conteo = document.getElementById('inscritosEventosConteo');
+
+        if (!container) {
+            return;
+        }
+
+        if (inscritosEventosState.inscripcionSeleccionadaId) {
+            renderDetalleInscritoSeleccionado();
+            return;
+        }
+
+        if (!inscritosEventosState.eventoSeleccionadoId) {
+            renderSeleccionEventosInscritos();
+            return;
+        }
+
+        const listaBase = Array.isArray(inscritosEventosState.inscripcionesAprobadas)
+            ? [...inscritosEventosState.inscripcionesAprobadas]
+            : [];
+        const terminoBusqueda = normalizarTexto(inscritosEventosState.filtroTexto);
+        const filtroSeleccionado = inscritosEventosState.filtroSeleccionado || 'Nombre de Usuario';
+
+        const listaEvento = listaBase.filter((inscripcion) => {
+            return String(extraerEventoIdInscripcion(inscripcion)) === String(inscritosEventosState.eventoSeleccionadoId);
+        });
+
+        const filtradas = !terminoBusqueda
+            ? listaEvento
+            : listaEvento.filter((inscripcion) => {
+                const valorFiltro = normalizarTexto(getInscripcionFilterValue(inscripcion, filtroSeleccionado));
+                return valorFiltro.includes(terminoBusqueda);
+            });
+
+        if (conteo) {
+            if (terminoBusqueda) {
+                conteo.textContent = `${filtradas.length} coincidencia(s) de ${listaEvento.length} usuarios inscritos`;
+            } else {
+                conteo.textContent = `${filtradas.length} usuarios inscritos`;
+            }
+        }
+
+        if (!filtradas.length) {
+            container.innerHTML = '<p class="text-muted">No hay usuarios inscritos aprobados para mostrar.</p>';
+            return;
+        }
+
+        const eventoDetalle = inscritosEventosState.eventosById.get(String(inscritosEventosState.eventoSeleccionadoId)) || null;
+        const primeraInscripcion = filtradas[0] || {};
+        const nombreEvento = escapeHtml(obtenerNombreEventoInscripcion(primeraInscripcion, eventoDetalle));
+        const fechaEvento = escapeHtml(formatearFechaEventoInscripcion(eventoDetalle));
+        const organizador = escapeHtml(obtenerOrganizadorEventoInscripcion(eventoDetalle));
+
+        const filasUsuarios = filtradas.map((inscripcion) => {
+            const inscripcionId = escapeHtml(inscripcion?._id || '');
+
+            return `
+                <div class="inscripcionUsuarioRow" role="row">
+                    <div class="inscripcionUsuarioInfo" role="cell">
+                        <p class="inscripcionUsuarioNombre">${escapeHtml(inscripcion?.nombreCompleto || 'Nombre de Usuario')}</p>
+                        <p class="inscripcionUsuarioMeta"><strong>Profesión u Oficio:</strong> ${escapeHtml(inscripcion?.profesion || 'No disponible')}</p>
+                        <p class="inscripcionUsuarioMeta"><strong>Entidad a la que pertenece:</strong> ${escapeHtml(inscripcion?.entidadTrabajo || 'No disponible')}</p>
+                        <p class="inscripcionUsuarioMeta"><strong>Tipo de deficiencia:</strong> ${escapeHtml(inscripcion?.tipoDeficiencia || 'No disponible')}</p>
+                    </div>
+                    <div class="inscripcionUsuarioAcciones" role="cell" aria-label="Acciones del usuario inscrito">
+                        <button class="btn inscripcionBtnDetalles" type="button" data-inscritos-accion="ver" data-inscripcion-id="${inscripcionId}">Ver detalles</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        container.innerHTML = `
+            <article class="inscripcionesEventoGrupo" aria-label="Usuarios inscritos por evento">
+                <div class="inscripcionesEventoHeaderRow" role="row">
+                    <p class="inscripcionesEventoTitulo"><strong>Evento:</strong> ${nombreEvento}.</p>
+                    <p class="inscripcionesEventoMeta"><strong>Fecha del Evento:</strong> ${fechaEvento}</p>
+                    <p class="inscripcionesEventoMeta"><strong>Organizador:</strong> ${organizador}</p>
+                </div>
+                ${filasUsuarios}
+            </article>
+        `;
+    };
+
+    const cargarInscritosEventos = async () => {
+        const container = document.getElementById('cardsInscritosEventosEditor');
+
+        if (!container) {
+            return;
+        }
+
+        container.innerHTML = '<p class="text-muted">Cargando usuarios inscritos...</p>';
+
+        try {
+            const [eventosResponse, inscripcionesResponse] = await Promise.all([
+                fetch('/api/form-evento?estado=aprobado'),
+                fetch('/api/usuario-inscrito?estado=aprobado'),
+            ]);
+
+            if (!eventosResponse.ok || !inscripcionesResponse.ok) {
+                throw new Error('No se pudieron cargar los datos de la sección.');
+            }
+
+            const eventosData = await eventosResponse.json();
+            const inscripcionesData = await inscripcionesResponse.json();
+            const eventos = Array.isArray(eventosData?.eventos) ? eventosData.eventos : [];
+            const inscripciones = Array.isArray(inscripcionesData?.inscripciones) ? inscripcionesData.inscripciones : [];
+
+            inscritosEventosState.eventosAprobados = eventos;
+            inscritosEventosState.inscripcionesAprobadas = inscripciones;
+            inscritosEventosState.eventosById = new Map(
+                eventos
+                    .filter((evento) => evento?._id)
+                    .map((evento) => [String(evento._id), evento])
+            );
+
+            await cargarDetallesEventosInscripciones(inscripciones);
+
+            for (const [eventoId, evento] of inscripcionesPendientesState.eventosById.entries()) {
+                if (!inscritosEventosState.eventosById.has(eventoId) && evento) {
+                    inscritosEventosState.eventosById.set(eventoId, evento);
+                }
+            }
+
+            configurarUIInscritosEventos();
+            renderInscritosEventos();
+        } catch (error) {
+            console.error('Error al cargar inscritos a eventos:', error);
+            container.innerHTML = '<div class="alert alert-warning mb-0">No se pudieron cargar los usuarios inscritos.</div>';
+        }
+    };
+
+    const initInscritosEventosEditor = async () => {
+        const filtroSelect = document.getElementById('gestionInscritosEventosFiltro');
+        const busquedaInput = document.getElementById('gestionInscritosEventosBusqueda');
+        const searchButton = document.getElementById('gestionInscritosEventosBuscarBtn');
+        const cardsContainer = document.getElementById('cardsInscritosEventosEditor');
+        const breadcrumb = document.getElementById('breadcrumbInscritosEventos');
+
+        if (!cardsContainer) {
+            return;
+        }
+
+        if (filtroSelect) {
+            filtroSelect.value = inscritosEventosState.filtroSeleccionado;
+
+            if (filtroSelect.dataset.inscritosBound !== 'true') {
+                filtroSelect.addEventListener('change', () => {
+                    inscritosEventosState.filtroSeleccionado = filtroSelect.value || 'Nombre de Usuario';
+                    renderInscritosEventos();
+                });
+
+                filtroSelect.dataset.inscritosBound = 'true';
+            }
+        }
+
+        if (busquedaInput) {
+            busquedaInput.value = inscritosEventosState.filtroTexto;
+
+            if (busquedaInput.dataset.inscritosBound !== 'true') {
+                busquedaInput.addEventListener('input', () => {
+                    inscritosEventosState.filtroTexto = busquedaInput.value || '';
+                    renderInscritosEventos();
+                });
+
+                busquedaInput.dataset.inscritosBound = 'true';
+            }
+        }
+
+        if (searchButton && searchButton.dataset.inscritosBound !== 'true') {
+            searchButton.addEventListener('click', () => {
+                inscritosEventosState.filtroTexto = busquedaInput?.value || '';
+                renderInscritosEventos();
+            });
+
+            searchButton.dataset.inscritosBound = 'true';
+        }
+
+        if (breadcrumb && breadcrumb.dataset.inscritosBound !== 'true') {
+            breadcrumb.addEventListener('click', (event) => {
+                const target = event.target.closest('[data-inscritos-nav]');
+
+                if (!target) {
+                    return;
+                }
+
+                event.preventDefault();
+                const destino = target.dataset.inscritosNav;
+
+                if (destino === 'usuarios-inscritos') {
+                    inscritosEventosState.inscripcionSeleccionadaId = '';
+                    inscritosEventosState.filtroTexto = '';
+                    inscritosEventosState.filtroSeleccionado = 'Nombre de Usuario';
+                } else {
+                    inscritosEventosState.eventoSeleccionadoId = '';
+                    inscritosEventosState.inscripcionSeleccionadaId = '';
+                    inscritosEventosState.filtroTexto = '';
+                    inscritosEventosState.filtroSeleccionado = 'Título del Evento';
+                }
+
+                if (busquedaInput) {
+                    busquedaInput.value = '';
+                }
+
+                configurarUIInscritosEventos();
+                renderInscritosEventos();
+            });
+
+            breadcrumb.dataset.inscritosBound = 'true';
+        }
+
+        if (cardsContainer.dataset.inscritosActionsBound !== 'true') {
+            cardsContainer.addEventListener('click', (event) => {
+                const actionButton = event.target.closest('[data-inscritos-accion]');
+
+                if (!actionButton) {
+                    return;
+                }
+
+                const action = actionButton.dataset.inscritosAccion;
+                const inscripcionId = actionButton.dataset.inscripcionId;
+                const eventoId = actionButton.dataset.eventoId;
+
+                if (action === 'seleccionar-evento' && eventoId) {
+                    inscritosEventosState.eventoSeleccionadoId = eventoId;
+                    inscritosEventosState.inscripcionSeleccionadaId = '';
+                    inscritosEventosState.filtroTexto = '';
+                    inscritosEventosState.filtroSeleccionado = 'Nombre de Usuario';
+                    configurarUIInscritosEventos();
+
+                    const busqueda = document.getElementById('gestionInscritosEventosBusqueda');
+                    if (busqueda) {
+                        busqueda.value = '';
+                    }
+
+                    renderInscritosEventos();
+                    return;
+                }
+
+                if (action === 'ver' && inscripcionId) {
+                    inscritosEventosState.inscripcionSeleccionadaId = inscripcionId;
+                    configurarUIInscritosEventos();
+                    renderInscritosEventos();
+                }
+            });
+
+            cardsContainer.dataset.inscritosActionsBound = 'true';
+        }
+
+        inscritosEventosState.eventoSeleccionadoId = '';
+        inscritosEventosState.inscripcionSeleccionadaId = '';
+        inscritosEventosState.filtroTexto = '';
+        inscritosEventosState.filtroSeleccionado = 'Título del Evento';
+        configurarUIInscritosEventos();
+
+        await cargarInscritosEventos();
+    };
+
     const getSidebarKey = (link) => link.dataset.sidebarKey || link.textContent.trim();
     const getDraftManager = () => globalThis.crearEventoDraftManager;
 
@@ -1728,6 +3205,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (sidebarKey === 'eventos-finalizados' && typeof initEventosFinalizadosEditor === 'function') {
             initEventosFinalizadosEditor();
+        }
+
+        if (sidebarKey === 'aprobacion-inscripciones' && typeof initAprobacionInscripcionesEditor === 'function') {
+            initAprobacionInscripcionesEditor();
+        }
+
+        if (sidebarKey === 'inscritos-eventos' && typeof initInscritosEventosEditor === 'function') {
+            initInscritosEventosEditor();
         }
 
         if (sidebarKey === 'listas-difusion' && typeof globalThis.initListaDifusionEdit === 'function') {
