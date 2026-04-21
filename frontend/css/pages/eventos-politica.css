@@ -1,4 +1,8 @@
 
+body {
+    margin: 0;
+}
+
 .lineaSeparadora {
     display: inline-block;
     width: 4px;
@@ -110,33 +114,38 @@
 #contenedorEventosCreados {
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 0.5rem;
+    row-gap: 0.5rem;
+    column-gap: 0.5rem;
+    justify-items: center;
 }
 
 #contenedorEventosCreados.eventoPoliticaDetallePantallaCompleta {
+    --bs-gutter-x: 0;
     grid-template-columns: 1fr !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: calc(50% - 50vw) !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
-    width: 100%;
+    width: 100vw;
     max-width: none;
     gap: 0;
 }
 
 @media (min-width: 768px) {
     #contenedorEventosCreados {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(420px, 500px));
+        justify-content: center;
+        column-gap: 0.5rem;
     }
 
     #contenedorEventosCreados:not(.eventoPoliticaDetallePantallaCompleta) {
-        transform: translateX(-60px);
+        transform: none;
     }
 }
 
 @media (min-width: 1200px) {
     #contenedorEventosCreados {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(420px, 500px));
     }
 }
 
@@ -154,15 +163,12 @@
 
 @media (min-width: 768px) {
     .eventoPoliticaCard {
-        width: 80%;
+        width: 100%;
+        max-width: 500px;
     }
 
-    #contenedorEventosCreados .eventoPoliticaCard:nth-child(odd) {
-        justify-self: end;
-    }
-
-    #contenedorEventosCreados .eventoPoliticaCard:nth-child(even) {
-        justify-self: start;
+    #contenedorEventosCreados .eventoPoliticaCard {
+        justify-self: center;
     }
 }
 
@@ -566,6 +572,13 @@
         max-width: none;
     }
 
+    .eventoPoliticaTituloFranja {
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        padding-left: max(1rem, calc((100vw - 1320px) / 2 + 1.25rem));
+        padding-right: max(1rem, calc((100vw - 1320px) / 2 + 1.25rem));
+    }
+
     .eventoPoliticaContenidoInterior {
         margin-left: auto;
         margin-right: auto;
@@ -604,6 +617,7 @@
 
 .eventoPoliticaSidebar {
     margin-top: -0.25rem;
+    min-width: 0;
 }
 
 .eventoPoliticaCaja {
@@ -639,6 +653,13 @@
     margin-bottom: 0.7rem;
     color: #4d5a6a;
     font-size: 0.92rem;
+    min-width: 0;
+}
+
+.eventoPoliticaInfoTexto {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .eventoPoliticaListaInfo i {
@@ -680,12 +701,15 @@
 
 .eventoPoliticaEnlaceEvento {
     padding: 0 0.15rem;
+    min-width: 0;
 }
 
 .eventoPoliticaEnlaceEvento a {
-    display: inline-block;
+    display: block;
+    max-width: 100%;
     color: #4d5a6a;
     font-size: 0.9rem;
+    overflow-wrap: anywhere;
     word-break: break-word;
     text-decoration: none;
 }
@@ -700,11 +724,11 @@
 }
 
 .eventoPoliticaInfoAdicionalCard {
-    background: #ffffff;
-    border-radius: 18px;
-    border: 1px solid rgba(22, 74, 152, 0.12);
-    box-shadow: 0 12px 28px rgba(22, 74, 152, 0.06);
-    padding: 2rem 1.5rem 1.75rem;
+    background: transparent;
+    border-radius: 0;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
 }
 
 .eventoPoliticaInfoAdicionalContenido {
@@ -980,7 +1004,7 @@
 
 @media (max-width: 991.98px) {
         .eventoPoliticaInfoAdicionalCard {
-                padding: 1.5rem 1rem;
+        padding: 0;
         }
 
     .eventoPoliticaAgendaFila {

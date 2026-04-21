@@ -626,9 +626,9 @@ function crearDetalleEvento(evento) {
                 <section class="eventoPoliticaCaja eventoPoliticaCajaClara" aria-labelledby="titulo-info-evento">
                   <h2 id="titulo-info-evento" class="eventoPoliticaSeccionTitulo">Información del evento</h2>
                   <ul class="eventoPoliticaListaInfo">
-                    <li><i class="fa-regular fa-calendar" aria-hidden="true"></i> ${fechaFormateada}</li>
-                    <li><i class="fa-regular fa-clock" aria-hidden="true"></i> ${escapeHtml(horaInicio)} - ${escapeHtml(horaFin)}</li>
-                    <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${escapeHtml(lugar)}</li>
+                    <li><i class="fa-regular fa-calendar" aria-hidden="true"></i><span class="eventoPoliticaInfoTexto">${fechaFormateada}</span></li>
+                    <li><i class="fa-regular fa-clock" aria-hidden="true"></i><span class="eventoPoliticaInfoTexto">${escapeHtml(horaInicio)} - ${escapeHtml(horaFin)}</span></li>
+                    <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span class="eventoPoliticaInfoTexto">${escapeHtml(lugar)}</span></li>
                   </ul>
                   <div class="eventoPoliticaContacto">
                     <p class="mb-1 fw-semibold">${escapeHtml(contactoNombre)}${contactoInstitucion ? `<br>${escapeHtml(contactoInstitucion)}` : ''}</p>
