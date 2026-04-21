@@ -1124,9 +1124,14 @@ function initCrearEvento() {
             .trim();
     }
 
-    function construirParrafosPreview(texto, fallback = 'No hay información disponible.') {
-        const parrafos = String(texto || '')
+    function normalizarSaltosPreview(texto) {
+        return String(texto || '')
             .replace(/<br\s*\/?>/gi, '\n')
+            .replace(/<\/(div|p|li|h[1-6]|tr|td|th|blockquote)\s*>/gi, '\n');
+    }
+
+    function construirParrafosPreview(texto, fallback = 'No hay información disponible.') {
+        const parrafos = normalizarSaltosPreview(texto)
             .split(/\r?\n+/)
             .map((parrafo) => limpiarTextoHtml(parrafo))
             .filter(Boolean);
@@ -1139,8 +1144,7 @@ function initCrearEvento() {
     }
 
     function construirListaPreview(texto, maxItems = 4) {
-        const items = String(texto || '')
-            .replace(/<br\s*\/?>/gi, '\n')
+        const items = normalizarSaltosPreview(texto)
             .split(/\r?\n+/)
             .map((item) => limpiarTextoHtml(item))
             .filter(Boolean)
@@ -1154,8 +1158,7 @@ function initCrearEvento() {
     }
 
     function construirAgendaPreview(texto) {
-        const lineas = String(texto || '')
-            .replace(/<br\s*\/?>/gi, '\n')
+        const lineas = normalizarSaltosPreview(texto)
             .split(/\r?\n+/)
             .map((linea) => limpiarTextoHtml(linea))
             .filter(Boolean);
@@ -2519,9 +2522,14 @@ function limpiarTextoHtmlGlobal(texto) {
         .trim();
 }
 
-function construirParrafosPreviewGlobal(texto, fallback = 'No hay información disponible.') {
-    const parrafos = String(texto || '')
+function normalizarSaltosPreviewGlobal(texto) {
+    return String(texto || '')
         .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<\/(div|p|li|h[1-6]|tr|td|th|blockquote)\s*>/gi, '\n');
+}
+
+function construirParrafosPreviewGlobal(texto, fallback = 'No hay información disponible.') {
+    const parrafos = normalizarSaltosPreviewGlobal(texto)
         .split(/\r?\n+/)
         .map((parrafo) => limpiarTextoHtmlGlobal(parrafo))
         .filter(Boolean);
@@ -2534,8 +2542,7 @@ function construirParrafosPreviewGlobal(texto, fallback = 'No hay información d
 }
 
 function construirListaPreviewGlobal(texto, maxItems = 4) {
-    const items = String(texto || '')
-        .replace(/<br\s*\/?>/gi, '\n')
+    const items = normalizarSaltosPreviewGlobal(texto)
         .split(/\r?\n+/)
         .map((item) => limpiarTextoHtmlGlobal(item))
         .filter(Boolean)
@@ -2549,8 +2556,7 @@ function construirListaPreviewGlobal(texto, maxItems = 4) {
 }
 
 function construirAgendaPreviewGlobal(texto) {
-    const lineas = String(texto || '')
-        .replace(/<br\s*\/?>/gi, '\n')
+    const lineas = normalizarSaltosPreviewGlobal(texto)
         .split(/\r?\n+/)
         .map((linea) => limpiarTextoHtmlGlobal(linea))
         .filter(Boolean);
