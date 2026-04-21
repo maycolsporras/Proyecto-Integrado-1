@@ -751,12 +751,14 @@ function mostrarFiltrosPolitica() {
 
 function activarModoDetallePantallaCompleta() {
   if (!contenedorEventosCreados) return;
+  contenedorEventosCreados.classList.remove('eventoPoliticaListado');
   contenedorEventosCreados.classList.add('eventoPoliticaDetallePantallaCompleta');
 }
 
 function desactivarModoDetallePantallaCompleta() {
   if (!contenedorEventosCreados) return;
   contenedorEventosCreados.classList.remove('eventoPoliticaDetallePantallaCompleta');
+  contenedorEventosCreados.classList.add('eventoPoliticaListado');
 }
 
 function construirListaDesdeTexto(texto, maxItems = 4) {
