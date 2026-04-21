@@ -2176,7 +2176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const cargarEventosAprobacionInscripciones = async () => {
-        const response = await fetch('/api/form-evento?estado=aprobado');
+        const response = await fetch('/api/form-evento?estado=aprobado&estadoVigencia=activo');
 
         if (!response.ok) {
             throw new Error('No se pudieron cargar los eventos aprobados.');
@@ -2204,7 +2204,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const [eventosResponse, inscripcionesResponse] = await Promise.all([
-                fetch('/api/form-evento?estado=aprobado'),
+                fetch('/api/form-evento?estado=aprobado&estadoVigencia=activo'),
                 fetch('/api/usuario-inscrito?estado=pendiente_aprobacion'),
             ]);
 
